@@ -1,8 +1,8 @@
 import { NbAppState, NbClientParams } from './types/base';
 import { Api } from './api';
 import { UserService } from './services';
-import { Interceptor } from './interceptors/reques.interceptor';
 import { defaultState } from './helpers/default-state';
+import { Interceptor } from './types/interceptor';
 
 export class Client {
     state: NbAppState = defaultState();
@@ -25,7 +25,7 @@ export class Client {
             fulfilled: (
                 config: RequestInit,
             ) => RequestInit | Promise<RequestInit>,
-            rejected?: (error: any) => any,
+            rejected: (error: any) => any,
         ) => {
             this.requestInterceptors.push({ fulfilled, rejected });
         },
@@ -34,7 +34,7 @@ export class Client {
     response = {
         use: (
             fulfilled: (response: Response) => Response | Promise<Response>,
-            rejected?: (error: any) => any,
+            rejected: (error: any) => any,
         ) => {
             this.responseInterceptors.push({ fulfilled, rejected });
         },

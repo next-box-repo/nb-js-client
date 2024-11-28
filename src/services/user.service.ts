@@ -8,6 +8,7 @@ import {
 } from '../types';
 
 const USERS = '/users';
+const USERS_ME = '/users/me';
 
 export class UserService {
     constructor(private api: Api) {}
@@ -34,5 +35,9 @@ export class UserService {
 
     restore(id: number): Promise<void> {
         return this.api.post(`${USERS}/${id}/restore`);
+    }
+
+    updateMe(data: UpdateUserParams): Promise<ResponseItem<User>> {
+        return this.api.put(USERS_ME, JSON.stringify(data));
     }
 }

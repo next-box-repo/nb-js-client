@@ -1,5 +1,5 @@
-import { Interceptor } from '../interceptors/reques.interceptor';
 import { NbClientParams, NbRequestParams } from '../types/base';
+import { Interceptor } from '../types/interceptor';
 
 export async function sendRequest(
     method: 'GET' | 'POST' | 'PUT' | 'DELETE',
@@ -31,11 +31,8 @@ export async function sendRequest(
         try {
             request = await interceptor.fulfilled(request);
         } catch (error) {
-            if (interceptor.rejected) {
-                interceptor.rejected(error);
-            } else {
-                throw error;
-            }
+            if (interceptor.rejected) interceptor.rejected(error);
+            else throw error;
         }
     }
 
@@ -48,12 +45,10 @@ export async function sendRequest(
             if (interceptor.rejected) {
                 try {
                     await interceptor.rejected(error);
-                } catch (newError) {
-                    throw newError;
+                } catch (error) {
+                    throw error;
                 }
-            } else {
-                throw error;
-            }
+            } else throw error;
         }
         throw error;
     }
@@ -62,11 +57,8 @@ export async function sendRequest(
         try {
             response = await interceptor.fulfilled(response);
         } catch (error) {
-            if (interceptor.rejected) {
-                interceptor.rejected(error);
-            } else {
-                throw error;
-            }
+            if (interceptor.rejected) interceptor.rejected(error);
+            else throw error;
         }
     }
 
