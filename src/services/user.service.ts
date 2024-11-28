@@ -1,4 +1,4 @@
-import { Client } from '../client';
+import { Api } from '../api';
 import {
     CreateUserParams,
     ResponseItem,
@@ -10,29 +10,29 @@ import {
 const USERS = '/users';
 
 export class UserService {
-    constructor(private client: Client) {}
+    constructor(private api: Api) {}
 
     list(query: any): Promise<ResponseList<User>> {
-        return this.client.get(USERS, query);
+        return this.api.get(USERS, query);
     }
 
     get(id: number): Promise<ResponseItem<User>> {
-        return this.client.get(USERS + `/${id}`);
+        return this.api.get(USERS + `/${id}`);
     }
 
     create(data: CreateUserParams): Promise<ResponseItem<User>> {
-        return this.client.post(USERS, JSON.stringify(data));
+        return this.api.post(USERS, JSON.stringify(data));
     }
 
     update(data: UpdateUserParams): Promise<ResponseItem<User>> {
-        return this.client.put(USERS + `/${data.id}`, JSON.stringify(data));
+        return this.api.put(USERS + `/${data.id}`, JSON.stringify(data));
     }
 
     delete(id: number, params?: { hard: boolean }): Promise<void> {
-        return this.client.delete(`${USERS}/${id}`, params);
+        return this.api.delete(`${USERS}/${id}`, params);
     }
 
     restore(id: number): Promise<void> {
-        return this.client.post(`${USERS}/${id}/restore`);
+        return this.api.post(`${USERS}/${id}/restore`);
     }
 }

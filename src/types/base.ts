@@ -11,6 +11,11 @@ export interface NbRequestParams {
     cache?: 'no-cache';
 }
 
+export interface NbAppState {
+    client: NbClientParams;
+    api: NbRequestParams;
+}
+
 export interface ResponseItem<T> {
     row: T;
 }

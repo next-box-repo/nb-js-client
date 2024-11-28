@@ -1,46 +1,46 @@
-import { NbClientParams, NbRequestParams } from './types/base';
-import { UserService } from './services/user.service';
-import { responseJSON, sendRequest } from './helpers';
+import { NbAppState, NbClientParams } from './types/base';
+import { Api } from './api';
+import { UserService } from './services';
+import { Interceptor } from './interceptors/reques.interceptor';
+import { defaultState } from './helpers/default-state';
 
 export class Client {
-    params!: NbClientParams;
-    state!: NbRequestParams;
+    state: NbAppState = defaultState();
 
+    Api!: Api;
     User!: UserService;
 
+    requestInterceptors: Interceptor<RequestInit>[] = [];
+    responseInterceptors: Interceptor<Response>[] = [];
+
     constructor(params: NbClientParams) {
-        this.params = params;
+        this.state.client = params;
 
-        this.User = new UserService(this);
+        this.Api = new Api(this);
+        this.User = new UserService(this.Api);
     }
 
-    get(path: string, query?: Record<string, any>): Promise<any> {
-        return sendRequest('GET', this.params, {
-            path,
-            query,
-            cache: 'no-cache',
-        }).then(responseJSON);
-    }
+    request = {
+        use: (
+            fulfilled: (
+                config: RequestInit,
+            ) => RequestInit | Promise<RequestInit>,
+            rejected?: (error: any) => any,
+        ) => {
+            this.requestInterceptors.push({ fulfilled, rejected });
+        },
+    };
 
-    post(path: string, body?: BodyInit | null): Promise<any> {
-        return sendRequest('POST', this.params, {
-            path,
-            body,
-        }).then(responseJSON);
-    }
+    response = {
+        use: (
+            fulfilled: (response: Response) => Response | Promise<Response>,
+            rejected?: (error: any) => any,
+        ) => {
+            this.responseInterceptors.push({ fulfilled, rejected });
+        },
+    };
 
-    put(path: string, body?: BodyInit | null): Promise<any> {
-        return sendRequest('PUT', this.params, {
-            path,
-            body,
-            cache: 'no-cache',
-        }).then(responseJSON);
-    }
-
-    delete(path: string, query?: Record<string, any>): Promise<any> {
-        return sendRequest('PUT', this.params, {
-            path,
-            query,
-        }).then(responseJSON);
+    resetParams(state: NbAppState): void {
+        this.state = state;
     }
 }

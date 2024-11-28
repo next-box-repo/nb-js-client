@@ -1,9 +1,14 @@
+import { Interceptor } from '../interceptors/reques.interceptor';
 import { NbClientParams, NbRequestParams } from '../types/base';
 
-export function sendRequest(
+export async function sendRequest(
     method: 'GET' | 'POST' | 'PUT' | 'DELETE',
     params: NbClientParams,
     options: NbRequestParams,
+    interceptors: {
+        request: Interceptor<RequestInit>[];
+        response: Interceptor<Response>[];
+    },
 ): Promise<Response> {
     const headers = {
         ...options.headers,
@@ -15,13 +20,57 @@ export function sendRequest(
 
     const url = `${params.host}/api/v${params.version || 1}${options.path}`;
 
-    const request: RequestInit = {
+    let request: RequestInit = {
         method,
         headers,
         body: options.body,
+        cache: options.cache,
     };
 
-    return fetch(url, request);
+    for (const interceptor of interceptors.request) {
+        try {
+            request = await interceptor.fulfilled(request);
+        } catch (error) {
+            if (interceptor.rejected) {
+                interceptor.rejected(error);
+            } else {
+                throw error;
+            }
+        }
+    }
+
+    let response: Response;
+
+    try {
+        response = await fetch(url, request);
+    } catch (error) {
+        for (const interceptor of interceptors.response) {
+            if (interceptor.rejected) {
+                try {
+                    await interceptor.rejected(error);
+                } catch (newError) {
+                    throw newError;
+                }
+            } else {
+                throw error;
+            }
+        }
+        throw error;
+    }
+
+    for (const interceptor of interceptors.response) {
+        try {
+            response = await interceptor.fulfilled(response);
+        } catch (error) {
+            if (interceptor.rejected) {
+                interceptor.rejected(error);
+            } else {
+                throw error;
+            }
+        }
+    }
+
+    return response;
 }
 
 const makeUrlParams = (params: Record<string, any>) => {
