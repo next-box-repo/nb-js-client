@@ -37,3 +37,17 @@ export enum OrderDirection {
     ASC = 'asc',
     DESC = 'desc',
 }
+
+export type Lang = { [key: string]: string };
+
+export enum RequestStatus {
+    Wait,
+    Done,
+    Reject,
+}
+
+export enum PermissionType {
+    Close = '',
+    Read = 'r',
+    Write = 'rw',
+}

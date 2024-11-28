@@ -1,6 +1,6 @@
 import { Client } from './client';
-import { sendRequest } from './helpers';
-import { NbAppState } from './types';
+import { sendRequest } from '../helpers';
+import { NbAppState } from '../types';
 
 export class Api {
     constructor(private client: Client) {}

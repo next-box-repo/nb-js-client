@@ -1,4 +1,4 @@
-export * from './client';
+export * from './api';
+export * from './classes';
 export * from './helpers';
-export * from './services';
 export * from './types';

@@ -1,3 +1,5 @@
+import { RequestBaseParams } from './base';
+
 export interface User {
     id: number;
     create_date: string;
@@ -32,18 +34,42 @@ export enum UserStatus {
 export enum UserType {
     User = 'user',
     Guest = 'guest',
+    Emperor = 'emperor',
+    Anonymous = 'anonymous',
 }
 
-export type UpdateUserParams = Pick<
-    User,
-    | 'first_name'
-    | 'last_name'
-    | 'middle_name'
-    | 'email'
-    | 'home_path'
-    | 'id'
-    | 'role_id'
->;
+export interface UserSession {
+    create_date: string;
+    expire_in: string;
+    ip: string;
+    user_agent: string;
+    id: number;
+    is_current?: boolean;
+}
+
+export interface UserToken {
+    id: number;
+    name: string;
+    expire_in: string;
+    create_date: string;
+    token?: string;
+}
+
+export interface RequestUserListParams extends RequestBaseParams {
+    email?: string;
+    first_name?: string;
+    middle_name?: string;
+    last_name?: string;
+    login?: string;
+    is_admin?: boolean;
+    id?: number[];
+    role_ids?: number[];
+    statuses?: UserStatus[];
+    search_field?: string;
+    with_me?: boolean;
+    type: UserType;
+    exclude_type?: UserType;
+}
 
 export type CreateUserParams = Pick<
     User,
