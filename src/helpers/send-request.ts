@@ -2,7 +2,7 @@ import { NbClientParams, NbRequestParams } from '../types/base';
 import { Interceptor } from '../types/interceptor';
 
 export async function sendRequest(
-    method: 'GET' | 'POST' | 'PUT' | 'DELETE',
+    method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE',
     params: NbClientParams,
     options: NbRequestParams,
     interceptors: {

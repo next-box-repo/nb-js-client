@@ -5,10 +5,15 @@ import { Api } from './api';
 import {
     AuthApiService,
     ConnectionsApiService,
+    DiscoveryApiService,
+    ExtensionsExternalApiService,
+    FcaApiService,
     GroupApiService,
     RoleApiService,
     UserApiService,
 } from '../api';
+import { DivideApiService } from '../api/divide-api.service';
+import { ExtensionsApiService } from '../api/extensions-api.service';
 
 export class Client {
     state: NbAppState = defaultState();
@@ -16,10 +21,15 @@ export class Client {
     Api!: Api;
 
     Auth!: AuthApiService;
-    User!: UserApiService;
-    Group!: GroupApiService;
     Connections!: ConnectionsApiService;
+    Divide!: DivideApiService;
+    Discovery!: DiscoveryApiService;
+    Extensions!: ExtensionsApiService;
+    ExtensionsExternal!: ExtensionsExternalApiService;
+    Fca!: FcaApiService;
+    Group!: GroupApiService;
     Role!: RoleApiService;
+    User!: UserApiService;
 
     requestInterceptors: Interceptor<RequestInit>[] = [];
     responseInterceptors: Interceptor<Response>[] = [];
@@ -30,10 +40,21 @@ export class Client {
         this.Api = new Api(this);
 
         this.Auth = new AuthApiService(this.Api);
-        this.Group = new GroupApiService(this.Api);
-        this.User = new UserApiService(this.Api);
-        this.Role = new RoleApiService(this.Api);
         this.Connections = new ConnectionsApiService(this.Api);
+        this.Divide = new DivideApiService(this.Api);
+        this.Discovery = new DiscoveryApiService(this.Api);
+        this.Extensions = new ExtensionsApiService(this.Api);
+        this.ExtensionsExternal = new ExtensionsExternalApiService(this.Api);
+        this.Fca = new FcaApiService(this.Api);
+        this.Group = new GroupApiService(this.Api);
+        this.Role = new RoleApiService(this.Api);
+        this.User = new UserApiService(this.Api);
+    }
+
+    private services: Record<string, any> = {};
+
+    get api(): Record<string, any> {
+        return this.services;
     }
 
     request = {
@@ -57,9 +78,6 @@ export class Client {
     };
 
     resetParams(state: NbAppState): void {
-        this.state = {
-            ...this.state,
-            ...state,
-        };
+        this.state = state;
     }
 }

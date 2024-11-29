@@ -9,8 +9,7 @@ import {
 } from '../types';
 
 const CONNECTIONS = '/connections';
-const CONNECTIONS_DASHBOARD = '/connections/dashboard';
-const DISK_CHECK = '/disk/check';
+const CONNECTIONS_DASHBOARD = `${CONNECTIONS}/dashboard`;
 
 export class ConnectionsApiService {
     constructor(private api: Api) {}
@@ -56,9 +55,5 @@ export class ConnectionsApiService {
         params: RequestConnectionParams,
     ): Promise<ResponseList<Connection>> {
         return this.api.get(CONNECTIONS_DASHBOARD, params);
-    }
-
-    check(data: ConnectionCreateParams): Promise<void> {
-        return this.api.post(DISK_CHECK, JSON.stringify(data));
     }
 }

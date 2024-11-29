@@ -1,4 +1,5 @@
-import { PermissionType, RequestBaseParams } from './base';
+import { RequestBaseParams } from './base';
+import { PermissionType } from './divide';
 import { User } from './user';
 
 export interface Connection {

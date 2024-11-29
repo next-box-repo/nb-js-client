@@ -46,8 +46,16 @@ export enum RequestStatus {
     Reject,
 }
 
-export enum PermissionType {
-    Close = '',
-    Read = 'r',
-    Write = 'rw',
+export enum EngineType {
+    WebSocket = 'websocket',
+    PostMessage = 'postmessage',
+    Empty = '',
+}
+
+export enum StorageRoot {
+    my = 'my',
+    fca = 'fca',
+    divide = 'divide',
+    share = 'share',
+    favorite = 'favorite',
 }

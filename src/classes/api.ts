@@ -59,6 +59,23 @@ export class Api {
         );
     }
 
+    patch(path: string, body?: BodyInit | null): Promise<any> {
+        return sendRequest(
+            'PATCH',
+            this.state.client,
+            {
+                path,
+                body,
+                headers: this.state.api.headers,
+                cache: 'no-cache',
+            },
+            {
+                request: this.client.requestInterceptors,
+                response: this.client.responseInterceptors,
+            },
+        );
+    }
+
     delete(path: string, query?: Record<string, any>): Promise<any> {
         return sendRequest(
             'PUT',
