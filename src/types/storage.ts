@@ -17,21 +17,6 @@ export interface RequestStorageListParams extends RequestBaseParams {
     from_sharing_password?: string;
 }
 
-export interface StorageElementCreate {
-    is_work_dir?: boolean;
-    created_by_extension?: string;
-    divide_id?: number;
-    name: string;
-    type: StorageElementType;
-    path: string;
-}
-
-export enum StorageElementType {
-    Dir = 'dir',
-    File = 'file',
-    WorkDir = 'work_dir',
-}
-
 export interface StorageElement {
     name: string;
     size: number;
@@ -54,6 +39,19 @@ export interface StorageElement {
     created_by_extension?: string;
 }
 
+export type CreateStorageElementParams = Pick<
+    StorageElement,
+    'created_by_extension' | 'divide_id' | 'name' | 'type' | 'path'
+> & {
+    is_work_dir?: boolean;
+};
+
+export enum StorageElementType {
+    Dir = 'dir',
+    File = 'file',
+    WorkDir = 'work_dir',
+}
+
 export enum StorageElementContentType {
     Any = 'any',
     Dir = 'dir',
@@ -65,6 +63,18 @@ export enum StorageElementContentType {
     Doc = 'doc',
     Xls = 'xls',
     Ppt = 'ppt',
+}
+
+export interface StorageElementPaste {
+    from_path: string;
+    to_path: string;
+}
+
+export interface StorageElementPasteParams {
+    paths: StorageElementPaste[];
+    overwrite: boolean;
+    from_divide_id?: number | null;
+    to_divide_id?: number | null;
 }
 
 export interface StorageElementVersion {
@@ -92,24 +102,17 @@ export enum StorageElementHistoryAction {
     Move = 'move',
 }
 
-export interface StorageElementPaste {
-    from_path: string;
-    to_path: string;
-}
-
-export interface QueryParamsToPaste {
-    paths: StorageElementPaste[];
-    overwrite: boolean;
-    from_divide_id?: number | null;
-    to_divide_id?: number | null;
-}
-
-export interface HistoryNote {
+export interface StorageElementHistoryNote {
     name: string;
     description: string;
     divide_id: number | null;
     file_version_id: string;
     path: string;
+}
+
+export interface RequestHistoryListParams extends RequestBaseParams {
+    path: string;
+    divide_id?: number | null;
 }
 
 export interface UploadNetRequestParams {

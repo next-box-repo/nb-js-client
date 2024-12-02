@@ -75,13 +75,6 @@ export type DivideResponseList = ResponseList<UserDivide> & {
     total_rw: number;
 };
 
-export interface ShareSetting {
-    share_token: string;
-    share_pass: string;
-    access_mode: PermissionType;
-    path: string;
-}
-
 export interface ShareModel {
     token: string;
     access_mode: PermissionType;

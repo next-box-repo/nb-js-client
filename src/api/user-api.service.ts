@@ -21,6 +21,7 @@ export class UserApiService {
     constructor(private api: Api) {}
 
     list(params: RequestUserListParams): Promise<ResponseList<User>> {
+        debugger;
         return this.api.get(USERS, params);
     }
 

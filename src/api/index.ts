@@ -1,6 +1,7 @@
 export * from './auth-api.service';
 export * from './connections-api.service';
 export * from './discovery-api.service';
+export * from './divide-api.service';
 export * from './extensions-api.service';
 export * from './extensions-external-api.service';
 export * from './fca-api.service';

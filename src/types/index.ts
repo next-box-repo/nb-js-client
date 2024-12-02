@@ -11,4 +11,3 @@ export * from './user';
 export * from './setting';
 export * from './storage';
 export * from './storage-trash';
-export * from './version';

@@ -1,12 +1,11 @@
 import { Api } from '../classes';
 import {
-    HistoryListRequestParams,
-    HistoryNote,
-    HistoryRequestParams,
-    QueryParamsToPaste,
+    RequestHistoryListParams,
+    StorageElementHistoryNote,
+    StorageElementPasteParams,
     ResponseItem,
     ResponseList,
-    StorageElementCreate,
+    CreateStorageElementParams,
     StorageElementHistory,
     StorageElementPaste,
     StorageElementVersion,
@@ -53,7 +52,7 @@ export class StorageElementApiService {
         return this.api.post(`${STORAGE_ELEMENT}/size`, JSON.stringify(data));
     }
 
-    move(data: QueryParamsToPaste, hasFCA = false): Promise<void> {
+    move(data: StorageElementPasteParams, hasFCA = false): Promise<void> {
         const { from_divide_id, to_divide_id } = data;
         const fcaParams = {
             ...data,
@@ -85,13 +84,13 @@ export class StorageElementApiService {
     }
 
     copy(
-        params: QueryParamsToPaste,
+        params: StorageElementPasteParams,
         from: StorageRoot,
         to: StorageRoot,
     ): Promise<void> {
         const { from_divide_id, to_divide_id } = params;
 
-        let fcaParams: QueryParamsToPaste = {
+        let fcaParams: StorageElementPasteParams = {
             ...params,
             from_divide_id: null,
             to_divide_id: null,
@@ -149,7 +148,9 @@ export class StorageElementApiService {
         return this.api.post(`/storage/element/copy`, JSON.stringify(data));
     }
 
-    create(data: StorageElementCreate): Promise<ResponseItem<StorageElement>> {
+    create(
+        data: CreateStorageElementParams,
+    ): Promise<ResponseItem<StorageElement>> {
         return this.api.post(STORAGE_ELEMENT, JSON.stringify(data));
     }
 
@@ -175,46 +176,46 @@ export class StorageElementApiService {
     }
 
     createItem(
-        data: StorageElementCreate,
+        data: CreateStorageElementParams,
     ): Promise<ResponseItem<StorageElement>> {
         return this.api.post(STORAGE_ELEMENT, JSON.stringify(data));
     }
 
     createWorkDir(
-        data: StorageElementCreate,
+        data: CreateStorageElementParams,
     ): Promise<ResponseItem<StorageElement>> {
         return this.api.post(STORAGE_ELEMENT, JSON.stringify(data));
     }
 
     history(
-        params: HistoryRequestParams,
+        params: RequestHistoryListParams,
     ): Promise<ResponseList<StorageElementHistory>> {
         return this.api.get(STORAGE_ELEMENT_HISTORY, params);
     }
 
     versions(
-        params: HistoryListRequestParams,
+        params: RequestHistoryListParams,
     ): Promise<ResponseList<StorageElementVersion>> {
         return this.api.get(STORAGE_ELEMENT_VERSION, params);
     }
 
     createVersion(
-        data: HistoryNote,
+        data: StorageElementHistoryNote,
     ): Promise<ResponseItem<StorageElementVersion>> {
         return this.api.post(STORAGE_ELEMENT_VERSION, JSON.stringify(data));
     }
 
     editVersion(
-        data: HistoryNote,
+        data: StorageElementHistoryNote,
     ): Promise<ResponseItem<StorageElementVersion>> {
         return this.api.put(STORAGE_ELEMENT_VERSION, JSON.stringify(data));
     }
 
-    deleteVersion(params: HistoryRequestParams): Promise<void> {
+    deleteVersion(params: RequestHistoryListParams): Promise<void> {
         return this.api.delete(STORAGE_ELEMENT_VERSION, params);
     }
 
-    makeCurrentVersion(data: HistoryRequestParams): Promise<void> {
+    makeCurrentVersion(data: RequestHistoryListParams): Promise<void> {
         return this.api.post(
             STORAGE_ELEMENT_VERSION_CURRENT,
             JSON.stringify(data),

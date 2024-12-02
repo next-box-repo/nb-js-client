@@ -40,12 +40,6 @@ export enum OrderDirection {
 
 export type Lang = { [key: string]: string };
 
-export enum RequestStatus {
-    Wait,
-    Done,
-    Reject,
-}
-
 export enum EngineType {
     WebSocket = 'websocket',
     PostMessage = 'postmessage',

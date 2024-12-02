@@ -1,6 +1,39 @@
 import { Client } from './client';
 import { sendRequest } from '../helpers';
 import { NbAppState } from '../types';
+import {
+    AuthApiService,
+    ConnectionsApiService,
+    DiscoveryApiService,
+    DivideApiService,
+    ExtensionsApiService,
+    ExtensionsExternalApiService,
+    FcaApiService,
+    GroupApiService,
+    RoleApiService,
+    StorageElementApiService,
+    StorageShareApiService,
+    StorageTrashApiService,
+    UserApiService,
+} from '../api';
+import { StorageFilesApiService } from '../api/storage-files-api.service';
+
+export type ApiServices = {
+    Auth: AuthApiService;
+    Connections: ConnectionsApiService;
+    Discovery: DiscoveryApiService;
+    Divide: DivideApiService;
+    Extensions: ExtensionsApiService;
+    ExtensionsExternal: ExtensionsExternalApiService;
+    Fca: FcaApiService;
+    Group: GroupApiService;
+    Role: RoleApiService;
+    StorageElement: StorageElementApiService;
+    StorageFiles: StorageFilesApiService;
+    StorageShare: StorageShareApiService;
+    StorageTrash: StorageTrashApiService;
+    User: UserApiService;
+};
 
 export class Api {
     constructor(private client: Client) {}

@@ -1,11 +1,11 @@
 import { Api } from '../classes';
 import {
     ConnectionCreateParams,
-    RequestListStorage,
+    RequestStorageListParams,
     ResponseItem,
     ResponseList,
     StorageElement,
-    StorageElementCreate,
+    CreateStorageElementParams,
 } from '../types';
 
 const DISK = '/disk';
@@ -20,12 +20,12 @@ export class FcaApiService {
 
     list(
         rootID: number,
-        params?: RequestListStorage,
+        params?: RequestStorageListParams,
     ): Promise<ResponseList<StorageElement>> {
         return this.api.get(`${DISK}/${rootID}`, params);
     }
 
-    create(rootID: number, data: StorageElementCreate): Promise<any> {
+    create(rootID: number, data: CreateStorageElementParams): Promise<any> {
         return this.api.post(`${DISK}/${rootID}/element`, JSON.stringify(data));
     }
 
