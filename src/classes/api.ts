@@ -111,7 +111,7 @@ export class Api {
 
     delete(path: string, query?: Record<string, any>): Promise<any> {
         return sendRequest(
-            'PUT',
+            'DELETE',
             this.state.client,
             {
                 path,
