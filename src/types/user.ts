@@ -19,6 +19,11 @@ export interface User {
     role_id: number | null;
 }
 
+export type UserLabel = Pick<
+    User,
+    'login' | 'email' | 'first_name' | 'middle_name' | 'last_name'
+>;
+
 export enum UserAuthType {
     Native = 'native',
     Ldap = 'ldap',

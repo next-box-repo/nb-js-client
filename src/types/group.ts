@@ -1,4 +1,5 @@
 import { RequestBaseParams } from './base';
+import { UserLabel } from './user';
 
 export interface Group {
     id: number;
@@ -7,13 +8,7 @@ export interface Group {
     amount_users: number;
     create_date: string;
     owner_id: number;
-    owner: {
-        login: string;
-        email: string;
-        first_name: string;
-        middle_name: string;
-        last_name: string;
-    };
+    owner: UserLabel;
     update_date: string;
     icon: string;
     icon_color: string;

@@ -1,31 +1,67 @@
-import { NbAppState, NbClientParams } from '../types/base';
-import { defaultState } from '../helpers/default-state';
+import {
+    AuthApiService,
+    ConnectionsApiService,
+    DiscoveryApiService,
+    DivideApiService,
+    ExtensionsApiService,
+    ExtensionsExternalApiService,
+    FcaApiService,
+    GatewayApiService,
+    GroupApiService,
+    LicenseApiService,
+    LogstashApiService,
+    RoleApiService,
+    ShareApiService,
+    StorageElementApiService,
+    StorageShareApiService,
+    StorageTrashApiService,
+    UserApiService,
+} from '../api';
+import { NotificationsApiService } from '../api/notifications-api.service';
+import { StorageFilesApiService } from '../api/storage-files-api.service';
+import { NbAppState, NbClientParams, NbRequestParams } from '../types/base';
 import { Interceptor } from '../types/interceptor';
-import { Api, ApiServices } from './api';
+import { Rest } from './rest';
 
 export class Client {
-    state: NbAppState = defaultState();
+    state!: NbAppState;
+
+    rest = new Rest(this);
+
+    Auth = new AuthApiService(this);
+    Connections = new ConnectionsApiService(this);
+    Discovery = new DiscoveryApiService(this);
+    Divide = new DivideApiService(this);
+    Extensions = new ExtensionsApiService(this);
+    ExtensionsExternal = new ExtensionsExternalApiService(this);
+    Fca = new FcaApiService(this);
+    Gateway = new GatewayApiService(this);
+    Group = new GroupApiService(this);
+    License = new LicenseApiService(this);
+    Logstash = new LogstashApiService(this);
+    Notifications = new NotificationsApiService(this);
+    Role = new RoleApiService(this);
+    Share = new ShareApiService(this);
+    StorageElement = new StorageElementApiService(this);
+    StorageFiles = new StorageFilesApiService(this);
+    StorageShare = new StorageShareApiService(this);
+    StorageTrash = new StorageTrashApiService(this);
+    User = new UserApiService(this);
 
     requestInterceptors: Interceptor<RequestInit>[] = [];
     responseInterceptors: Interceptor<Response>[] = [];
 
-    private Api!: Api;
-    private services = new Map<string, any>();
-
-    constructor(params: NbClientParams) {
-        this.state.client = params;
-
-        this.Api = new Api(this);
-    }
-
-    get api(): ApiServices {
-        const api: Partial<ApiServices> = {};
-
-        this.services.forEach((value, key) => {
-            api[key as keyof ApiServices] = value;
-        });
-
-        return api as ApiServices;
+    constructor(clientParams: NbClientParams) {
+        this.state = {
+            clientParams,
+            requestParams: {
+                path: '',
+                headers: {},
+                query: {},
+                body: null,
+                cache: 'no-cache',
+            },
+        };
     }
 
     request = {
@@ -48,16 +84,24 @@ export class Client {
         },
     };
 
-    handler = {
-        registerService: <T extends keyof ApiServices>(
-            ServiceClass: new (api: Api) => ApiServices[T],
-            serviceName: T,
-        ) => {
-            this.services.set(serviceName, new ServiceClass(this.Api));
-        },
-    };
+    resetParams(params: Partial<NbClientParams & NbRequestParams>): void {
+        const { host, version } = params as NbClientParams;
+        const { path, headers, query, body, cache } = params as NbRequestParams;
 
-    resetParams(state: NbAppState): void {
-        this.state = state;
+        const { clientParams, requestParams } = this.state;
+
+        this.state = {
+            clientParams: {
+                host: host || clientParams.host,
+                version: version ?? clientParams.version,
+            },
+            requestParams: {
+                path: path || requestParams.path,
+                headers: headers || requestParams.headers,
+                query: query || requestParams.query,
+                body: body ?? requestParams.body,
+                cache: cache || requestParams.cache,
+            },
+        };
     }
 }

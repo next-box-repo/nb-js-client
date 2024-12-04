@@ -8,12 +8,12 @@ export interface NbRequestParams {
     headers?: Record<string, any>;
     query?: Record<string, any>;
     body?: any;
-    cache?: 'no-cache';
+    cache?: RequestCache;
 }
 
 export interface NbAppState {
-    client: NbClientParams;
-    api: NbRequestParams;
+    clientParams: NbClientParams;
+    requestParams: NbRequestParams;
 }
 
 export interface ResponseItem<T> {

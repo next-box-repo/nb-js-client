@@ -1,16 +1,16 @@
-import { Api } from '../classes';
+import { Client } from '../classes';
 import { ResponseItem, StorageElement, UploadNetRequestParams } from '../types';
 
 const STORAGE_FILES = '/storage/files';
 const STORAGE_FILES_NET = `${STORAGE_FILES}/net`;
 
 export class StorageFilesApiService {
-    constructor(private api: Api) {}
+    constructor(private client: Client) {}
 
     read(path: string, params: any): Promise<ResponseItem<any>> {
         params['path'] = path;
 
-        return this.api.get(STORAGE_FILES, params);
+        return this.client.rest.get(STORAGE_FILES, params);
     }
 
     replace(
@@ -24,7 +24,10 @@ export class StorageFilesApiService {
             if (params[key]) search.append(key, params[key]);
         });
 
-        return this.api.put(`${STORAGE_FILES}?${search.toString()}`, data);
+        return this.client.rest.put(
+            `${STORAGE_FILES}?${search.toString()}`,
+            data,
+        );
     }
 
     upload(
@@ -39,12 +42,12 @@ export class StorageFilesApiService {
 
         if (divide_id) form.set('divide_id', divide_id.toString());
 
-        return this.api.post(STORAGE_FILES, form);
+        return this.client.rest.post(STORAGE_FILES, form);
     }
 
     uploadNet(
         data: UploadNetRequestParams,
     ): Promise<ResponseItem<StorageElement>> {
-        return this.api.post(STORAGE_FILES_NET, JSON.stringify(data));
+        return this.client.rest.post(STORAGE_FILES_NET, JSON.stringify(data));
     }
 }

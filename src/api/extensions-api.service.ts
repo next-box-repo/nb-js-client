@@ -1,4 +1,4 @@
-import { Api } from '../classes';
+import { Client } from '../classes';
 import {
     Extension,
     ExtensionDefault,
@@ -12,53 +12,53 @@ const EXTENSION = '/static/extensions';
 const EXTENSION_DEFAULT = `/extensions/defaults`;
 
 export class ExtensionsApiService {
-    constructor(private api: Api) {}
+    constructor(private client: Client) {}
 
     getSetting(uniqKey: string): Promise<SettingValue[]> {
-        return this.api.get(`${EXTENSION}/${uniqKey}/settings`);
+        return this.client.rest.get(`${EXTENSION}/${uniqKey}/settings`);
     }
 
     setSetting(uniqKey: string, params: SettingValue[]): Promise<void> {
-        return this.api.post(
+        return this.client.rest.post(
             `${EXTENSION}/${uniqKey}/settings`,
             JSON.stringify(params),
         );
     }
 
     deleteSetting(uniqKey: string): Promise<void> {
-        return this.api.delete(`${EXTENSION}/${uniqKey}/settings`);
+        return this.client.rest.delete(`${EXTENSION}/${uniqKey}/settings`);
     }
 
     get(id: number): Promise<ResponseItem<Extension>> {
-        return this.api.get(`${EXTENSION}/${id}`);
+        return this.client.rest.get(`${EXTENSION}/${id}`);
     }
 
     getByKey(uniqKey: string): Promise<ResponseItem<Extension | null>> {
-        return this.api.get(`${EXTENSION}/${uniqKey}`);
+        return this.client.rest.get(`${EXTENSION}/${uniqKey}`);
     }
 
     getDefault(
         ext_code: string[] = [],
     ): Promise<ResponseList<ExtensionDefault>> {
-        return this.api.get(EXTENSION_DEFAULT, { ext_code });
+        return this.client.rest.get(EXTENSION_DEFAULT, { ext_code });
     }
 
     setDefault(
         ext_code: string,
         ext_uniq_key: string,
     ): Promise<ExtensionDefault> {
-        return this.api.post(
+        return this.client.rest.post(
             EXTENSION_DEFAULT,
             JSON.stringify({ ext_code, ext_uniq_key }),
         );
     }
 
     checkUpdates(): Promise<void> {
-        return this.api.post('/static/extensions/check_updates');
+        return this.client.rest.post('/static/extensions/check_updates');
     }
 
     updateVersion(id: number, version: string): Promise<Extension> {
-        return this.api.put(
+        return this.client.rest.put(
             `/static/extensions/${id}`,
             JSON.stringify({ version }),
         );
@@ -67,22 +67,22 @@ export class ExtensionsApiService {
     list(
         params?: ExtensionListParams,
     ): Promise<ResponseList<Extension & { with_settings: boolean }>> {
-        return this.api.get(EXTENSION, params);
+        return this.client.rest.get(EXTENSION, params);
     }
 
     delete(id: number, name: string): Promise<void> {
-        return this.api.delete(`${EXTENSION}/${id}`);
+        return this.client.rest.delete(`${EXTENSION}/${id}`);
     }
 
     upload(file: File): Promise<ResponseItem<Extension>> {
         const form = new FormData();
         form.set('file', file);
 
-        return this.api.post(EXTENSION, form);
+        return this.client.rest.post(EXTENSION, form);
     }
 
     install(uniq_key: string, version: string): Promise<any> {
-        return this.api.post(
+        return this.client.rest.post(
             '/static/extensions/site',
             JSON.stringify({ uniq_key, version }),
         );

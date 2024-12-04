@@ -1,4 +1,4 @@
-import { Api } from '../classes';
+import { Client } from '../classes';
 import { AuthToken, AuthType } from '../types';
 
 const LOGIN = '/login';
@@ -7,10 +7,10 @@ const LOGIN_LDAP = `${LOGIN}/ldap`;
 const LOGIN_UPDATE = `${LOGIN}/update`;
 
 export class AuthApiService {
-    constructor(private api: Api) {}
+    constructor(private client: Client) {}
 
     info(): Promise<AuthType> {
-        return this.api.get(LOGIN);
+        return this.client.rest.get(LOGIN);
     }
 
     login(data: {
@@ -18,7 +18,7 @@ export class AuthApiService {
         password: string;
         is_remember: boolean;
     }): Promise<AuthToken> {
-        return this.api.post(LOGIN, JSON.stringify(data));
+        return this.client.rest.post(LOGIN, JSON.stringify(data));
     }
 
     ldapLogin(data: {
@@ -26,14 +26,14 @@ export class AuthApiService {
         password: string;
         is_remember: boolean;
     }): Promise<AuthToken> {
-        return this.api.post(LOGIN_LDAP, JSON.stringify(data));
+        return this.client.rest.post(LOGIN_LDAP, JSON.stringify(data));
     }
 
     updateToken(data: AuthToken): Promise<any> {
-        return this.api.post(LOGIN_UPDATE, JSON.stringify(data));
+        return this.client.rest.post(LOGIN_UPDATE, JSON.stringify(data));
     }
 
     logout(): Promise<void> {
-        return this.api.post(LOGOUT);
+        return this.client.rest.post(LOGOUT);
     }
 }

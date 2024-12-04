@@ -1,4 +1,4 @@
-import { Api } from '../classes';
+import { Client } from '../classes';
 import {
     ExtensionExternal,
     ExtensionExternalInList,
@@ -7,19 +7,19 @@ import {
 } from '../types';
 
 export class ExtensionsExternalApiService {
-    constructor(private api: Api) {}
+    constructor(private client: Client) {}
 
     listExtensionsSite(
         params: ExtensionExternalListParams,
     ): Promise<ResponseList<ExtensionExternalInList>> {
-        return this.api.get('/anons_ext/extensions', params);
+        return this.client.rest.get('/anons_ext/extensions', params);
     }
 
     extensionDetailSite(uniqKey: string): Promise<ExtensionExternal> {
-        return this.api.get(`/anons_ext/extensions/${uniqKey}`);
+        return this.client.rest.get(`/anons_ext/extensions/${uniqKey}`);
     }
 
     extensionMarkdown(uniqKey: string): Promise<string> {
-        return this.api.get(`/anons_ext/extensions/${uniqKey}/readme`);
+        return this.client.rest.get(`/anons_ext/extensions/${uniqKey}/readme`);
     }
 }

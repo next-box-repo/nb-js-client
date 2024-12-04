@@ -1,4 +1,4 @@
-import { Api } from '../classes';
+import { Client } from '../classes';
 import {
     Connection,
     ConnectionCreateParams,
@@ -12,25 +12,28 @@ const CONNECTIONS = '/connections';
 const CONNECTIONS_DASHBOARD = `${CONNECTIONS}/dashboard`;
 
 export class ConnectionsApiService {
-    constructor(private api: Api) {}
+    constructor(private client: Client) {}
 
     list(params: RequestConnectionParams): Promise<ResponseList<Connection>> {
-        return this.api.get(CONNECTIONS, params);
+        return this.client.rest.get(CONNECTIONS, params);
     }
 
     get(id: number): Promise<ResponseItem<Connection>> {
-        return this.api.get(`${CONNECTIONS}/${id}`);
+        return this.client.rest.get(`${CONNECTIONS}/${id}`);
     }
 
     update(
         id: number,
         data: ConnectionCreateParams,
     ): Promise<ResponseItem<Connection>> {
-        return this.api.put(`${CONNECTIONS}/${id}`, JSON.stringify(data));
+        return this.client.rest.put(
+            `${CONNECTIONS}/${id}`,
+            JSON.stringify(data),
+        );
     }
 
     delete(id: number): Promise<void> {
-        return this.api.delete(`${CONNECTIONS}/${id}`);
+        return this.client.rest.delete(`${CONNECTIONS}/${id}`);
     }
 
     create(data: ConnectionCreateParams): Promise<ResponseItem<Connection>> {
@@ -45,7 +48,7 @@ export class ConnectionsApiService {
             [ConnectionType.S3]: '/disk/s3',
         };
 
-        return this.api.post(
+        return this.client.rest.post(
             routes[data.type] || CONNECTIONS,
             JSON.stringify(data),
         );
@@ -54,6 +57,6 @@ export class ConnectionsApiService {
     dashboard(
         params: RequestConnectionParams,
     ): Promise<ResponseList<Connection>> {
-        return this.api.get(CONNECTIONS_DASHBOARD, params);
+        return this.client.rest.get(CONNECTIONS_DASHBOARD, params);
     }
 }

@@ -23,7 +23,6 @@ export default [
             }),
             terser(),
         ],
-        external: [],
     },
     {
         input: 'dist/index.d.ts',

@@ -1,13 +1,13 @@
-import { Api } from '../classes';
+import { Client } from '../classes';
 import { PermissionType, ShareInfo, ShareModel } from '../types';
 
 const STORAGE_ELEMENT_SHARE = '/storage/element/share';
 
 export class StorageShareApiService {
-    constructor(private api: Api) {}
+    constructor(private client: Client) {}
 
     info(path: string): Promise<ShareInfo> {
-        return this.api.get(STORAGE_ELEMENT_SHARE, { path });
+        return this.client.rest.get(STORAGE_ELEMENT_SHARE, { path });
     }
 
     create(path: string, permissions_type: PermissionType): Promise<ShareInfo> {
@@ -16,21 +16,26 @@ export class StorageShareApiService {
             permissions_type,
         };
 
-        return this.api.post(STORAGE_ELEMENT_SHARE, JSON.stringify(data));
+        return this.client.rest.post(
+            STORAGE_ELEMENT_SHARE,
+            JSON.stringify(data),
+        );
     }
 
     change(data: ShareModel): Promise<ShareInfo> {
-        return this.api.put(
+        return this.client.rest.put(
             `${STORAGE_ELEMENT_SHARE}/${data.token}`,
             JSON.stringify(data),
         );
     }
 
     delete(path: string): Promise<void> {
-        return this.api.delete(STORAGE_ELEMENT_SHARE, { path });
+        return this.client.rest.delete(STORAGE_ELEMENT_SHARE, { path });
     }
 
     refresh(token: string): Promise<ShareInfo> {
-        return this.api.put(`${STORAGE_ELEMENT_SHARE}/${token}/refresh`);
+        return this.client.rest.put(
+            `${STORAGE_ELEMENT_SHARE}/${token}/refresh`,
+        );
     }
 }
