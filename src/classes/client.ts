@@ -28,25 +28,25 @@ export class Client {
 
     rest = new Rest(this);
 
-    Auth = new AuthApiService(this);
-    Connections = new ConnectionsApiService(this);
-    Discovery = new DiscoveryApiService(this);
-    Divide = new DivideApiService(this);
-    Extensions = new ExtensionsApiService(this);
-    ExtensionsExternal = new ExtensionsExternalApiService(this);
-    Fca = new FcaApiService(this);
-    Gateway = new GatewayApiService(this);
-    Group = new GroupApiService(this);
-    License = new LicenseApiService(this);
-    Logstash = new LogstashApiService(this);
-    Notifications = new NotificationsApiService(this);
-    Role = new RoleApiService(this);
-    Share = new ShareApiService(this);
-    StorageElement = new StorageElementApiService(this);
-    StorageFiles = new StorageFilesApiService(this);
-    StorageShare = new StorageShareApiService(this);
-    StorageTrash = new StorageTrashApiService(this);
-    User = new UserApiService(this);
+    AuthApi = new AuthApiService(this);
+    ConnectionsApi = new ConnectionsApiService(this);
+    DiscoveryApi = new DiscoveryApiService(this);
+    DivideApi = new DivideApiService(this);
+    ExtensionsApi = new ExtensionsApiService(this);
+    ExtensionsExternalApi = new ExtensionsExternalApiService(this);
+    FcaApi = new FcaApiService(this);
+    GatewayApi = new GatewayApiService(this);
+    GroupApi = new GroupApiService(this);
+    LicenseApi = new LicenseApiService(this);
+    LogstashApi = new LogstashApiService(this);
+    NotificationsApi = new NotificationsApiService(this);
+    RoleApi = new RoleApiService(this);
+    ShareApi = new ShareApiService(this);
+    StorageElementApi = new StorageElementApiService(this);
+    StorageFilesApi = new StorageFilesApiService(this);
+    StorageShareApi = new StorageShareApiService(this);
+    StorageTrashApi = new StorageTrashApiService(this);
+    UserApi = new UserApiService(this);
 
     requestInterceptors: Interceptor<RequestInit>[] = [];
     responseInterceptors: Interceptor<Response>[] = [];
