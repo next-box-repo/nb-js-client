@@ -65,6 +65,27 @@ export enum StorageElementContentType {
     Ppt = 'ppt',
 }
 
+export enum StorageRoot {
+    my = 'my',
+    fca = 'fca',
+    divide = 'divide',
+    share = 'share',
+    favorite = 'favorite',
+}
+
+export interface StorageRouteData {
+    path: string;
+    root: StorageRoot;
+    rootId: number;
+    divideDir?: string;
+    share_token?: string;
+    share_password?: string;
+    share_back?: boolean;
+    dash_back?: boolean;
+    access_mode?: PermissionType;
+    file_version_id?: string;
+}
+
 export interface StorageElementPaste {
     from_path: string;
     to_path: string;
