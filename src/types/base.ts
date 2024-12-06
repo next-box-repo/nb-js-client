@@ -45,11 +45,3 @@ export enum EngineType {
     PostMessage = 'postmessage',
     Empty = '',
 }
-
-export enum StorageRoot {
-    my = 'my',
-    fca = 'fca',
-    divide = 'divide',
-    share = 'share',
-    favorite = 'favorite',
-}
