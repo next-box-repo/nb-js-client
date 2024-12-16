@@ -1,5 +1,5 @@
 export interface NbClientParams {
-    host: string;
+    host?: string;
     version?: number;
 }
 
