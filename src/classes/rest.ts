@@ -54,6 +54,10 @@ export class Rest {
                 request: this.client.requestInterceptors,
                 response: this.client.responseInterceptors,
             },
-        );
+            this.state.skipInterceptors,
+        ).finally(() => {
+            if (this.state.skipInterceptors)
+                this.state.skipInterceptors = false;
+        });
     }
 }

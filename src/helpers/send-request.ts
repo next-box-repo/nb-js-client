@@ -9,6 +9,7 @@ export async function sendRequest(
         request: Interceptor<RequestInit>[];
         response: Interceptor<Response>[];
     },
+    skipInterceptors: boolean,
 ): Promise<Response> {
     const headers = {
         ...options.headers,
@@ -27,12 +28,14 @@ export async function sendRequest(
         cache: options.cache,
     };
 
-    for (const interceptor of interceptors.request) {
-        try {
-            request = await interceptor.fulfilled(request);
-        } catch (error) {
-            if (interceptor.rejected) interceptor.rejected(error);
-            else throw error;
+    if (!skipInterceptors) {
+        for (const interceptor of interceptors.request) {
+            try {
+                request = await interceptor.fulfilled(request);
+            } catch (error) {
+                if (interceptor.rejected) interceptor.rejected(error);
+                else throw error;
+            }
         }
     }
 

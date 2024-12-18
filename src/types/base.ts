@@ -14,6 +14,7 @@ export interface NbRequestParams {
 export interface NbAppState {
     clientParams: NbClientParams;
     requestParams: NbRequestParams;
+    skipInterceptors: boolean;
 }
 
 export interface ResponseItem<T> {

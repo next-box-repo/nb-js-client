@@ -61,6 +61,7 @@ export class Client {
                 body: null,
                 cache: 'no-cache',
             },
+            skipInterceptors: false,
         };
     }
 
@@ -84,24 +85,35 @@ export class Client {
         },
     };
 
-    resetParams(params: Partial<NbClientParams & NbRequestParams>): void {
-        const { host, version } = params as NbClientParams;
-        const { path, headers, query, body, cache } = params as NbRequestParams;
+    resetParams(
+        params: Partial<
+            NbClientParams & NbRequestParams & { skipInterceptors: boolean }
+        >,
+    ): Promise<void> {
+        return new Promise((resolve) => {
+            const { host, version } = params as NbClientParams;
+            const { path, headers, query, body, cache } =
+                params as NbRequestParams;
 
-        const { clientParams, requestParams } = this.state;
+            const { clientParams, requestParams, skipInterceptors } =
+                this.state;
 
-        this.state = {
-            clientParams: {
-                host: host || clientParams.host,
-                version: version ?? clientParams.version,
-            },
-            requestParams: {
-                path: path || requestParams.path,
-                headers: headers || requestParams.headers,
-                query: query || requestParams.query,
-                body: body ?? requestParams.body,
-                cache: cache || requestParams.cache,
-            },
-        };
+            this.state = {
+                clientParams: {
+                    host: host || clientParams.host,
+                    version: version ?? clientParams.version,
+                },
+                requestParams: {
+                    path: path || requestParams.path,
+                    headers: headers || requestParams.headers,
+                    query: query || requestParams.query,
+                    body: body ?? requestParams.body,
+                    cache: cache || requestParams.cache,
+                },
+                skipInterceptors: params.skipInterceptors || skipInterceptors,
+            };
+
+            resolve();
+        });
     }
 }
