@@ -39,6 +39,9 @@ export class Rest {
         } = {},
     ): Promise<any> {
         const { query, body, cache } = options;
+        const state = this.state.skipInterceptors ?? false;
+
+        this.state.skipInterceptors = false;
 
         return sendRequest(
             method,
@@ -54,10 +57,7 @@ export class Rest {
                 request: this.client.requestInterceptors,
                 response: this.client.responseInterceptors,
             },
-            this.state.skipInterceptors,
-        ).finally(() => {
-            if (this.state.skipInterceptors)
-                this.state.skipInterceptors = false;
-        });
+            state,
+        );
     }
 }

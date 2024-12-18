@@ -90,7 +90,7 @@ export class Client {
             NbClientParams & NbRequestParams & { skipInterceptors: boolean }
         >,
     ): Promise<void> {
-        return new Promise((resolve) => {
+        return new Promise<void>((resolve) => {
             const { host, version } = params as NbClientParams;
             const { path, headers, query, body, cache } =
                 params as NbRequestParams;
