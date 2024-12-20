@@ -1,31 +1,32 @@
-import { NbClientParams, NbRequestParams } from '../types/base';
+import { NbAppState } from '../types/base';
 import { Interceptor } from '../types/interceptor';
 
 export async function sendRequest(
     method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE',
-    params: NbClientParams,
-    options: NbRequestParams,
+    path: string,
+    options: {
+        query?: Record<string, any>;
+        body?: BodyInit | null;
+        cache?: RequestCache;
+    },
+    state: NbAppState,
     interceptors: {
         request: Interceptor<RequestInit>[];
         response: Interceptor<Response>[];
     },
-    skipInterceptors: boolean,
 ): Promise<Response> {
-    const headers = {
-        ...options.headers,
-    };
+    const skipInterceptors = state.skipInterceptors ?? false;
+    state.skipInterceptors = false;
 
     if (options.query) {
-        options.path += '?' + makeUrlParams(options.query);
+        path += '?' + makeUrlParams(options.query);
     }
-
-    const url = `${params.host}/api/v${params.version || 1}${options.path}`;
 
     let request: RequestInit = {
         method,
-        headers,
-        body: options.body,
-        cache: options.cache,
+        headers: state.requestParams.headers,
+        cache: options.cache || state.requestParams.cache,
+        body: options.body || state.requestParams.body,
     };
 
     if (!skipInterceptors) {
@@ -39,10 +40,13 @@ export async function sendRequest(
         }
     }
 
+    const url = `${state.clientParams.host}/api/v${state.clientParams.version || 1}${path}`;
+    const sanitizedUrl = url.replace(/([^:]\/)\/+/g, '$1');
+
     let response: Response;
 
     try {
-        response = await fetch(url, request);
+        response = await fetch(sanitizedUrl, request);
     } catch (error) {
         for (const interceptor of interceptors.response) {
             if (interceptor.rejected) {

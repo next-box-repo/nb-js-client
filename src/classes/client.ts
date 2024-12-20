@@ -19,7 +19,7 @@ import {
 } from '../api';
 import { NotificationsApiService } from '../api/notifications-api.service';
 import { StorageFilesApiService } from '../api/storage-files-api.service';
-import { NbAppState, NbClientParams, NbRequestParams } from '../types/base';
+import { NbAppState, NbClientParams } from '../types/base';
 import { Interceptor } from '../types/interceptor';
 import { Rest } from './rest';
 
@@ -53,7 +53,10 @@ export class Client {
 
     constructor(clientParams: NbClientParams) {
         this.state = {
-            clientParams,
+            clientParams: {
+                host: clientParams?.host || '',
+                version: clientParams?.version || 1,
+            },
             requestParams: {
                 path: '',
                 headers: {},
@@ -85,32 +88,28 @@ export class Client {
         },
     };
 
-    resetParams(
-        params: Partial<
-            NbClientParams & NbRequestParams & { skipInterceptors: boolean }
-        >,
-    ): Promise<void> {
+    resetParams(params: {
+        host?: string;
+        version?: number;
+        headers?: Record<string, any>;
+        cache?: RequestCache;
+        skipInterceptors?: boolean;
+    }): Promise<void> {
         return new Promise<void>((resolve) => {
-            const { host, version } = params as NbClientParams;
-            const { path, headers, query, body, cache } =
-                params as NbRequestParams;
-
-            const { clientParams, requestParams, skipInterceptors } =
-                this.state;
+            const { host, version, headers, cache, skipInterceptors } = params;
 
             this.state = {
                 clientParams: {
-                    host: host || clientParams.host,
-                    version: version ?? clientParams.version,
+                    host: host || this.state.clientParams.host,
+                    version: version ?? this.state.clientParams.version,
                 },
                 requestParams: {
-                    path: path || requestParams.path,
-                    headers: headers || requestParams.headers,
-                    query: query || requestParams.query,
-                    body: body ?? requestParams.body,
-                    cache: cache || requestParams.cache,
+                    ...this.state.requestParams,
+                    headers: headers || this.state.requestParams.headers,
+                    cache: cache || this.state.requestParams.cache,
                 },
-                skipInterceptors: params.skipInterceptors || skipInterceptors,
+                skipInterceptors:
+                    skipInterceptors || this.state.skipInterceptors,
             };
 
             resolve();

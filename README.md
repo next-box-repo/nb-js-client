@@ -22,7 +22,7 @@ api.request.use((params: RequestParams) => {
 }, (error) => return Promise.reject(error))
 
 // Перехват ответа (обработка параметров ответа)
-api.request.use((params: Response) => {
+api.response.use((params: Response) => {
 	return Promise.resolve({...params});
 
 }, (error) => return Promise.reject(error))

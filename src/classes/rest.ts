@@ -10,7 +10,7 @@ export class Rest {
     }
 
     get(path: string, query?: Record<string, any>): Promise<any> {
-        return this.request('GET', path, { query });
+        return this.request('GET', path, { query, cache: 'no-cache' });
     }
 
     post(path: string, body?: BodyInit | null): Promise<any> {
@@ -18,7 +18,7 @@ export class Rest {
     }
 
     put(path: string, body?: BodyInit | null): Promise<any> {
-        return this.request('PUT', path, { body });
+        return this.request('PUT', path, { body, cache: 'no-cache' });
     }
 
     patch(path: string, body?: BodyInit | null): Promise<any> {
@@ -38,26 +38,9 @@ export class Rest {
             cache?: RequestCache;
         } = {},
     ): Promise<any> {
-        const { query, body, cache } = options;
-        const state = this.state.skipInterceptors ?? false;
-
-        this.state.skipInterceptors = false;
-
-        return sendRequest(
-            method,
-            this.state.clientParams,
-            {
-                path,
-                query: { ...this.state.requestParams.query, ...query },
-                body,
-                headers: this.state.requestParams.headers,
-                cache: cache,
-            },
-            {
-                request: this.client.requestInterceptors,
-                response: this.client.responseInterceptors,
-            },
-            state,
-        );
+        return sendRequest(method, path, options, this.state, {
+            request: this.client.requestInterceptors,
+            response: this.client.responseInterceptors,
+        });
     }
 }
