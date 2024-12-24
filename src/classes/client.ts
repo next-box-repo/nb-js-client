@@ -19,14 +19,14 @@ import {
 } from '../api';
 import { NotificationsApiService } from '../api/notifications-api.service';
 import { StorageFilesApiService } from '../api/storage-files-api.service';
+import { AuthToken } from '../types';
 import { NbAppState, NbClientParams } from '../types/base';
 import { Interceptor } from '../types/interceptor';
 import { Rest } from './rest';
+import { TokenUpdate } from './tokenUpdate';
 
 export class Client {
     state!: NbAppState;
-
-    rest = new Rest(this);
 
     AuthApi = new AuthApiService(this);
     ConnectionsApi = new ConnectionsApiService(this);
@@ -48,6 +48,9 @@ export class Client {
     StorageTrashApi = new StorageTrashApiService(this);
     UserApi = new UserApiService(this);
 
+    tokenUpdate = new TokenUpdate(this.AuthApi);
+    rest = new Rest(this, this.tokenUpdate);
+
     requestInterceptors: Interceptor<RequestInit>[] = [];
     responseInterceptors: Interceptor<Response>[] = [];
 
@@ -63,6 +66,10 @@ export class Client {
                 query: {},
                 body: null,
                 cache: 'no-cache',
+            },
+            authToken: {
+                access_token: '',
+                refresh_token: '',
             },
             skipInterceptors: false,
         };
@@ -93,10 +100,18 @@ export class Client {
         version?: number;
         headers?: Record<string, any>;
         cache?: RequestCache;
+        authTokens?: AuthToken;
         skipInterceptors?: boolean;
     }): Promise<void> {
         return new Promise<void>((resolve) => {
-            const { host, version, headers, cache, skipInterceptors } = params;
+            const {
+                host,
+                version,
+                headers,
+                cache,
+                authTokens,
+                skipInterceptors,
+            } = params;
 
             this.state = {
                 clientParams: {
@@ -108,6 +123,7 @@ export class Client {
                     headers: headers || this.state.requestParams.headers,
                     cache: cache || this.state.requestParams.cache,
                 },
+                authToken: authTokens || this.state.authToken,
                 skipInterceptors:
                     skipInterceptors || this.state.skipInterceptors,
             };

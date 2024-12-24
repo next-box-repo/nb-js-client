@@ -1,3 +1,5 @@
+import { AuthToken } from './auth';
+
 export interface NbClientParams {
     host?: string;
     version?: number;
@@ -14,6 +16,7 @@ export interface NbRequestParams {
 export interface NbAppState {
     clientParams: NbClientParams;
     requestParams: NbRequestParams;
+    authToken: AuthToken;
     skipInterceptors: boolean;
 }
 
