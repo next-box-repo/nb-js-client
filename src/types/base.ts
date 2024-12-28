@@ -16,7 +16,7 @@ export interface NbRequestParams {
 export interface NbAppState {
     clientParams: NbClientParams;
     requestParams: NbRequestParams;
-    authToken: AuthToken;
+    authToken: AuthToken[] | null;
     skipInterceptors: boolean;
 }
 

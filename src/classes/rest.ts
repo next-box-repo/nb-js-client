@@ -2,7 +2,9 @@ import { Client } from './client';
 import { AuthToken, NbAppState } from '../types';
 import { AccessToken } from '../types/access-token';
 import { jwtDecode } from 'jwt-decode';
-import { TokenUpdate } from './tokenUpdate';
+import { TokenUpdate } from './token-update';
+import { HttpErrorResponse } from './http-error-response';
+import { applyInterceptors, makeUrlParams } from '../tools';
 
 export class Rest {
     constructor(
@@ -46,10 +48,6 @@ export class Rest {
         const skipInterceptors = this.state.skipInterceptors ?? false;
         this.state.skipInterceptors = false;
 
-        if (options.query) {
-            path += '?' + makeUrlParams(options.query);
-        }
-
         let request: RequestInit = {
             method,
             headers: this.state.requestParams.headers,
@@ -57,88 +55,91 @@ export class Rest {
             body: options.body || this.state.requestParams.body,
         };
 
-        if (this.state.authToken.access_token) {
-            const token: AccessToken = jwtDecode(
-                this.state.authToken.access_token,
-            );
-            const needUpdate =
-                token &&
-                token.is_remember &&
-                this.tokenUpdate.isTokenExpire(token.exp);
-
-            if (
-                needUpdate &&
-                !path.includes('/login') &&
-                !path.includes('/assets')
-            ) {
-                const newTokens: AuthToken | null =
-                    await this.tokenUpdate.refreshToken(this.state.authToken);
-
-                if (newTokens) {
-                    request.headers = {
-                        ...request.headers,
-                        Authorization: `Bearer ${newTokens.access_token}`,
-                    };
-                }
-            }
-        }
-
         if (!skipInterceptors) {
-            for (const interceptor of this.client.requestInterceptors) {
-                try {
-                    request = await interceptor.fulfilled(request);
-                } catch (error) {
-                    if (interceptor.rejected) interceptor.rejected(error);
-                    else throw error;
+            request = await applyInterceptors(
+                this.client.requestInterceptors,
+                request,
+            );
+        }
+
+        if (this.state.authToken) {
+            for (const [index, item] of this.state.authToken.entries()) {
+                const token: AccessToken = jwtDecode(item.access_token);
+
+                const needUpdate =
+                    token &&
+                    token.is_remember &&
+                    this.tokenUpdate.isTokenExpire(token.exp);
+
+                if (
+                    needUpdate &&
+                    !path.includes('/login') &&
+                    !path.includes('/assets')
+                ) {
+                    const tokens: AuthToken | null =
+                        await this.tokenUpdate.refreshToken(item);
+
+                    if (tokens) {
+                        this.state.authToken[index] = tokens;
+
+                        request = await applyInterceptors(
+                            this.client.requestInterceptors,
+                            request,
+                        );
+                    }
                 }
             }
         }
 
-        const url = `${this.state.clientParams.host}/api/v${this.state.clientParams.version || 1}${path}`;
-        const sanitizedUrl = url.replace(/([^:]\/)\/+/g, '$1');
-
-        let response: Response;
-
-        try {
-            response = await fetch(sanitizedUrl, request);
-        } catch (error) {
-            for (const interceptor of this.client.responseInterceptors) {
-                if (interceptor.rejected) {
-                    try {
-                        await interceptor.rejected(error);
-                    } catch (error) {
-                        throw error;
-                    }
-                } else throw error;
-            }
-            throw error;
+        if (options.query) {
+            path += '?' + makeUrlParams(options.query);
         }
 
-        for (const interceptor of this.client.responseInterceptors) {
+        const executeFetch = async (
+            url: string,
+            request: RequestInit,
+        ): Promise<Response> => {
             try {
-                response = await interceptor.fulfilled(response);
+                const response = await fetch(url, request);
+
+                let responseBody: any;
+                try {
+                    responseBody = await response.clone().json();
+                } catch {
+                    responseBody = await response.text();
+                }
+
+                if (!response.ok) {
+                    throw new HttpErrorResponse({
+                        error: responseBody,
+                        status: response.status,
+                        statusText: response.statusText,
+                        url: response.url,
+                    });
+                }
+
+                return response;
             } catch (error) {
-                if (interceptor.rejected) interceptor.rejected(error);
-                else throw error;
+                await applyInterceptors(
+                    this.client.responseInterceptors,
+                    error as Response,
+                );
+
+                throw error;
             }
-        }
+        };
+
+        const url = `${this.state.clientParams.host}/api/v${
+            this.state.clientParams.version || 1
+        }${path}`;
+        const sanitizedUrl = url.replace(/([^:]\/)+\/+/g, '$1');
+
+        let response: Response = await executeFetch(sanitizedUrl, request);
+        response = await applyInterceptors(
+            this.client.responseInterceptors,
+            response,
+        );
 
         return response;
     }
 }
-
-const makeUrlParams = (params: Record<string, any>) => {
-    const query = new URLSearchParams();
-
-    Object.keys(params).forEach((key) => {
-        if (Array.isArray(params[key])) {
-            params[key].forEach((value: any) => {
-                query.append(key, value);
-            });
-        } else {
-            query.append(key, params[key]);
-        }
-    });
-
-    return query;
-};

@@ -1,4 +1,5 @@
 import { AuthApiService } from '../api';
+import { getCookieValue } from '../tools';
 import { AuthToken } from '../types';
 
 const MILLISECONDS_IN_SECOND = 1000;
@@ -38,13 +39,19 @@ export class TokenUpdate {
                     refresh_token: response.refresh_token,
                 };
 
+                if (getCookieValue('access_token') === tokens.access_token) {
+                    localStorage.setItem('refresh-token', tokens.refresh_token);
+                }
+
                 if (this.tokenUpdateResolve) {
                     this.tokenUpdateResolve(tokens);
                     this.tokenUpdateResolve = null;
                 }
 
                 return tokens;
-            } else return null;
+            } else {
+                return null;
+            }
         } catch (error) {
             throw error;
         } finally {

@@ -23,7 +23,7 @@ import { AuthToken } from '../types';
 import { NbAppState, NbClientParams } from '../types/base';
 import { Interceptor } from '../types/interceptor';
 import { Rest } from './rest';
-import { TokenUpdate } from './tokenUpdate';
+import { TokenUpdate } from './token-update';
 
 export class Client {
     state!: NbAppState;
@@ -67,10 +67,7 @@ export class Client {
                 body: null,
                 cache: 'no-cache',
             },
-            authToken: {
-                access_token: '',
-                refresh_token: '',
-            },
+            authToken: null,
             skipInterceptors: false,
         };
     }
@@ -100,7 +97,7 @@ export class Client {
         version?: number;
         headers?: Record<string, any>;
         cache?: RequestCache;
-        authTokens?: AuthToken;
+        authTokens?: AuthToken[] | null;
         skipInterceptors?: boolean;
     }): Promise<void> {
         return new Promise<void>((resolve) => {

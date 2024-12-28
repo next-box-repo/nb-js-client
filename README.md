@@ -23,6 +23,10 @@ api.request.use((params: RequestParams) => {
 
 // Перехват ответа (обработка параметров ответа)
 api.response.use((params: Response) => {
+	if (!params.ok) {
+        return Promise.reject({...params});
+    }
+
 	return Promise.resolve({...params});
 
 }, (error) => return Promise.reject(error))
