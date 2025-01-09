@@ -30,7 +30,9 @@ export class AuthApiService {
     }
 
     updateToken(data: AuthToken): Promise<any> {
-        return this.client.rest.post(LOGIN_UPDATE, JSON.stringify(data));
+        const path = data.path ? `${data.path}/${LOGIN_UPDATE}` : LOGIN_UPDATE;
+
+        return this.client.rest.post(path, JSON.stringify(data));
     }
 
     logout(): Promise<void> {
