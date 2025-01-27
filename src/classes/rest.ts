@@ -63,7 +63,7 @@ export class Rest {
         }
 
         if (this.state.authToken) {
-            for (const [index, item] of this.state.authToken.entries()) {
+            for (const [connectionId, item] of this.state.authToken.entries()) {
                 const token: AccessToken = jwtDecode(item.access_token);
 
                 const needUpdate =
@@ -80,7 +80,7 @@ export class Rest {
                         await this.tokenUpdate.refreshToken(item);
 
                     if (tokens) {
-                        this.state.authToken[index] = tokens;
+                        this.state.authToken.set(connectionId, tokens);
 
                         request = await applyInterceptors(
                             this.client.requestInterceptors,

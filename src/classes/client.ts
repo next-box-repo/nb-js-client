@@ -97,7 +97,7 @@ export class Client {
         version?: number;
         headers?: Record<string, any>;
         cache?: RequestCache;
-        authTokens?: AuthToken[] | null;
+        authTokens?: Map<number, AuthToken> | null;
         skipInterceptors?: boolean;
     }): Promise<void> {
         return new Promise<void>((resolve) => {
