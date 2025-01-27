@@ -31,6 +31,7 @@ export class AuthApiService {
 
     updateToken(data: AuthToken): Promise<any> {
         const path = data.path ? `${data.path}/${LOGIN_UPDATE}` : LOGIN_UPDATE;
+        if (data.path) delete data.path;
 
         return this.client.rest.post(path, JSON.stringify(data));
     }
