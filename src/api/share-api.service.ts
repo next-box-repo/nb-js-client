@@ -6,7 +6,7 @@ import {
     ShareInfo,
 } from '../types';
 
-export class ShareApiService {
+export class ShareApi {
     constructor(private client: Client) {}
 
     info(path: string, share_token: string): Promise<ShareInfo> {

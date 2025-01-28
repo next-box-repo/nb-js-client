@@ -11,7 +11,7 @@ const NOTIFICATIONS_ALL = `${NOTIFICATIONS}/all`;
 const NOTIFICATIONS_SUBSCRIPTION = `${NOTIFICATIONS}/subscription`;
 const NOTIFICATIONS_PERMISSION = `${NOTIFICATIONS}/permission`;
 
-export class NotificationsApiService {
+export class NotificationApi {
     constructor(private client: Client) {}
 
     list(

@@ -11,7 +11,7 @@ import {
 const DISK = '/disk';
 const DISK_CHECK = `${DISK}/check`;
 
-export class FcaApiService {
+export class FcaApi {
     constructor(private client: Client) {}
 
     info(rootID: number, path: string): Promise<StorageElement> {

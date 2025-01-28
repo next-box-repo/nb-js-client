@@ -10,7 +10,7 @@ const STORAGE_TRASH = '/storage/trash';
 const STORAGE_TRASH_ELEMENT = `${STORAGE_TRASH}/element`;
 const STORAGE_TRASH_ELEMENT_ALL = `${STORAGE_TRASH_ELEMENT}/all`;
 
-export class StorageTrashApiService {
+export class StorageTrashApi {
     constructor(private client: Client) {}
 
     list(

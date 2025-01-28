@@ -1,7 +1,7 @@
 import { Client } from '../classes';
 import { RequestUsersLogParams, ResponseList, UsersLog } from '../types';
 
-export class LogstashApiService {
+export class LogstashApi {
     constructor(private client: Client) {}
 
     getUsersLogs(

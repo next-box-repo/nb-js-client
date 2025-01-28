@@ -11,7 +11,7 @@ import {
 const CONNECTIONS = '/connections';
 const CONNECTIONS_DASHBOARD = `${CONNECTIONS}/dashboard`;
 
-export class ConnectionsApiService {
+export class ConnectionsApi {
     constructor(private client: Client) {}
 
     list(params: RequestConnectionParams): Promise<ResponseList<Connection>> {

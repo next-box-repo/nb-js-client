@@ -17,7 +17,7 @@ const USERS_ME_SESSIONS = `${USERS_ME}/sessions`;
 const USERS_ME_TOKEN = `${USERS_ME}/tokens`;
 const USERS_CHANGE_MY_PASSWORD = `${USERS_ME}/change-password`;
 
-export class UserApiService {
+export class UserApi {
     constructor(private client: Client) {}
 
     list(params: RequestUserListParams): Promise<ResponseList<User>> {

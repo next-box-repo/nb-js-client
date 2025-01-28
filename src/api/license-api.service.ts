@@ -5,7 +5,7 @@ const LICENSE = '/license';
 const CHECK_LICENSE = `${LICENSE}/manual-check`;
 const HASH = `${LICENSE}/hardware/hash`;
 
-export class LicenseApiService {
+export class LicenseApi {
     constructor(private client: Client) {}
 
     info(): Promise<License> {

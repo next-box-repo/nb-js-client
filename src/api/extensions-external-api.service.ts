@@ -6,7 +6,7 @@ import {
     ResponseList,
 } from '../types';
 
-export class ExtensionsExternalApiService {
+export class ExtensionsExternalApi {
     constructor(private client: Client) {}
 
     listExtensionsSite(

@@ -2,7 +2,7 @@ import { AuthToken } from './auth';
 
 export interface NbClientParams {
     host?: string;
-    version?: number;
+    version?: string;
 }
 
 export interface NbRequestParams {

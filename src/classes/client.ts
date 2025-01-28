@@ -1,24 +1,24 @@
 import {
-    AuthApiService,
-    ConnectionsApiService,
-    DiscoveryApiService,
-    DivideApiService,
-    ExtensionsApiService,
-    ExtensionsExternalApiService,
-    FcaApiService,
-    GatewayApiService,
-    GroupApiService,
-    LicenseApiService,
-    LogstashApiService,
-    RoleApiService,
-    ShareApiService,
-    StorageElementApiService,
-    StorageShareApiService,
-    StorageTrashApiService,
-    UserApiService,
+    AuthApi,
+    ConnectionsApi,
+    DiscoveryApi,
+    DivideApi,
+    ExtensionsApi,
+    ExtensionsExternalApi,
+    FcaApi,
+    GatewayApi,
+    GroupApi,
+    LicenseApi,
+    LogstashApi,
+    RoleApi,
+    ShareApi,
+    StorageElementApi,
+    StorageShareApi,
+    StorageTrashApi,
+    UserApi,
 } from '../api';
-import { NotificationsApiService } from '../api/notifications-api.service';
-import { StorageFilesApiService } from '../api/storage-files-api.service';
+import { NotificationApi } from '../api/notification-api.service';
+import { StorageFilesApi } from '../api/storage-files-api.service';
 import { AuthToken } from '../types';
 import { NbAppState, NbClientParams } from '../types/base';
 import { Interceptor } from '../types/interceptor';
@@ -28,25 +28,25 @@ import { TokenUpdate } from './token-update';
 export class Client {
     state!: NbAppState;
 
-    AuthApi = new AuthApiService(this);
-    ConnectionsApi = new ConnectionsApiService(this);
-    DiscoveryApi = new DiscoveryApiService(this);
-    DivideApi = new DivideApiService(this);
-    ExtensionsApi = new ExtensionsApiService(this);
-    ExtensionsExternalApi = new ExtensionsExternalApiService(this);
-    FcaApi = new FcaApiService(this);
-    GatewayApi = new GatewayApiService(this);
-    GroupApi = new GroupApiService(this);
-    LicenseApi = new LicenseApiService(this);
-    LogstashApi = new LogstashApiService(this);
-    NotificationsApi = new NotificationsApiService(this);
-    RoleApi = new RoleApiService(this);
-    ShareApi = new ShareApiService(this);
-    StorageElementApi = new StorageElementApiService(this);
-    StorageFilesApi = new StorageFilesApiService(this);
-    StorageShareApi = new StorageShareApiService(this);
-    StorageTrashApi = new StorageTrashApiService(this);
-    UserApi = new UserApiService(this);
+    AuthApi = new AuthApi(this);
+    ConnectionsApi = new ConnectionsApi(this);
+    DiscoveryApi = new DiscoveryApi(this);
+    DivideApi = new DivideApi(this);
+    ExtensionsApi = new ExtensionsApi(this);
+    ExtensionsExternalApi = new ExtensionsExternalApi(this);
+    FcaApi = new FcaApi(this);
+    GatewayApi = new GatewayApi(this);
+    GroupApi = new GroupApi(this);
+    LicenseApi = new LicenseApi(this);
+    LogstashApi = new LogstashApi(this);
+    NotificationApi = new NotificationApi(this);
+    RoleApi = new RoleApi(this);
+    ShareApi = new ShareApi(this);
+    StorageElementApi = new StorageElementApi(this);
+    StorageFilesApi = new StorageFilesApi(this);
+    StorageShareApi = new StorageShareApi(this);
+    StorageTrashApi = new StorageTrashApi(this);
+    UserApi = new UserApi(this);
 
     tokenUpdate = new TokenUpdate(this.AuthApi);
     rest = new Rest(this, this.tokenUpdate);
@@ -57,8 +57,10 @@ export class Client {
     constructor(clientParams: NbClientParams) {
         this.state = {
             clientParams: {
-                host: clientParams?.host || '',
-                version: clientParams?.version || 1,
+                host:
+                    clientParams?.host ||
+                    `${window.location.protocol}//${window.location.host}`,
+                version: clientParams?.version || '/api/v1',
             },
             requestParams: {
                 path: '',
@@ -94,7 +96,7 @@ export class Client {
 
     resetParams(params: {
         host?: string;
-        version?: number;
+        version?: string;
         headers?: Record<string, any>;
         cache?: RequestCache;
         authTokens?: Map<number, AuthToken> | null;

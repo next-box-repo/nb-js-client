@@ -2,7 +2,7 @@ import { Client } from '../classes';
 import { ResponseList } from '../types';
 import { Discovery } from '../types/discovery';
 
-export class DiscoveryApiService {
+export class DiscoveryApi {
     constructor(private client: Client) {}
 
     discovery(params?: any): Promise<ResponseList<Discovery>> {

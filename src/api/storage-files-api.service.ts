@@ -4,7 +4,7 @@ import { ResponseItem, StorageElement, UploadNetRequestParams } from '../types';
 const STORAGE_FILES = '/storage/files';
 const STORAGE_FILES_NET = `${STORAGE_FILES}/net`;
 
-export class StorageFilesApiService {
+export class StorageFilesApi {
     constructor(private client: Client) {}
 
     read(path: string, params: any): Promise<ResponseItem<any>> {

@@ -11,7 +11,7 @@ import {
 const EXTENSION = '/static/extensions';
 const EXTENSION_DEFAULT = `/extensions/defaults`;
 
-export class ExtensionsApiService {
+export class ExtensionsApi {
     constructor(private client: Client) {}
 
     getSetting(uniqKey: string): Promise<SettingValue[]> {

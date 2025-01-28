@@ -21,7 +21,7 @@ const STORAGE_ELEMENT_HISTORY = `${STORAGE_ELEMENT}/history`;
 const STORAGE_ELEMENT_VERSION = `${STORAGE_ELEMENT}/version`;
 const STORAGE_ELEMENT_VERSION_CURRENT = `${STORAGE_ELEMENT_VERSION}/current`;
 
-export class StorageElementApiService {
+export class StorageElementApi {
     constructor(private client: Client) {}
 
     list(

@@ -11,7 +11,7 @@ import {
     UserDivide,
 } from '../types';
 
-export class DivideApiService {
+export class DivideApi {
     constructor(private client: Client) {}
 
     divideDelete(service: DivideScope, id: number): Promise<void> {

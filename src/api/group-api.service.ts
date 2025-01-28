@@ -10,7 +10,7 @@ import {
 
 const GROUPS = '/groups';
 
-export class GroupApiService {
+export class GroupApi {
     constructor(private client: Client) {}
 
     list(params: RequestGroupListParams): Promise<ResponseList<Group>> {

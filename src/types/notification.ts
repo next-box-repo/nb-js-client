@@ -27,6 +27,7 @@ export type RequestNotificationListParams = RequestBaseParams & {
     read?: boolean;
     search?: string;
 };
+
 export type ResponseListNotification = ResponseList<UserNotification> & {
     total_all: number;
 };
@@ -61,6 +62,19 @@ export enum NotificationAction {
 
     DeleteExtension = 'delete_extension',
     NewVersionExtension = 'new_version_extension',
+
+    AllowInternalAccessUser = 'allow_internal_access_to_user',
+    BlockInternalAccessUser = 'block_internal_access_to_user',
+    WaitInternalAccessUser = 'wait_internal_access_to_user',
+    WaitInternalAccessUserCreate = 'wait_internal_access_to_user_create',
+    AllowInternalAccessGroup = 'allow_internal_access_to_group',
+    BlockInternalAccessGroup = 'block_internal_access_to_group',
+    WaitInternalAccessGroup = 'wait_internal_access_to_group',
+    WaitInternalAccessGroupCreate = 'wait_internal_access_to_group_create',
+    AllowSharing = 'allow_sharing',
+    BlockSharing = 'block_sharing',
+    WaitSharing = 'wait_sharing',
+    WaitSharingCreate = 'wait_sharing_create',
 
     Other = 'other',
 }

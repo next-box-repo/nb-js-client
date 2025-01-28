@@ -1,4 +1,4 @@
-import { AuthApiService } from '../api';
+import { AuthApi } from '../api';
 import { getCookieValue } from '../tools';
 import { AuthToken } from '../types';
 
@@ -11,7 +11,7 @@ export class TokenUpdate {
     private tokenUpdatePromise: Promise<AuthToken> | null = null;
     private tokenUpdateResolve: ((token: AuthToken) => void) | null = null;
 
-    constructor(private authApiService: AuthApiService) {}
+    constructor(private authApiService: AuthApi) {}
 
     isTokenExpire(timestamp: number): boolean {
         if (!timestamp) return false;

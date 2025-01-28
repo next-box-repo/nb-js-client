@@ -1,7 +1,7 @@
 import { Client } from '../classes';
 import { QueryInit, Setting, SettingValue } from '../types';
 
-export class GatewayApiService {
+export class GatewayApi {
     constructor(private client: Client) {}
 
     settings(): Promise<Setting[]> {

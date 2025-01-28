@@ -5,19 +5,19 @@ export const applyInterceptors = async <T>(
     }[],
     arg: T,
 ): Promise<T> => {
-    let result = arg;
+    let response = arg;
 
     for (const interceptor of interceptors) {
         try {
-            result = await interceptor.fulfilled(result);
+            response = await interceptor.fulfilled(response);
         } catch (error) {
             if (interceptor.rejected) {
-                result = await interceptor.rejected(error);
+                response = await interceptor.rejected(error);
             } else {
                 throw error;
             }
         }
     }
 
-    return result;
+    return response;
 };

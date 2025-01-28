@@ -101,24 +101,24 @@ export class Rest {
         ): Promise<Response> => {
             try {
                 const response = await fetch(url, request);
+                let body: any;
 
-                let responseBody: any;
                 try {
-                    responseBody = await response.clone().json();
+                    body = await response.clone().json();
                 } catch {
-                    responseBody = await response.text();
+                    body = await response.text();
                 }
 
                 if (!response.ok) {
                     throw new HttpErrorResponse({
-                        error: responseBody,
+                        error: body,
                         status: response.status,
                         statusText: response.statusText,
                         url: response.url,
                     });
                 }
 
-                return response;
+                return body;
             } catch (error) {
                 await applyInterceptors(
                     this.client.responseInterceptors,
@@ -129,12 +129,13 @@ export class Rest {
             }
         };
 
-        const url = `${this.state.clientParams.host}/api/v${
-            this.state.clientParams.version || 1
+        const url = `${this.state.clientParams.host}${
+            this.state.clientParams.version
         }${path}`;
         const sanitizedUrl = url.replace(/([^:]\/)+\/+/g, '$1');
 
         let response: Response = await executeFetch(sanitizedUrl, request);
+
         response = await applyInterceptors(
             this.client.responseInterceptors,
             response,

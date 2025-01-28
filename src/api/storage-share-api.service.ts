@@ -3,7 +3,7 @@ import { PermissionType, ShareInfo, ShareModel } from '../types';
 
 const STORAGE_ELEMENT_SHARE = '/storage/element/share';
 
-export class StorageShareApiService {
+export class StorageShareApi {
     constructor(private client: Client) {}
 
     info(path: string): Promise<ShareInfo> {

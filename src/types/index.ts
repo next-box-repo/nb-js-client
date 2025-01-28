@@ -1,3 +1,5 @@
+export * from './access-rights';
+export * from './access-token';
 export * from './auth';
 export * from './base';
 export * from './connection';
