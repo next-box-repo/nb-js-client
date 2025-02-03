@@ -37,6 +37,7 @@ export interface SettingField {
     placeholder?: SettingLang;
 
     view?: SettingFieldView;
+    disabled?: boolean;
 
     control: {
         type: SettingControlType;

@@ -1,11 +1,11 @@
 import { Client } from '../classes';
 import {
-    CreateGroupParams,
-    Group,
-    RequestGroupListParams,
+    CreateUserGroupParams,
+    RequestUserGroupListParams,
     ResponseItem,
     ResponseList,
     User,
+    UserGroup,
 } from '../types';
 
 const GROUPS = '/groups';
@@ -13,7 +13,7 @@ const GROUPS = '/groups';
 export class GroupApi {
     constructor(private client: Client) {}
 
-    list(params: RequestGroupListParams): Promise<ResponseList<Group>> {
+    list(params: RequestUserGroupListParams): Promise<ResponseList<UserGroup>> {
         return this.client.rest.get(GROUPS, params);
     }
 
@@ -21,11 +21,14 @@ export class GroupApi {
         return this.client.rest.get(`${GROUPS}/${id}/users`);
     }
 
-    create(data: CreateGroupParams): Promise<ResponseItem<Group>> {
+    create(data: CreateUserGroupParams): Promise<ResponseItem<UserGroup>> {
         return this.client.rest.post(GROUPS, JSON.stringify(data));
     }
 
-    update(id: number, data: CreateGroupParams): Promise<ResponseItem<Group>> {
+    update(
+        id: number,
+        data: CreateUserGroupParams,
+    ): Promise<ResponseItem<UserGroup>> {
         return this.client.rest.put(`${GROUPS}/${id}`, JSON.stringify(data));
     }
 

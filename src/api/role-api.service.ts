@@ -1,10 +1,10 @@
 import { Client } from '../classes';
 import {
-    CreateRoleParams,
-    RequestRoleListParams,
+    CreateUserRoleParams,
+    RequestUserRoleListParams,
     ResponseItem,
     ResponseList,
-    Role,
+    UserRole,
     Permission,
 } from '../types';
 
@@ -15,26 +15,26 @@ const PERMISSION = '/permissions';
 export class RoleApi {
     constructor(private client: Client) {}
 
-    list(params?: RequestRoleListParams): Promise<ResponseList<Role>> {
+    list(params?: RequestUserRoleListParams): Promise<ResponseList<UserRole>> {
         return this.client.rest.get(ROLES, params);
     }
 
-    get(id: number): Promise<ResponseItem<Role>> {
+    get(id: number): Promise<ResponseItem<UserRole>> {
         return this.client.rest.get(`${ROLES}/${id}`);
     }
 
-    getDefault(): Promise<ResponseItem<Role>> {
+    getDefault(): Promise<ResponseItem<UserRole>> {
         return this.client.rest.get(`${ROLES_DEFAULT}`);
     }
 
-    create(data: CreateRoleParams): Promise<ResponseItem<Role>> {
+    create(data: CreateUserRoleParams): Promise<ResponseItem<UserRole>> {
         return this.client.rest.post(ROLES, JSON.stringify(data));
     }
 
     update(
         id: number,
-        data: Partial<CreateRoleParams>,
-    ): Promise<ResponseItem<Role>> {
+        data: Partial<CreateUserRoleParams>,
+    ): Promise<ResponseItem<UserRole>> {
         return this.client.rest.put(`${ROLES}/${id}`, JSON.stringify(data));
     }
 

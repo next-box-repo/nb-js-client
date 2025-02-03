@@ -101,24 +101,24 @@ export class Rest {
         ): Promise<Response> => {
             try {
                 const response = await fetch(url, request);
-                let body: any;
+                let parsedBody: any;
 
                 try {
-                    body = await response.clone().json();
+                    parsedBody = await response.clone().json();
                 } catch {
-                    body = await response.text();
+                    parsedBody = await response.clone().text();
                 }
 
                 if (!response.ok) {
                     throw new HttpErrorResponse({
-                        error: body,
+                        error: parsedBody,
                         status: response.status,
                         statusText: response.statusText,
                         url: response.url,
                     });
                 }
 
-                return body;
+                return parsedBody;
             } catch (error) {
                 await applyInterceptors(
                     this.client.responseInterceptors,

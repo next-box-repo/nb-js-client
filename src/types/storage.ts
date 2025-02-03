@@ -30,12 +30,11 @@ export interface StorageElement {
     create_date: string;
     with_preview: boolean;
     is_favorite: boolean;
-    owner: User;
     owner_id: number;
     version?: StorageElementVersion;
     divide_id?: number;
     access_mode?: PermissionType;
-    to_user_group_name?: string;
+    to_user_group_id?: number;
     created_by_extension?: string;
 }
 

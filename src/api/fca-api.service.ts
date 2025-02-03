@@ -6,6 +6,7 @@ import {
     ResponseList,
     StorageElement,
     CreateStorageElementParams,
+    UploadNetRequestParams,
 } from '../types';
 
 const DISK = '/disk';
@@ -57,6 +58,16 @@ export class FcaApi {
         form.set('file', file);
 
         return this.client.rest.post(`${DISK}/${rootID}/files`, form);
+    }
+
+    uploadNet(
+        rootID: number,
+        params: UploadNetRequestParams,
+    ): Promise<ResponseItem<StorageElement>> {
+        return this.client.rest.post(
+            `/disk/${rootID}/files/net`,
+            JSON.stringify(params),
+        );
     }
 
     delete(rootID: number, path: string): Promise<void> {

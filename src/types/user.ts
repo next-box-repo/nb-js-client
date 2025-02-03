@@ -72,7 +72,7 @@ export interface RequestUserListParams extends RequestBaseParams {
     statuses?: UserStatus[];
     search_field?: string;
     with_me?: boolean;
-    type: UserType;
+    type?: UserType;
     exclude_type?: UserType;
 }
 
@@ -85,4 +85,50 @@ export type CreateUserParams = Pick<
     | 'home_path'
     | 'password'
     | 'role_id'
+>;
+
+export interface UserGroup {
+    id: number;
+    name: string;
+    description: string;
+    amount_users: number;
+    create_date: string;
+    owner_id: number;
+    owner: UserLabel;
+    update_date: string;
+    icon: string;
+    icon_color: string;
+}
+
+export interface RequestUserGroupListParams extends RequestBaseParams {
+    id?: number[];
+    name?: string;
+    description?: string;
+    search_field?: string;
+}
+
+export type CreateUserGroupParams = Pick<UserGroup, 'name' | 'description'> & {
+    users?: number[];
+};
+
+export interface UserRole {
+    id: number;
+    name: string;
+    description: string;
+    create_date: string;
+    update_date: string;
+    is_default: boolean;
+    owner_id: number;
+    grant_access_all: boolean;
+    permissions_id?: number[];
+}
+
+export interface RequestUserRoleListParams extends RequestBaseParams {
+    id?: number[];
+    search_field?: string;
+}
+
+export type CreateUserRoleParams = Pick<
+    UserRole,
+    'name' | 'description' | 'grant_access_all' | 'is_default'
 >;

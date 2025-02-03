@@ -93,41 +93,4 @@ export class Client {
             this.responseInterceptors.push({ fulfilled, rejected });
         },
     };
-
-    resetParams(params: {
-        host?: string;
-        version?: string;
-        headers?: Record<string, any>;
-        cache?: RequestCache;
-        authTokens?: Map<number, AuthToken> | null;
-        skipInterceptors?: boolean;
-    }): Promise<void> {
-        return new Promise<void>((resolve) => {
-            const {
-                host,
-                version,
-                headers,
-                cache,
-                authTokens,
-                skipInterceptors,
-            } = params;
-
-            this.state = {
-                clientParams: {
-                    host: host || this.state.clientParams.host,
-                    version: version ?? this.state.clientParams.version,
-                },
-                requestParams: {
-                    ...this.state.requestParams,
-                    headers: headers || this.state.requestParams.headers,
-                    cache: cache || this.state.requestParams.cache,
-                },
-                authToken: authTokens || this.state.authToken,
-                skipInterceptors:
-                    skipInterceptors || this.state.skipInterceptors,
-            };
-
-            resolve();
-        });
-    }
 }

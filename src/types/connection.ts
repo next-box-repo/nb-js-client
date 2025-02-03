@@ -12,16 +12,15 @@ export interface Connection {
     port: number;
     root_path: string;
     group_name: ConnectionGroup;
+    owner_id: number;
 
     divide_id?: number;
     access_mode?: PermissionType;
 
-    owner?: Pick<User, 'first_name' | 'last_name' | 'login' | 'middle_name'>;
-
     update_date: string;
     create_date: string;
     expire_in: string;
-    to_user_group_name?: string;
+    to_user_group_id?: number;
 }
 
 export enum ConnectionGroup {
@@ -44,6 +43,7 @@ export enum ConnectionType {
 }
 
 export interface RequestConnectionParams extends RequestBaseParams {
+    id?: number[];
     name?: string | null;
     group_name?: ConnectionGroup;
     is_divided?: boolean;
