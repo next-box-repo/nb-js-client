@@ -10,7 +10,7 @@ export * from './license';
 export * from './lock-screen';
 export * from './notification';
 export * from './permission';
-export * from './query-init';
+export * from './request';
 export * from './restriction';
 export * from './user';
 export * from './user-log';

@@ -73,20 +73,6 @@ export interface ExtensionMetaPayload {
     uniq_key: string;
 }
 
-export interface ExtensionListParams extends RequestBaseParams {
-    search?: string | null;
-    uniq_key?: string[];
-    file_name_ext?: string;
-    type?: StorageElementType[];
-    ext_value?: string | null;
-    file_mode?: ExtensionFileMode[];
-    lang?: string;
-}
-
-export interface ExtensionExternalListParams extends RequestBaseParams {
-    search_field?: string;
-}
-
 export interface ExtensionExternalInList {
     id: number;
     create_date: string;

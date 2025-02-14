@@ -1,16 +1,12 @@
 import { Client } from '../classes';
-import {
-    RequestStorageListParams,
-    ResponseList,
-    StorageTrashElement,
-    StorageTrashItem,
-} from '../types';
+import { ResponseList, StorageTrashElement, StorageTrashItem } from '../types';
+import { RequestStorageListParams } from './storage-element-api.service';
 
 const STORAGE_TRASH = '/storage/trash';
 const STORAGE_TRASH_ELEMENT = `${STORAGE_TRASH}/element`;
 const STORAGE_TRASH_ELEMENT_ALL = `${STORAGE_TRASH_ELEMENT}/all`;
 
-export class StorageTrashApi {
+export class StorageTrashApiService {
     constructor(private client: Client) {}
 
     list(

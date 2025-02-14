@@ -1,10 +1,18 @@
 import { Client } from './client';
-import { AuthToken, NbAppState } from '../types';
+import {
+    AuthToken,
+    NbAppState,
+    ResponseType,
+    RequestMethod,
+    HttpResponse,
+    RequestConfig,
+    RequestObserve,
+    HttpEvent,
+} from '../types';
 import { AccessToken } from '../types/access-token';
 import { jwtDecode } from 'jwt-decode';
 import { TokenUpdate } from './token-update';
-import { HttpErrorResponse } from './http-error-response';
-import { applyInterceptors, makeUrlParams } from '../tools';
+import { applyInterceptors, makeUrlParams, normalizeHeaders } from '../tools';
 
 export class Rest {
     constructor(
@@ -16,131 +24,193 @@ export class Rest {
         return this.client.state;
     }
 
-    get(path: string, query?: Record<string, any>): Promise<any> {
-        return this.sendRequest('GET', path, { query, cache: 'no-cache' });
-    }
-
-    post(path: string, body?: BodyInit | null): Promise<any> {
-        return this.sendRequest('POST', path, { body });
-    }
-
-    put(path: string, body?: BodyInit | null): Promise<any> {
-        return this.sendRequest('PUT', path, { body, cache: 'no-cache' });
-    }
-
-    patch(path: string, body?: BodyInit | null): Promise<any> {
-        return this.sendRequest('PATCH', path, { body });
-    }
-
-    delete(path: string, query?: Record<string, any>): Promise<any> {
-        return this.sendRequest('DELETE', path, { query });
-    }
-
-    private async sendRequest(
-        method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE',
+    get(
         path: string,
-        options: {
-            query?: Record<string, any>;
-            body?: BodyInit | null;
-            cache?: RequestCache;
-        } = {},
-    ): Promise<Response> {
-        const skipInterceptors = this.state.skipInterceptors ?? false;
-        this.state.skipInterceptors = false;
+        params?: Record<string, any>,
+        config?: RequestConfig,
+    ): Promise<any> {
+        return this.request(RequestMethod.GET, path, {
+            params,
+            cache: 'no-cache',
+            ...config,
+        });
+    }
 
-        let request: RequestInit = {
-            method,
-            headers: this.state.requestParams.headers,
-            cache: options.cache || this.state.requestParams.cache,
-            body: options.body || this.state.requestParams.body,
-        };
+    post(
+        path: string,
+        body?: BodyInit | null,
+        config?: RequestConfig,
+    ): Promise<any> {
+        return this.request(RequestMethod.POST, path, { body, ...config });
+    }
 
-        if (!skipInterceptors) {
-            request = await applyInterceptors(
-                this.client.requestInterceptors,
-                request,
-            );
-        }
+    put(
+        path: string,
+        body?: BodyInit | null,
+        config?: RequestConfig,
+    ): Promise<any> {
+        return this.request(RequestMethod.PUT, path, {
+            body,
+            cache: 'no-cache',
+            ...config,
+        });
+    }
 
-        if (this.state.authToken) {
-            for (const [connectionId, item] of this.state.authToken.entries()) {
-                const token: AccessToken = jwtDecode(item.access_token);
+    patch(
+        path: string,
+        body?: BodyInit | null,
+        config?: RequestConfig,
+    ): Promise<any> {
+        return this.request(RequestMethod.PATCH, path, { body, ...config });
+    }
 
-                const needUpdate =
-                    token &&
-                    token.is_remember &&
-                    this.tokenUpdate.isTokenExpire(token.exp);
+    delete(
+        path: string,
+        params?: Record<string, any>,
+        config?: RequestConfig,
+    ): Promise<any> {
+        return this.request(RequestMethod.DELETE, path, { params, ...config });
+    }
 
-                if (
-                    needUpdate &&
-                    !path.includes('/login') &&
-                    !path.includes('/assets')
-                ) {
-                    const tokens: AuthToken | null =
-                        await this.tokenUpdate.refreshToken(item);
+    async request<T>(
+        method: RequestMethod,
+        path: string,
+        config?: RequestConfig,
+    ): Promise<T | HttpResponse<T> | HttpEvent<T>> {
+        return new Promise(async (resolve, reject) => {
+            const skipInterceptors = this.state.skipInterceptors ?? false;
+            this.state.skipInterceptors = false;
 
-                    if (tokens) {
-                        this.state.authToken.set(connectionId, tokens);
+            let request: RequestInit = {
+                method,
+                ...config,
+            };
 
-                        request = await applyInterceptors(
-                            this.client.requestInterceptors,
-                            request,
-                        );
+            if (!skipInterceptors) {
+                config = await applyInterceptors(
+                    this.client.requestInterceptors,
+                    request,
+                );
+            }
+
+            if (this.state.authToken) {
+                for (const [
+                    connectionId,
+                    item,
+                ] of this.state.authToken.entries()) {
+                    const token: AccessToken = jwtDecode(item.access_token);
+
+                    const needUpdate =
+                        token &&
+                        token.is_remember &&
+                        this.tokenUpdate.isTokenExpire(token.exp);
+
+                    if (
+                        needUpdate &&
+                        !path.includes('/login') &&
+                        !path.includes('/assets')
+                    ) {
+                        const tokens: AuthToken | null =
+                            await this.tokenUpdate.refreshToken(item);
+
+                        if (tokens) {
+                            this.state.authToken.set(connectionId, tokens);
+
+                            config = await applyInterceptors(
+                                this.client.requestInterceptors,
+                                request,
+                            );
+                        }
                     }
                 }
             }
-        }
 
-        if (options.query) {
-            path += '?' + makeUrlParams(options.query);
-        }
+            const xhr = new XMLHttpRequest();
 
-        const executeFetch = async (
-            url: string,
-            request: RequestInit,
-        ): Promise<Response> => {
-            try {
-                const response = await fetch(url, request);
-                let parsedBody: any;
+            if (config?.params && Object.keys(config.params).length === 0) {
+                path += '?' + makeUrlParams(config.params);
+            }
 
-                try {
-                    parsedBody = await response.clone().json();
-                } catch {
-                    parsedBody = await response.clone().text();
+            const url = `${this.state.clientParams.host}${
+                this.state.clientParams.version
+            }${path}`;
+
+            xhr.open(method, url, true);
+
+            if (config?.headers) {
+                const normalizedHeaders = normalizeHeaders(config.headers);
+
+                for (const [key, value] of Object.entries(normalizedHeaders)) {
+                    xhr.setRequestHeader(key, value);
                 }
+            }
 
-                if (!response.ok) {
-                    throw new HttpErrorResponse({
-                        error: parsedBody,
-                        status: response.status,
-                        statusText: response.statusText,
-                        url: response.url,
+            if (config?.responseType) {
+                xhr.responseType = config.responseType;
+            }
+
+            if (xhr.upload) {
+                xhr.upload.onprogress = (event) => {
+                    if (event.lengthComputable && config?.onUploadProgress) {
+                        config.onUploadProgress(event);
+                    }
+                };
+            }
+
+            xhr.onload = async () => {
+                const headers = new Headers();
+                xhr.getAllResponseHeaders()
+                    .split('\r\n')
+                    .forEach((header) => {
+                        const [key, value] = header.split(': ');
+                        if (key && value) headers.append(key, value);
                     });
+
+                let body: any;
+
+                switch (config?.responseType) {
+                    case ResponseType.Text:
+                        body = xhr.responseText;
+                    case ResponseType.Blob:
+                    case ResponseType.ArrayBuffer:
+                        body = xhr.response;
+                    default:
+                        try {
+                            body = JSON.parse(xhr.responseText);
+                        } catch {
+                            body = xhr.responseText;
+                        }
                 }
 
-                return parsedBody;
-            } catch (error) {
-                await applyInterceptors(
+                let response = {
+                    status: xhr.status,
+                    statusText: xhr.statusText,
+                    headers,
+                    body: body as T,
+                };
+
+                response = await applyInterceptors(
                     this.client.responseInterceptors,
-                    error as Response,
+                    response,
                 );
 
-                throw error;
-            }
-        };
+                if (xhr.status >= 200 && xhr.status < 300) {
+                    if (config?.observe === RequestObserve.Response) {
+                        resolve(response);
+                    } else resolve(body as T);
+                } else {
+                    reject({
+                        status: xhr.status,
+                        statusText: xhr.statusText,
+                        headers,
+                        error: body,
+                    });
+                }
+            };
 
-        const url = `${this.state.clientParams.host}${
-            this.state.clientParams.version
-        }${path}`;
-        const sanitizedUrl = url.replace(/([^:]\/)+\/+/g, '$1');
+            xhr.onerror = () => reject(new Error('Network error'));
 
-        let response: Response = await executeFetch(sanitizedUrl, request);
-
-        response = await applyInterceptors(
-            this.client.responseInterceptors,
-            response,
-        );
-
-        return response;
+            xhr.send(config?.body ?? null);
+        });
     }
 }

@@ -1,28 +1,28 @@
 import { Client } from '../classes';
 import {
-    RequestHistoryListParams,
-    StorageElementHistoryNote,
-    StorageElementPasteParams,
     ResponseItem,
     ResponseList,
-    CreateStorageElementParams,
-    StorageElementHistory,
     StorageElementPaste,
-    StorageElementVersion,
     StorageRoot,
+    RequestBaseParams,
+    StorageElementType,
+    StorageRouteData,
+    SizeBySection,
 } from '../types';
-import { RequestStorageListParams, StorageElement } from '../types';
+import { StorageElement } from '../types';
+import { FcaApiService } from './fca-api.service';
 
 const STORAGE = '/storage';
 const STORAGE_ELEMENT = `${STORAGE}/element`;
 const STORAGE_ELEMENT_MOVE = `${STORAGE_ELEMENT}/move`;
 const STORAGE_ELEMENT_COPY = `${STORAGE_ELEMENT}/copy`;
-const STORAGE_ELEMENT_HISTORY = `${STORAGE_ELEMENT}/history`;
-const STORAGE_ELEMENT_VERSION = `${STORAGE_ELEMENT}/version`;
-const STORAGE_ELEMENT_VERSION_CURRENT = `${STORAGE_ELEMENT_VERSION}/current`;
+const STORAGE_ELEMENT_SECTION_SIZE = `${STORAGE_ELEMENT}/content_type_size`;
 
-export class StorageElementApi {
-    constructor(private client: Client) {}
+export class StorageElementApiService {
+    constructor(
+        private client: Client,
+        private fcaApiService: FcaApiService,
+    ) {}
 
     list(
         params?: RequestStorageListParams,
@@ -44,6 +44,19 @@ export class StorageElementApi {
         return this.client.rest.get(STORAGE_ELEMENT, params);
     }
 
+    combineInfo({
+        root,
+        rootId,
+        path,
+        file_version_id,
+    }: StorageRouteData): Promise<StorageElement> {
+        if (root === StorageRoot.fca && rootId) {
+            return this.fcaApiService.info(rootId, path);
+        }
+
+        return this.info({ path, divide_id: rootId, file_version_id });
+    }
+
     size(data: { paths: string[]; divide_id?: number }): Promise<number> {
         if (!parseInt(data.divide_id?.toString() || '')) {
             delete data.divide_id;
@@ -55,28 +68,42 @@ export class StorageElementApi {
         );
     }
 
-    move(data: StorageElementPasteParams, hasFCA = false): Promise<void> {
-        const { from_divide_id, to_divide_id } = data;
-        const fcaParams = {
-            ...data,
+    move(
+        params: StorageElementPasteParams,
+        to: StorageRoot,
+        from: StorageRoot,
+    ): Promise<void> {
+        const { from_divide_id, to_divide_id } = params;
+
+        let fcaParams: StorageElementPasteParams = {
+            ...params,
             from_divide_id: null,
             to_divide_id: null,
         };
 
-        if (!hasFCA)
+        if (to === StorageRoot.fca && from === StorageRoot.fca) {
             return this.client.rest.post(
-                STORAGE_ELEMENT_MOVE,
-                JSON.stringify(data),
+                `/disk/${from_divide_id}/files/move/disk/${to_divide_id}`,
+                JSON.stringify(fcaParams),
             );
+        }
 
-        if (!from_divide_id) {
+        if (to === StorageRoot.fca) {
+            if (from_divide_id) {
+                fcaParams.from_divide_id = from_divide_id;
+            }
+
             return this.client.rest.put(
                 `/disk/${to_divide_id}/files/from/box`,
                 JSON.stringify(fcaParams),
             );
         }
 
-        if (!to_divide_id) {
+        if (from === StorageRoot.fca) {
+            if (to_divide_id) {
+                fcaParams.to_divide_id = to_divide_id;
+            }
+
             return this.client.rest.put(
                 `/disk/${from_divide_id}/files/to/box`,
                 JSON.stringify(fcaParams),
@@ -84,8 +111,8 @@ export class StorageElementApi {
         }
 
         return this.client.rest.post(
-            `/disk/${from_divide_id}/files/move/disk/${to_divide_id}`,
-            JSON.stringify(fcaParams),
+            STORAGE_ELEMENT_MOVE,
+            JSON.stringify(params),
         );
     }
 
@@ -199,44 +226,39 @@ export class StorageElementApi {
         return this.client.rest.post(STORAGE_ELEMENT, JSON.stringify(data));
     }
 
-    history(
-        params: RequestHistoryListParams,
-    ): Promise<ResponseList<StorageElementHistory>> {
-        return this.client.rest.get(STORAGE_ELEMENT_HISTORY, params);
-    }
-
-    versions(
-        params: RequestHistoryListParams,
-    ): Promise<ResponseList<StorageElementVersion>> {
-        return this.client.rest.get(STORAGE_ELEMENT_VERSION, params);
-    }
-
-    createVersion(
-        data: StorageElementHistoryNote,
-    ): Promise<ResponseItem<StorageElementVersion>> {
-        return this.client.rest.post(
-            STORAGE_ELEMENT_VERSION,
-            JSON.stringify(data),
-        );
-    }
-
-    editVersion(
-        data: StorageElementHistoryNote,
-    ): Promise<ResponseItem<StorageElementVersion>> {
-        return this.client.rest.put(
-            STORAGE_ELEMENT_VERSION,
-            JSON.stringify(data),
-        );
-    }
-
-    deleteVersion(params: RequestHistoryListParams): Promise<void> {
-        return this.client.rest.delete(STORAGE_ELEMENT_VERSION, params);
-    }
-
-    makeCurrentVersion(data: RequestHistoryListParams): Promise<void> {
-        return this.client.rest.post(
-            STORAGE_ELEMENT_VERSION_CURRENT,
-            JSON.stringify(data),
-        );
+    sizeWithSection(params?: {
+        owner_id: number;
+        with_trash: boolean;
+    }): Promise<SizeBySection[] | null> {
+        return this.client.rest.get(STORAGE_ELEMENT_SECTION_SIZE, params);
     }
 }
+
+export interface RequestStorageListParams extends RequestBaseParams {
+    search?: string;
+    is_favorite?: boolean;
+    is_divided?: boolean;
+    divide_id?: number | null;
+    path?: string;
+    min_size?: number | null;
+    max_size?: number | null;
+    type?: StorageElementType;
+    file_name_ext?: string[];
+    from_sharing_token?: string;
+    from_path?: string;
+    from_sharing_password?: string;
+}
+
+export interface StorageElementPasteParams {
+    paths: StorageElementPaste[];
+    overwrite: boolean;
+    from_divide_id?: number | null;
+    to_divide_id?: number | null;
+}
+
+export type CreateStorageElementParams = Pick<
+    StorageElement,
+    'created_by_extension' | 'divide_id' | 'name' | 'type' | 'path'
+> & {
+    is_work_dir?: boolean;
+};

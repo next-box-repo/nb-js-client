@@ -1,4 +1,5 @@
 import { AuthToken } from './auth';
+import { PermissionType } from './divide';
 
 export interface NbClientParams {
     host?: string;
@@ -27,6 +28,7 @@ export interface ResponseItem<T> {
 export interface ResponseList<T> {
     rows: T[];
     total: number;
+    current?: { access_mode: PermissionType };
 }
 
 export interface RequestBaseParams {

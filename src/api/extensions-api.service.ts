@@ -2,16 +2,20 @@ import { Client } from '../classes';
 import {
     Extension,
     ExtensionDefault,
-    ExtensionListParams,
+    ExtensionFileMode,
+    HttpEvent,
+    OnUploadProgress,
+    RequestBaseParams,
     ResponseItem,
     ResponseList,
     SettingValue,
+    StorageElementType,
 } from '../types';
 
 const EXTENSION = '/static/extensions';
 const EXTENSION_DEFAULT = `/extensions/defaults`;
 
-export class ExtensionsApi {
+export class ExtensionsApiService {
     constructor(private client: Client) {}
 
     getSetting(uniqKey: string): Promise<SettingValue[]> {
@@ -74,11 +78,18 @@ export class ExtensionsApi {
         return this.client.rest.delete(`${EXTENSION}/${id}`);
     }
 
-    upload(file: File): Promise<ResponseItem<Extension>> {
+    upload(
+        onProgress: OnUploadProgress,
+        file: File,
+    ): Promise<HttpEvent<ResponseItem<Extension>>> {
         const form = new FormData();
         form.set('file', file);
 
-        return this.client.rest.post(EXTENSION, form);
+        return this.client.rest.post(EXTENSION, form, {
+            onUploadProgress: (event) => {
+                onProgress(event);
+            },
+        });
     }
 
     install(uniq_key: string, version: string): Promise<any> {
@@ -87,4 +98,14 @@ export class ExtensionsApi {
             JSON.stringify({ uniq_key, version }),
         );
     }
+}
+
+export interface ExtensionListParams extends RequestBaseParams {
+    search?: string | null;
+    uniq_key?: string[];
+    file_name_ext?: string;
+    type?: StorageElementType[];
+    ext_value?: string | null;
+    file_mode?: ExtensionFileMode[];
+    lang?: string;
 }

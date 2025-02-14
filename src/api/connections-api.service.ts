@@ -1,9 +1,9 @@
 import { Client } from '../classes';
 import {
     Connection,
-    ConnectionCreateParams,
+    ConnectionGroup,
     ConnectionType,
-    RequestConnectionParams,
+    RequestBaseParams,
     ResponseItem,
     ResponseList,
 } from '../types';
@@ -11,7 +11,7 @@ import {
 const CONNECTIONS = '/connections';
 const CONNECTIONS_DASHBOARD = `${CONNECTIONS}/dashboard`;
 
-export class ConnectionsApi {
+export class ConnectionsApiService {
     constructor(private client: Client) {}
 
     list(params: RequestConnectionParams): Promise<ResponseList<Connection>> {
@@ -60,3 +60,13 @@ export class ConnectionsApi {
         return this.client.rest.get(CONNECTIONS_DASHBOARD, params);
     }
 }
+
+export interface RequestConnectionParams extends RequestBaseParams {
+    id?: number[];
+    name?: string | null;
+    group_name?: ConnectionGroup;
+    is_divided?: boolean;
+    type?: string;
+}
+
+export type ConnectionCreateParams = Omit<Connection, 'group_name'>;

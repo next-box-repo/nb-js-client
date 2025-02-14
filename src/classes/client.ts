@@ -1,25 +1,28 @@
 import {
-    AuthApi,
-    ConnectionsApi,
-    DiscoveryApi,
-    DivideApi,
-    ExtensionsApi,
-    ExtensionsExternalApi,
-    FcaApi,
-    GatewayApi,
-    GroupApi,
-    LicenseApi,
-    LogstashApi,
-    RoleApi,
-    ShareApi,
-    StorageElementApi,
-    StorageShareApi,
-    StorageTrashApi,
-    UserApi,
+    AuthApiService,
+    ConnectionsApiService,
+    DiscoveryApiService,
+    DivideApiService,
+    ExtensionsApiService,
+    ExtensionsExternalApiService,
+    FcaApiService,
+    GatewayApiService,
+    GroupApiService,
+    LicenseApiService,
+    LinksApiService,
+    LogstashApiService,
+    NotificationApiService,
+    RoleApiService,
+    ShareApiService,
+    StorageElementApiService,
+    StorageFilesApiService,
+    StorageInstanceApiService,
+    StorageShareApiService,
+    StorageTrashApiService,
+    UserApiService,
+    VersionApiService,
 } from '../api';
-import { NotificationApi } from '../api/notification-api.service';
-import { StorageFilesApi } from '../api/storage-files-api.service';
-import { AuthToken } from '../types';
+
 import { NbAppState, NbClientParams } from '../types/base';
 import { Interceptor } from '../types/interceptor';
 import { Rest } from './rest';
@@ -28,31 +31,37 @@ import { TokenUpdate } from './token-update';
 export class Client {
     state!: NbAppState;
 
-    AuthApi = new AuthApi(this);
-    ConnectionsApi = new ConnectionsApi(this);
-    DiscoveryApi = new DiscoveryApi(this);
-    DivideApi = new DivideApi(this);
-    ExtensionsApi = new ExtensionsApi(this);
-    ExtensionsExternalApi = new ExtensionsExternalApi(this);
-    FcaApi = new FcaApi(this);
-    GatewayApi = new GatewayApi(this);
-    GroupApi = new GroupApi(this);
-    LicenseApi = new LicenseApi(this);
-    LogstashApi = new LogstashApi(this);
-    NotificationApi = new NotificationApi(this);
-    RoleApi = new RoleApi(this);
-    ShareApi = new ShareApi(this);
-    StorageElementApi = new StorageElementApi(this);
-    StorageFilesApi = new StorageFilesApi(this);
-    StorageShareApi = new StorageShareApi(this);
-    StorageTrashApi = new StorageTrashApi(this);
-    UserApi = new UserApi(this);
+    AuthApiService = new AuthApiService(this);
+    ConnectionsApiService = new ConnectionsApiService(this);
+    DiscoveryApiService = new DiscoveryApiService(this);
+    DivideApiService = new DivideApiService(this);
+    ExtensionsApiService = new ExtensionsApiService(this);
+    ExtensionsExternalApiService = new ExtensionsExternalApiService(this);
+    FcaApiService = new FcaApiService(this);
+    GatewayApiService = new GatewayApiService(this);
+    GroupApiService = new GroupApiService(this);
+    LicenseApiService = new LicenseApiService(this);
+    LinksApiService = new LinksApiService(this);
+    LogstashApiService = new LogstashApiService(this);
+    NotificationApiService = new NotificationApiService(this);
+    RoleApiService = new RoleApiService(this);
+    ShareApiService = new ShareApiService(this);
+    StorageElementApiService = new StorageElementApiService(
+        this,
+        this.FcaApiService,
+    );
+    StorageFilesApiService = new StorageFilesApiService(this);
+    StorageInstanceApiService = new StorageInstanceApiService(this);
+    StorageShareApiService = new StorageShareApiService(this);
+    StorageTrashApiService = new StorageTrashApiService(this);
+    UserApiService = new UserApiService(this);
+    VersionApiService = new VersionApiService(this);
 
-    tokenUpdate = new TokenUpdate(this.AuthApi);
+    tokenUpdate = new TokenUpdate(this.AuthApiService);
     rest = new Rest(this, this.tokenUpdate);
 
     requestInterceptors: Interceptor<RequestInit>[] = [];
-    responseInterceptors: Interceptor<Response>[] = [];
+    responseInterceptors: Interceptor<any>[] = [];
 
     constructor(clientParams: NbClientParams) {
         this.state = {
@@ -87,7 +96,7 @@ export class Client {
 
     response = {
         use: (
-            fulfilled: (response: Response) => Response | Promise<Response>,
+            fulfilled: (response: any) => any | Promise<any>,
             rejected: (error: any) => any,
         ) => {
             this.responseInterceptors.push({ fulfilled, rejected });

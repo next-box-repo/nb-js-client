@@ -8,10 +8,12 @@ import {
     RequestUserDivideParams,
     ResponseItem,
     ResponseList,
+    RestrictionModeKey,
+    UnionRestriction,
     UserDivide,
 } from '../types';
 
-export class DivideApi {
+export class DivideApiService {
     constructor(private client: Client) {}
 
     divideDelete(service: DivideScope, id: number): Promise<void> {
@@ -67,6 +69,17 @@ export class DivideApi {
             ...this.makeParam(service, resource),
             ...params,
         });
+    }
+
+    getRestriction(id: number): Promise<UnionRestriction> {
+        return this.client.rest.get(`/divide/restrictions/${id}`);
+    }
+
+    restrictionSize(
+        key: string | number,
+        modeKey: RestrictionModeKey,
+    ): Promise<number> {
+        return this.client.rest.get(`/${modeKey}/restrictions/${key}/size`);
     }
 
     restrictions(params?: any): Promise<ResponseList<UserDivide>> {

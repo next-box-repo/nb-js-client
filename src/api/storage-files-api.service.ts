@@ -1,10 +1,15 @@
 import { Client } from '../classes';
-import { ResponseItem, StorageElement, UploadNetRequestParams } from '../types';
+import {
+    HttpEvent,
+    OnUploadProgress,
+    ResponseItem,
+    StorageElement,
+} from '../types';
 
 const STORAGE_FILES = '/storage/files';
 const STORAGE_FILES_NET = `${STORAGE_FILES}/net`;
 
-export class StorageFilesApi {
+export class StorageFilesApiService {
     constructor(private client: Client) {}
 
     read(path: string, params: any): Promise<ResponseItem<any>> {
@@ -31,10 +36,11 @@ export class StorageFilesApi {
     }
 
     upload(
+        onProgress: OnUploadProgress,
         file: File,
         path: string,
         divide_id?: number,
-    ): Promise<ResponseItem<StorageElement>> {
+    ): Promise<HttpEvent<ResponseItem<StorageElement>>> {
         const form = new FormData();
 
         form.set('path', path);
@@ -42,7 +48,11 @@ export class StorageFilesApi {
 
         if (divide_id) form.set('divide_id', divide_id.toString());
 
-        return this.client.rest.post(STORAGE_FILES, form);
+        return this.client.rest.post(STORAGE_FILES, form, {
+            onUploadProgress: (event) => {
+                onProgress(event);
+            },
+        });
     }
 
     uploadNet(
@@ -50,4 +60,12 @@ export class StorageFilesApi {
     ): Promise<ResponseItem<StorageElement>> {
         return this.client.rest.post(STORAGE_FILES_NET, JSON.stringify(data));
     }
+}
+
+export interface UploadNetRequestParams {
+    path: string;
+    url: string;
+    overwrite?: boolean;
+    divide_id?: number;
+    connection_divide_id?: number;
 }

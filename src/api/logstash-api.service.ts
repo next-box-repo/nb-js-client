@@ -1,16 +1,49 @@
 import { Client } from '../classes';
-import { RequestUsersLogParams, ResponseList, UsersLog } from '../types';
+import {
+    HttpResponse,
+    RequestBaseParams,
+    RequestMethod,
+    RequestObserve,
+    ResponseList,
+    ResponseType,
+    UsersLog,
+} from '../types';
 
-export class LogstashApi {
+const LOGS = '/logs';
+
+export class LogstashApiService {
     constructor(private client: Client) {}
 
     getUsersLogs(
         params: RequestUsersLogParams,
     ): Promise<ResponseList<UsersLog>> {
-        return this.client.rest.get(`/logs/users`, params);
+        return this.client.rest.get(`${LOGS}/users`, params);
     }
 
-    getSystemLogs(path: string): Promise<string> {
-        return this.client.rest.get(path);
+    getSystemLogs(
+        path: string,
+        start: number,
+        end: number,
+    ): Promise<HttpResponse<string>> {
+        return this.client.rest.get(
+            `${LOGS}/${path}`,
+            {},
+            {
+                observe: RequestObserve.Response,
+                responseType: ResponseType.Text,
+                headers: { Range: `bytes=${start}-${end}` },
+            },
+        );
     }
+}
+
+export interface RequestUsersLogParams extends RequestBaseParams {
+    user_id?: string;
+    search_field?: string;
+    from_date?: string;
+    to_date?: string;
+    with_me?: boolean;
+}
+function of(): Promise<HttpResponse<string>> {
+    throw new Error('Function not implemented.');
 }

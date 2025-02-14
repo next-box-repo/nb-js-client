@@ -1,17 +1,12 @@
 import { Client } from '../classes';
-import {
-    RequestAuthSettingsParams,
-    AuthToken,
-    AuthType,
-    RequestAuthTokenParams,
-} from '../types';
+import { AuthToken, AuthType } from '../types';
 
 const LOGIN = '/login';
 const LOGOUT = '/logout';
 const LOGIN_LDAP = `${LOGIN}/ldap`;
 const LOGIN_UPDATE = `${LOGIN}/update`;
 
-export class AuthApi {
+export class AuthApiService {
     constructor(private client: Client) {}
 
     info(): Promise<AuthType> {
@@ -36,4 +31,15 @@ export class AuthApi {
     logout(): Promise<void> {
         return this.client.rest.post(LOGOUT);
     }
+}
+
+export interface RequestAuthSettingsParams {
+    login: string;
+    password: string;
+    is_remember: boolean;
+}
+
+export interface RequestAuthTokenParams extends AuthToken {
+    with_cookie?: boolean;
+    path?: string;
 }

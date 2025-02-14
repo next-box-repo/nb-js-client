@@ -4,9 +4,10 @@ import {
     ResponseList,
     RestrictionStatus,
     ShareInfo,
+    UnionRestriction,
 } from '../types';
 
-export class ShareApi {
+export class ShareApiService {
     constructor(private client: Client) {}
 
     info(path: string, share_token: string): Promise<ShareInfo> {
@@ -25,6 +26,10 @@ export class ShareApi {
 
     checkToken(share_token: string): Promise<any> {
         return this.client.rest.get(`share?share_token=${share_token}`);
+    }
+
+    getRestriction(token: string): Promise<UnionRestriction> {
+        return this.client.rest.get(`/share/restrictions/${token}`);
     }
 
     restrictions(params?: RequestBaseParams): Promise<ResponseList<ShareInfo>> {

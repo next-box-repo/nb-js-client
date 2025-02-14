@@ -1,18 +1,17 @@
 import { Client } from '../classes';
 import {
-    CreateUserRoleParams,
-    RequestUserRoleListParams,
     ResponseItem,
     ResponseList,
     UserRole,
     Permission,
+    RequestBaseParams,
 } from '../types';
 
 const ROLES = '/roles';
 const ROLES_DEFAULT = `${ROLES}/default`;
 const PERMISSION = '/permissions';
 
-export class RoleApi {
+export class RoleApiService {
     constructor(private client: Client) {}
 
     list(params?: RequestUserRoleListParams): Promise<ResponseList<UserRole>> {
@@ -57,3 +56,13 @@ export class RoleApi {
         return this.client.rest.delete(`${ROLES}/${id}/permissions`, { ids });
     }
 }
+
+export interface RequestUserRoleListParams extends RequestBaseParams {
+    id?: number[];
+    search_field?: string;
+}
+
+export type CreateUserRoleParams = Pick<
+    UserRole,
+    'name' | 'description' | 'grant_access_all' | 'is_default'
+>;

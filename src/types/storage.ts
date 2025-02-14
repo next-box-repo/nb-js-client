@@ -2,21 +2,6 @@ import { RequestBaseParams } from './base';
 import { PermissionType } from './divide';
 import { User } from './user';
 
-export interface RequestStorageListParams extends RequestBaseParams {
-    search?: string;
-    is_favorite?: boolean;
-    is_divided?: boolean;
-    divide_id?: number | null;
-    path?: string;
-    min_size?: number | null;
-    max_size?: number | null;
-    type?: StorageElementType;
-    file_name_ext?: string[];
-    from_sharing_token?: string;
-    from_path?: string;
-    from_sharing_password?: string;
-}
-
 export interface StorageElement {
     name: string;
     size: number;
@@ -37,13 +22,6 @@ export interface StorageElement {
     to_user_group_id?: number;
     created_by_extension?: string;
 }
-
-export type CreateStorageElementParams = Pick<
-    StorageElement,
-    'created_by_extension' | 'divide_id' | 'name' | 'type' | 'path'
-> & {
-    is_work_dir?: boolean;
-};
 
 export enum StorageElementType {
     Dir = 'dir',
@@ -90,11 +68,10 @@ export interface StorageElementPaste {
     to_path: string;
 }
 
-export interface StorageElementPasteParams {
-    paths: StorageElementPaste[];
-    overwrite: boolean;
-    from_divide_id?: number | null;
-    to_divide_id?: number | null;
+export interface StorageElementHistory {
+    user_id: number;
+    action: StorageElementHistoryAction;
+    create_date: string;
 }
 
 export interface StorageElementVersion {
@@ -110,19 +87,13 @@ export interface StorageElementVersion {
     is_current_version: boolean;
 }
 
-export interface StorageElementHistory {
-    user_id: number;
-    action: StorageElementHistoryAction;
-    create_date: string;
-}
-
 export enum StorageElementHistoryAction {
     Create = 'create',
     Update = 'update',
     Move = 'move',
 }
 
-export interface StorageElementHistoryNote {
+export interface HistoryNote {
     name: string;
     description: string;
     divide_id: number | null;
@@ -130,14 +101,24 @@ export interface StorageElementHistoryNote {
     path: string;
 }
 
-export interface RequestHistoryListParams extends RequestBaseParams {
+export interface RequestVersionsSizeParams {
     path: string;
-    divide_id?: number | null;
+    divide_id?: number;
 }
 
-export interface UploadNetRequestParams {
-    path: string;
-    url: string;
-    overwrite?: boolean;
-    divide_id?: number;
+export interface StorageInstance {
+    disk_id: string;
+    disk_size: number;
+    free_size: number;
+    instance_number: number;
+    quota_size_config: number;
+    quota_size_setting: number;
+    used_size: number;
+}
+
+export interface SizeBySection {
+    content_type: string;
+    size: number;
+    count: number;
+    label: string;
 }

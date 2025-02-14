@@ -9,11 +9,3 @@ export interface UsersLog {
     resource: string;
     description: string;
 }
-
-export interface RequestUsersLogParams extends RequestBaseParams {
-    user_id?: string;
-    search_field?: string;
-    from_date?: string;
-    to_date?: string;
-    with_me?: boolean;
-}

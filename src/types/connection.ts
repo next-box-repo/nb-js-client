@@ -41,13 +41,3 @@ export enum ConnectionType {
     HttpProxy = 'http_proxy_connection',
     S3 = 's3_connection',
 }
-
-export interface RequestConnectionParams extends RequestBaseParams {
-    id?: number[];
-    name?: string | null;
-    group_name?: ConnectionGroup;
-    is_divided?: boolean;
-    type?: string;
-}
-
-export type ConnectionCreateParams = Omit<Connection, 'group_name'>;

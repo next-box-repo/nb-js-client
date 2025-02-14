@@ -2,11 +2,12 @@ import { Client } from '../classes';
 import {
     ExtensionExternal,
     ExtensionExternalInList,
-    ExtensionExternalListParams,
+    RequestBaseParams,
     ResponseList,
+    ResponseType,
 } from '../types';
 
-export class ExtensionsExternalApi {
+export class ExtensionsExternalApiService {
     constructor(private client: Client) {}
 
     listExtensionsSite(
@@ -19,7 +20,18 @@ export class ExtensionsExternalApi {
         return this.client.rest.get(`/anons_ext/extensions/${uniqKey}`);
     }
 
-    extensionMarkdown(uniqKey: string): Promise<string> {
-        return this.client.rest.get(`/anons_ext/extensions/${uniqKey}/readme`);
+    extensionMarkdown(
+        uniqKey: string,
+        config: { responseType: ResponseType },
+    ): Promise<string> {
+        return this.client.rest.get(
+            `/anons_ext/extensions/${uniqKey}/readme`,
+            {},
+            config,
+        );
     }
+}
+
+export interface ExtensionExternalListParams extends RequestBaseParams {
+    search_field?: string;
 }

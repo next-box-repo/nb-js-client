@@ -10,7 +10,18 @@ export interface StorageTrashElement {
     size: number;
     type: StorageElementType;
     update_date: string;
+    version: VersionStorageTrashElement;
     with_preview: boolean;
+}
+
+interface VersionStorageTrashElement {
+    create_date: string;
+    description: string;
+    id: string;
+    name: string | null;
+    size: number;
+    update_date: string;
+    user_id: number;
 }
 
 export type StorageTrashItem = Pick<

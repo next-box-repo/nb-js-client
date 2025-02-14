@@ -1,18 +1,22 @@
 import { Client } from '../classes';
 import {
-    ConnectionCreateParams,
-    RequestStorageListParams,
+    HttpEvent,
+    OnUploadProgress,
     ResponseItem,
     ResponseList,
     StorageElement,
-    CreateStorageElementParams,
-    UploadNetRequestParams,
 } from '../types';
+import { ConnectionCreateParams } from './connections-api.service';
+import {
+    CreateStorageElementParams,
+    RequestStorageListParams,
+} from './storage-element-api.service';
+import { UploadNetRequestParams } from './storage-files-api.service';
 
 const DISK = '/disk';
 const DISK_CHECK = `${DISK}/check`;
 
-export class FcaApi {
+export class FcaApiService {
     constructor(private client: Client) {}
 
     info(rootID: number, path: string): Promise<StorageElement> {
@@ -49,15 +53,20 @@ export class FcaApi {
     }
 
     upload(
+        onProgress: OnUploadProgress,
         rootID: number,
         file: File,
         path = '',
-    ): Promise<ResponseItem<StorageElement>> {
+    ): Promise<HttpEvent<ResponseItem<StorageElement>>> {
         const form = new FormData();
         form.set('path', path);
         form.set('file', file);
 
-        return this.client.rest.post(`${DISK}/${rootID}/files`, form);
+        return this.client.rest.post(`${DISK}/${rootID}/files`, form, {
+            onUploadProgress: (event) => {
+                onProgress(event);
+            },
+        });
     }
 
     uploadNet(

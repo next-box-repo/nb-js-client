@@ -1,7 +1,6 @@
 import { Client } from '../classes';
 import {
-    CreateUserGroupParams,
-    RequestUserGroupListParams,
+    RequestBaseParams,
     ResponseItem,
     ResponseList,
     User,
@@ -10,7 +9,7 @@ import {
 
 const GROUPS = '/groups';
 
-export class GroupApi {
+export class GroupApiService {
     constructor(private client: Client) {}
 
     list(params: RequestUserGroupListParams): Promise<ResponseList<UserGroup>> {
@@ -36,3 +35,14 @@ export class GroupApi {
         return this.client.rest.delete(`${GROUPS}/${id}`);
     }
 }
+
+export interface RequestUserGroupListParams extends RequestBaseParams {
+    id?: number[];
+    name?: string;
+    description?: string;
+    search_field?: string;
+}
+
+export type CreateUserGroupParams = Pick<UserGroup, 'name' | 'description'> & {
+    users?: number[];
+};

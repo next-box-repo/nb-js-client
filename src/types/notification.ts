@@ -23,15 +23,6 @@ export interface UserNotification {
     owner?: UserLabel;
 }
 
-export type RequestNotificationListParams = RequestBaseParams & {
-    read?: boolean;
-    search?: string;
-};
-
-export type ResponseListNotification = ResponseList<UserNotification> & {
-    total_all: number;
-};
-
 export enum NotificationEntityType {
     Dir = 'dir',
     File = 'file',
@@ -62,6 +53,8 @@ export enum NotificationAction {
 
     DeleteExtension = 'delete_extension',
     NewVersionExtension = 'new_version_extension',
+
+    TransferData = 'transfer_data',
 
     AllowInternalAccessUser = 'allow_internal_access_to_user',
     BlockInternalAccessUser = 'block_internal_access_to_user',

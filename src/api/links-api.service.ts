@@ -1,0 +1,26 @@
+import { Client } from '../classes';
+
+const LINKS = '/links';
+
+export class LinksApiService {
+    constructor(private client: Client) {}
+
+    createShortLink(params: CutLinkRequest): Promise<CutLinkResponse> {
+        return this.client.rest.post('links', JSON.stringify(params));
+    }
+
+    updateShortLink(params: CutLinkRequest): Promise<CutLinkResponse> {
+        return this.client.rest.put('links', JSON.stringify(params));
+    }
+}
+
+interface CutLinkRequest {
+    entity_id: number;
+    entity_type: string;
+    full_url: string;
+}
+
+interface CutLinkResponse extends CutLinkRequest {
+    full_url: string;
+    short_url: string;
+}

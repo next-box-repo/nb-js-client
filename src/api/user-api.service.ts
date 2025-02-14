@@ -1,13 +1,13 @@
 import { Client } from '../classes';
 import {
-    CreateUserParams,
     RequestBaseParams,
-    RequestUserListParams,
     ResponseItem,
     ResponseList,
     User,
     UserSession,
+    UserStatus,
     UserToken,
+    UserType,
 } from '../types';
 
 const USERS = '/users';
@@ -17,7 +17,7 @@ const USERS_ME_SESSIONS = `${USERS_ME}/sessions`;
 const USERS_ME_TOKEN = `${USERS_ME}/tokens`;
 const USERS_CHANGE_MY_PASSWORD = `${USERS_ME}/change-password`;
 
-export class UserApi {
+export class UserApiService {
     constructor(private client: Client) {}
 
     list(params: RequestUserListParams): Promise<ResponseList<User>> {
@@ -121,3 +121,31 @@ export class UserApi {
         );
     }
 }
+
+export interface RequestUserListParams extends RequestBaseParams {
+    email?: string;
+    first_name?: string;
+    middle_name?: string;
+    last_name?: string;
+    login?: string;
+    is_admin?: boolean;
+    id?: number[];
+    role_ids?: number[];
+    statuses?: UserStatus[];
+    search_field?: string;
+    with_me?: boolean;
+    type?: UserType;
+    exclude_type?: UserType;
+    exclude_ids?: number[];
+}
+
+export type CreateUserParams = Pick<
+    User,
+    | 'first_name'
+    | 'last_name'
+    | 'middle_name'
+    | 'email'
+    | 'home_path'
+    | 'password'
+    | 'role_id'
+>;

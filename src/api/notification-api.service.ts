@@ -2,8 +2,9 @@ import { Client } from '../classes';
 import {
     NotificationActionGroup,
     NotificationRowAction,
-    RequestNotificationListParams,
-    ResponseListNotification,
+    RequestBaseParams,
+    ResponseList,
+    UserNotification,
 } from '../types';
 
 const NOTIFICATIONS = '/notifications';
@@ -11,7 +12,7 @@ const NOTIFICATIONS_ALL = `${NOTIFICATIONS}/all`;
 const NOTIFICATIONS_SUBSCRIPTION = `${NOTIFICATIONS}/subscription`;
 const NOTIFICATIONS_PERMISSION = `${NOTIFICATIONS}/permission`;
 
-export class NotificationApi {
+export class NotificationApiService {
     constructor(private client: Client) {}
 
     list(
@@ -75,3 +76,12 @@ export class NotificationApi {
         );
     }
 }
+
+export interface RequestNotificationListParams extends RequestBaseParams {
+    read?: boolean;
+    search?: string;
+}
+
+export type ResponseListNotification = ResponseList<UserNotification> & {
+    total_all: number;
+};

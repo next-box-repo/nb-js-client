@@ -1,5 +1,5 @@
 import { ResponseList } from './base';
-import { StorageElementType } from './storage';
+import { StorageElement, StorageElementType } from './storage';
 
 export enum DivideScope {
     Storage = '/storage/element',
@@ -31,6 +31,7 @@ export enum DivideMode {
 }
 
 export interface ShareInfo extends DivideParams {
+    id: number;
     token: string;
     access_mode: PermissionType;
     expire_delta: number | null;
@@ -41,8 +42,11 @@ export interface ShareInfo extends DivideParams {
     update_date: string;
     owner_id: number;
     resource: string;
+    file_info: StorageElement;
+    short_url: string;
 }
 
+export interface UnionRestriction extends UserDivide, ShareInfo {}
 export interface UserDivide extends DivideParams {
     access_mode: PermissionType;
     create_date: string;
@@ -54,6 +58,12 @@ export interface UserDivide extends DivideParams {
     to_user_id: number;
     type: StorageElementType;
     update_date: string;
+    file_info: StorageElement;
+}
+
+export enum RestrictionModeKey {
+    Divide = 'divide',
+    Share = 'share',
 }
 
 interface DivideParams {
