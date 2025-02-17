@@ -94,10 +94,7 @@ export class Rest {
             }
 
             if (this.state.authToken) {
-                for (const [
-                    connectionId,
-                    item,
-                ] of this.state.authToken.entries()) {
+                for (const [id, item] of this.state.authToken.entries()) {
                     const token: AccessToken = jwtDecode(item.access_token);
 
                     const needUpdate =
@@ -114,7 +111,7 @@ export class Rest {
                             await this.tokenUpdate.refreshToken(item);
 
                         if (tokens) {
-                            this.state.authToken.set(connectionId, tokens);
+                            this.state.authToken.set(id, tokens);
 
                             config = await applyInterceptors(
                                 this.client.requestInterceptors,
@@ -136,6 +133,7 @@ export class Rest {
             }${path}`;
 
             xhr.open(method, url, true);
+            xhr.withCredentials = true;
 
             if (config?.headers) {
                 const normalizedHeaders = normalizeHeaders(config.headers);
