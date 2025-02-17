@@ -6,11 +6,11 @@ export class LinksApiService {
     constructor(private client: Client) {}
 
     createShortLink(params: CutLinkRequest): Promise<CutLinkResponse> {
-        return this.client.rest.post('links', JSON.stringify(params));
+        return this.client.rest.post(`${LINKS}`, JSON.stringify(params));
     }
 
     updateShortLink(params: CutLinkRequest): Promise<CutLinkResponse> {
-        return this.client.rest.put('links', JSON.stringify(params));
+        return this.client.rest.put(`${LINKS}`, JSON.stringify(params));
     }
 }
 

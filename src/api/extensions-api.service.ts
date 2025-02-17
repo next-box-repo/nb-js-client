@@ -1,4 +1,4 @@
-import { Client } from '../classes';
+import { BASE_URL_V2, Client } from '../classes';
 import {
     Extension,
     ExtensionDefault,
@@ -85,18 +85,22 @@ export class ExtensionsApiService {
         const form = new FormData();
         form.set('file', file);
 
-        return this.client.rest.post(EXTENSION, form, {
-            onUploadProgress: (event) => {
-                onProgress(event);
-            },
+        return this.client.rest.changeBaseUrlVersion(BASE_URL_V2, () => {
+            return this.client.rest.post(EXTENSION, form, {
+                onUploadProgress: (event) => {
+                    onProgress(event);
+                },
+            });
         });
     }
 
     install(uniq_key: string, version: string): Promise<any> {
-        return this.client.rest.post(
-            '/static/extensions/site',
-            JSON.stringify({ uniq_key, version }),
-        );
+        return this.client.rest.changeBaseUrlVersion(BASE_URL_V2, () => {
+            return this.client.rest.post(
+                '/static/extensions/site',
+                JSON.stringify({ uniq_key, version }),
+            );
+        });
     }
 }
 

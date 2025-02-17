@@ -13,7 +13,9 @@ export class ExtensionsExternalApiService {
     listExtensionsSite(
         params: ExtensionExternalListParams,
     ): Promise<ResponseList<ExtensionExternalInList>> {
-        return this.client.rest.get('/anons_ext/extensions', params);
+        return this.client.rest.changeHost('https://next-box.ru', () => {
+            return this.client.rest.get('/anons_ext/extensions', params);
+        });
     }
 
     extensionDetailSite(uniqKey: string): Promise<ExtensionExternal> {

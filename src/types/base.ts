@@ -1,4 +1,4 @@
-import { AuthToken } from './auth';
+import { RequestAuthTokenParams } from '../api';
 import { PermissionType } from './divide';
 
 export interface NbClientParams {
@@ -17,7 +17,7 @@ export interface NbRequestParams {
 export interface NbAppState {
     clientParams: NbClientParams;
     requestParams: NbRequestParams;
-    authToken: Map<number, AuthToken> | null;
+    authToken: Map<number, RequestAuthTokenParams> | null;
     skipInterceptors: boolean;
 }
 

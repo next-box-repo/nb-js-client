@@ -1,4 +1,4 @@
-import { AuthApiService } from '../api';
+import { AuthApiService, RequestAuthTokenParams } from '../api';
 import { getCookieValue } from '../tools';
 import { AuthToken } from '../types';
 
@@ -22,8 +22,10 @@ export class TokenUpdate {
         return expTime <= curTime + TOKEN_EXPIRATION_BUFFER_MS;
     }
 
-    async refreshToken(authToken: AuthToken): Promise<AuthToken | null> {
-        const { access_token, refresh_token } = authToken;
+    async refreshToken(
+        params: RequestAuthTokenParams,
+    ): Promise<AuthToken | null> {
+        const { access_token, refresh_token } = params;
 
         if (!access_token || !refresh_token) return null;
         if (this.isUpdating) return this.waitForTokenUpdate();
@@ -31,7 +33,7 @@ export class TokenUpdate {
         this.isUpdating = true;
 
         try {
-            const response = await this.authApiService.updateToken(authToken);
+            const response = await this.authApiService.updateToken(params);
 
             if (response && response.access_token && response.refresh_token) {
                 const tokens: AuthToken = {

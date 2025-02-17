@@ -14,6 +14,10 @@ import { jwtDecode } from 'jwt-decode';
 import { TokenUpdate } from './token-update';
 import { applyInterceptors, makeUrlParams, normalizeHeaders } from '../tools';
 
+export const BASE_URL_V1 = '/api/v1';
+export const BASE_URL_V2 = '/api/v2';
+export const HOST = `${window.location.protocol}//${window.location.host}`;
+
 export class Rest {
     constructor(
         private client: Client,
@@ -124,7 +128,7 @@ export class Rest {
 
             const xhr = new XMLHttpRequest();
 
-            if (config?.params && Object.keys(config.params).length === 0) {
+            if (config?.params && Object.keys(config.params).length !== 0) {
                 path += '?' + makeUrlParams(config.params);
             }
 
@@ -133,7 +137,6 @@ export class Rest {
             }${path}`;
 
             xhr.open(method, url, true);
-            xhr.withCredentials = true;
 
             if (config?.headers) {
                 const normalizedHeaders = normalizeHeaders(config.headers);
@@ -210,5 +213,30 @@ export class Rest {
 
             xhr.send(config?.body ?? null);
         });
+    }
+
+    async changeBaseUrlVersion<T>(
+        baseUrl: string,
+        handler: () => Promise<T>,
+    ): Promise<T> {
+        const originalBaseUrl = this.state.clientParams.version;
+        this.state.clientParams.version = baseUrl;
+
+        try {
+            return await handler();
+        } finally {
+            this.state.clientParams.version = originalBaseUrl;
+        }
+    }
+
+    async changeHost<T>(host: string, handler: () => Promise<T>): Promise<T> {
+        this.state.clientParams.host = host;
+        this.state.requestParams.headers = {};
+
+        try {
+            return await handler();
+        } finally {
+            this.state.clientParams.host = HOST;
+        }
     }
 }
