@@ -138,9 +138,11 @@ export class Rest {
 
                 for (const [key, value] of Object.entries(normalizedHeaders)) {
                     if (
-                        [RequestMethod.POST, RequestMethod.POST].includes(
-                            method,
-                        )
+                        [
+                            RequestMethod.POST,
+                            RequestMethod.PUT,
+                            RequestMethod.PATCH,
+                        ].includes(method)
                     ) {
                         xhr.setRequestHeader(key, value);
                     } else if (key.toLowerCase() !== 'content-type') {
@@ -155,7 +157,11 @@ export class Rest {
 
             if (
                 xhr.upload &&
-                [RequestMethod.POST, RequestMethod.POST].includes(method)
+                [
+                    RequestMethod.POST,
+                    RequestMethod.PUT,
+                    RequestMethod.PATCH,
+                ].includes(method)
             ) {
                 xhr.upload.onprogress = (event) => {
                     if (event.lengthComputable && config?.onUploadProgress) {
