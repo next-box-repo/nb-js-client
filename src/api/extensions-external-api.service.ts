@@ -19,18 +19,22 @@ export class ExtensionsExternalApiService {
     }
 
     extensionDetailSite(uniqKey: string): Promise<ExtensionExternal> {
-        return this.client.rest.get(`/anons_ext/extensions/${uniqKey}`);
+        return this.client.rest.changeHost('https://next-box.ru', () => {
+            return this.client.rest.get(`/anons_ext/extensions/${uniqKey}`);
+        });
     }
 
     extensionMarkdown(
         uniqKey: string,
         config: { responseType: ResponseType },
     ): Promise<string> {
-        return this.client.rest.get(
-            `/anons_ext/extensions/${uniqKey}/readme`,
-            {},
-            config,
-        );
+        return this.client.rest.changeHost('https://next-box.ru', () => {
+            return this.client.rest.get(
+                `/anons_ext/extensions/${uniqKey}/readme`,
+                {},
+                config,
+            );
+        });
     }
 }
 
