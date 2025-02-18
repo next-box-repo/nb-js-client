@@ -100,12 +100,10 @@ export class Rest {
             if (this.state.authToken) {
                 for (const [id, item] of this.state.authToken.entries()) {
                     const token: AccessToken = jwtDecode(item.access_token);
-
                     const needUpdate =
                         token &&
                         token.is_remember &&
                         this.tokenUpdate.isTokenExpire(token.exp);
-
                     if (
                         needUpdate &&
                         !path.includes('/login') &&
@@ -113,10 +111,8 @@ export class Rest {
                     ) {
                         const tokens: AuthToken | null =
                             await this.tokenUpdate.refreshToken(item);
-
                         if (tokens) {
                             this.state.authToken.set(id, tokens);
-
                             config = await applyInterceptors(
                                 this.client.requestInterceptors,
                                 request,
@@ -132,17 +128,21 @@ export class Rest {
                 path += '?' + makeUrlParams(config.params);
             }
 
-            const url = `${this.state.clientParams.host}${
-                this.state.clientParams.version
-            }${path}`;
+            const url = `${this.state.clientParams.host}${this.state.clientParams.version}${path}`;
 
+            xhr.withCredentials = false;
             xhr.open(method, url, true);
 
             if (config?.headers) {
                 const normalizedHeaders = normalizeHeaders(config.headers);
 
                 for (const [key, value] of Object.entries(normalizedHeaders)) {
-                    xhr.setRequestHeader(key, value);
+                    if (
+                        key.toLowerCase() !== 'authorization' &&
+                        key.toLowerCase() !== 'content-type'
+                    ) {
+                        xhr.setRequestHeader(key, value);
+                    }
                 }
             }
 
@@ -150,7 +150,10 @@ export class Rest {
                 xhr.responseType = config.responseType;
             }
 
-            if (xhr.upload) {
+            if (
+                xhr.upload &&
+                [RequestMethod.POST, RequestMethod.POST].includes(method)
+            ) {
                 xhr.upload.onprogress = (event) => {
                     if (event.lengthComputable && config?.onUploadProgress) {
                         config.onUploadProgress(event);
@@ -212,6 +215,26 @@ export class Rest {
             xhr.onerror = () => reject(new Error('Network error'));
 
             xhr.send(config?.body ?? null);
+
+            // if (config?.headers) {
+            //     const normalizedHeaders = normalizeHeaders(config.headers);
+
+            //     for (const [key, value] of Object.entries(normalizedHeaders)) {
+            //         xhr.setRequestHeader(key, value);
+            //     }
+            // }
+
+            // if (config?.responseType) {
+            //     xhr.responseType = config.responseType;
+            // }
+
+            // if (xhr.upload) {
+            //     xhr.upload.onprogress = (event) => {
+            //         if (event.lengthComputable && config?.onUploadProgress) {
+            //             config.onUploadProgress(event);
+            //         }
+            //     };
+            // }
         });
     }
 
