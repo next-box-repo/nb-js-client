@@ -81,17 +81,26 @@ export class ExtensionsApiService {
     upload(
         onProgress: OnUploadProgress,
         file: File,
-    ): Promise<HttpEvent<ResponseItem<Extension>>> {
+    ): {
+        promise: Promise<HttpEvent<ResponseItem<Extension>>>;
+        abort: () => void;
+    } {
         const form = new FormData();
         form.set('file', file);
 
-        return this.client.rest.changeBaseUrlVersion(BASE_URL_V2, () => {
-            return this.client.rest.post(EXTENSION, form, {
-                onUploadProgress: (event) => {
-                    onProgress(event);
-                },
-            });
+        const { promise, abort } = this.client.rest.upload(EXTENSION, form, {
+            onUploadProgress: (event) => {
+                onProgress(event);
+            },
         });
+
+        return {
+            promise: this.client.rest.changeBaseUrlVersion(
+                BASE_URL_V2,
+                () => promise,
+            ),
+            abort,
+        };
     }
 
     install(uniq_key: string, version: string): Promise<any> {

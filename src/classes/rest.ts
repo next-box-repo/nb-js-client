@@ -76,6 +76,23 @@ export class Rest {
         return this.request(RequestMethod.DELETE, path, { params, ...config });
     }
 
+    upload(
+        path: string,
+        body?: BodyInit | null,
+        config?: RequestConfig,
+    ): { promise: Promise<any>; abort: () => void } {
+        const controller = new AbortController();
+        const signal = controller.signal;
+
+        const promise = this.request(RequestMethod.POST, path, {
+            body,
+            signal,
+            ...config,
+        });
+
+        return { promise, abort: () => controller.abort() };
+    }
+
     async request<T>(
         method: RequestMethod,
         path: string,
@@ -89,6 +106,8 @@ export class Rest {
                 method,
                 ...config,
             };
+
+            if (config?.signal) request.signal = config.signal;
 
             if (!skipInterceptors) {
                 config = await applyInterceptors(
@@ -155,6 +174,13 @@ export class Rest {
                 xhr.responseType = config.responseType;
             }
 
+            if (config?.signal) {
+                config.signal.addEventListener('abort', () => {
+                    xhr.abort();
+                    reject(new Error('Upload aborted'));
+                });
+            }
+
             if (
                 xhr.upload &&
                 [
@@ -171,6 +197,8 @@ export class Rest {
             }
 
             xhr.onload = async () => {
+                if (config?.signal && config.signal.aborted) return;
+
                 const headers = new Headers();
                 xhr.getAllResponseHeaders()
                     .split('\r\n')
@@ -224,26 +252,6 @@ export class Rest {
             xhr.onerror = () => reject(new Error('Network error'));
 
             xhr.send(config?.body ?? null);
-
-            // if (config?.headers) {
-            //     const normalizedHeaders = normalizeHeaders(config.headers);
-
-            //     for (const [key, value] of Object.entries(normalizedHeaders)) {
-            //         xhr.setRequestHeader(key, value);
-            //     }
-            // }
-
-            // if (config?.responseType) {
-            //     xhr.responseType = config.responseType;
-            // }
-
-            // if (xhr.upload) {
-            //     xhr.upload.onprogress = (event) => {
-            //         if (event.lengthComputable && config?.onUploadProgress) {
-            //             config.onUploadProgress(event);
-            //         }
-            //     };
-            // }
         });
     }
 

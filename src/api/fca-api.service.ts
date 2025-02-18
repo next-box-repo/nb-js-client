@@ -57,16 +57,25 @@ export class FcaApiService {
         rootID: number,
         file: File,
         path = '',
-    ): Promise<HttpEvent<ResponseItem<StorageElement>>> {
+    ): {
+        promise: Promise<HttpEvent<ResponseItem<StorageElement>>>;
+        abort: () => void;
+    } {
         const form = new FormData();
         form.set('path', path);
         form.set('file', file);
 
-        return this.client.rest.post(`${DISK}/${rootID}/files`, form, {
-            onUploadProgress: (event) => {
-                onProgress(event);
+        const { promise, abort } = this.client.rest.upload(
+            `${DISK}/${rootID}/files`,
+            form,
+            {
+                onUploadProgress: (event) => {
+                    onProgress(event);
+                },
             },
-        });
+        );
+
+        return { promise, abort };
     }
 
     uploadNet(

@@ -39,6 +39,7 @@ export interface RequestConfig {
     headers?: HeadersInit;
     observe?: RequestObserve;
     responseType?: ResponseType;
+    signal?: AbortSignal | null;
     onUploadProgress?: OnUploadProgress;
 }
 
