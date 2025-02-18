@@ -138,9 +138,12 @@ export class Rest {
 
                 for (const [key, value] of Object.entries(normalizedHeaders)) {
                     if (
-                        key.toLowerCase() !== 'authorization' &&
-                        key.toLowerCase() !== 'content-type'
+                        [RequestMethod.POST, RequestMethod.POST].includes(
+                            method,
+                        )
                     ) {
+                        xhr.setRequestHeader(key, value);
+                    } else if (key.toLowerCase() !== 'content-type') {
                         xhr.setRequestHeader(key, value);
                     }
                 }
