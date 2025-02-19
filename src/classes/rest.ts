@@ -206,9 +206,11 @@ export class Rest {
                 switch (config?.responseType) {
                     case ResponseType.Text:
                         body = xhr.responseText;
+                        break;
                     case ResponseType.Blob:
                     case ResponseType.ArrayBuffer:
                         body = xhr.response;
+                        break;
                     default:
                         try {
                             body = JSON.parse(xhr.responseText);
