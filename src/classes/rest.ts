@@ -156,13 +156,7 @@ export class Rest {
                 const normalizedHeaders = normalizeHeaders(config.headers);
 
                 for (const [key, value] of Object.entries(normalizedHeaders)) {
-                    if (
-                        [
-                            RequestMethod.POST,
-                            RequestMethod.PUT,
-                            RequestMethod.PATCH,
-                        ].includes(method)
-                    ) {
+                    if (this.state.clientParams.host === HOST) {
                         xhr.setRequestHeader(key, value);
                     } else if (key.toLowerCase() !== 'content-type') {
                         xhr.setRequestHeader(key, value);
