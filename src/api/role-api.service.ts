@@ -9,7 +9,7 @@ import {
 
 const ROLES = '/roles';
 const ROLES_DEFAULT = `${ROLES}/default`;
-const PERMISSION = '/permissions';
+const PERMISSIONS = '/permissions';
 
 export class RoleApiService {
     constructor(private client: Client) {}
@@ -42,7 +42,7 @@ export class RoleApiService {
     }
 
     permissionList(): Promise<ResponseList<Permission>> {
-        return this.client.rest.get(PERMISSION);
+        return this.client.rest.get(PERMISSIONS);
     }
 
     addPermission(id: number, ids: number[]): Promise<void> {
@@ -53,7 +53,9 @@ export class RoleApiService {
     }
 
     deletePermission(id: number, ids: number[]): Promise<void> {
-        return this.client.rest.delete(`${ROLES}/${id}/permissions`, { ids });
+        return this.client.rest.delete(`${ROLES}/${id}/${PERMISSIONS}`, {
+            ids,
+        });
     }
 }
 

@@ -12,15 +12,17 @@ import {
     UserNotification,
 } from '../types';
 
+const SETTINGS = '/settings';
+
 export class GatewayApiService {
     constructor(private client: Client) {}
 
     settings(): Promise<Setting[]> {
-        return this.client.rest.get('/settings');
+        return this.client.rest.get(SETTINGS);
     }
 
     changeSettings(data: SettingValue[]): Promise<void> {
-        return this.client.rest.post('/settings', JSON.stringify(data));
+        return this.client.rest.post(SETTINGS, JSON.stringify(data));
     }
 
     queryInit(): Promise<QueryInitResponse> {

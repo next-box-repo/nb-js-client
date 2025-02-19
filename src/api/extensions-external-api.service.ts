@@ -7,6 +7,8 @@ import {
     ResponseType,
 } from '../types';
 
+const EXTENSIONS = '/anons_ext/extensions';
+
 export class ExtensionsExternalApiService {
     constructor(private client: Client) {}
 
@@ -14,13 +16,13 @@ export class ExtensionsExternalApiService {
         params: ExtensionExternalListParams,
     ): Promise<ResponseList<ExtensionExternalInList>> {
         return this.client.rest.changeHost('https://next-box.ru', () => {
-            return this.client.rest.get('/anons_ext/extensions', params);
+            return this.client.rest.get(EXTENSIONS, params);
         });
     }
 
     extensionDetailSite(uniqKey: string): Promise<ExtensionExternal> {
         return this.client.rest.changeHost('https://next-box.ru', () => {
-            return this.client.rest.get(`/anons_ext/extensions/${uniqKey}`);
+            return this.client.rest.get(`${EXTENSIONS}/${uniqKey}`);
         });
     }
 
@@ -30,7 +32,7 @@ export class ExtensionsExternalApiService {
     ): Promise<string> {
         return this.client.rest.changeHost('https://next-box.ru', () => {
             return this.client.rest.get(
-                `/anons_ext/extensions/${uniqKey}/readme`,
+                `${EXTENSIONS}/${uniqKey}/readme`,
                 {},
                 config,
             );

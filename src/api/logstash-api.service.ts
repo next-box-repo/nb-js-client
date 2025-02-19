@@ -2,7 +2,6 @@ import { Client } from '../classes';
 import {
     HttpResponse,
     RequestBaseParams,
-    RequestMethod,
     RequestObserve,
     ResponseList,
     ResponseType,

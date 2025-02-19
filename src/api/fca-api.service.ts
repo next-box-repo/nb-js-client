@@ -83,7 +83,7 @@ export class FcaApiService {
         params: UploadNetRequestParams,
     ): Promise<ResponseItem<StorageElement>> {
         return this.client.rest.post(
-            `/disk/${rootID}/files/net`,
+            `${DISK}/${rootID}/files/net`,
             JSON.stringify(params),
         );
     }

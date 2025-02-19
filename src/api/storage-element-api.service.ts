@@ -18,6 +18,8 @@ const STORAGE_ELEMENT_MOVE = `${STORAGE_ELEMENT}/move`;
 const STORAGE_ELEMENT_COPY = `${STORAGE_ELEMENT}/copy`;
 const STORAGE_ELEMENT_SECTION_SIZE = `${STORAGE_ELEMENT}/content_type_size`;
 
+const DISK = '/disk';
+
 export class StorageElementApiService {
     constructor(
         private client: Client,
@@ -83,7 +85,7 @@ export class StorageElementApiService {
 
         if (to === StorageRoot.fca && from === StorageRoot.fca) {
             return this.client.rest.post(
-                `/disk/${from_divide_id}/files/move/disk/${to_divide_id}`,
+                `${DISK}/${from_divide_id}/files/move${DISK}/${to_divide_id}`,
                 JSON.stringify(fcaParams),
             );
         }
@@ -94,7 +96,7 @@ export class StorageElementApiService {
             }
 
             return this.client.rest.put(
-                `/disk/${to_divide_id}/files/from/box`,
+                `${DISK}/${to_divide_id}/files/from/box`,
                 JSON.stringify(fcaParams),
             );
         }
@@ -105,7 +107,7 @@ export class StorageElementApiService {
             }
 
             return this.client.rest.put(
-                `/disk/${from_divide_id}/files/to/box`,
+                `${DISK}/${from_divide_id}/files/to/box`,
                 JSON.stringify(fcaParams),
             );
         }
@@ -132,7 +134,7 @@ export class StorageElementApiService {
         // между подключениями
         if (to === StorageRoot.fca && from === StorageRoot.fca) {
             return this.client.rest.post(
-                `/disk/${from_divide_id}/files/copy/disk/${to_divide_id}`,
+                `${DISK}/${from_divide_id}/files/copy${DISK}/${to_divide_id}`,
                 JSON.stringify(fcaParams),
             );
         }
@@ -145,7 +147,7 @@ export class StorageElementApiService {
             }
 
             return this.client.rest.post(
-                `/disk/${to_divide_id}/files/from/box`,
+                `${DISK}/${to_divide_id}/files/from/box`,
                 JSON.stringify(fcaParams),
             );
         }
@@ -158,7 +160,7 @@ export class StorageElementApiService {
             }
 
             return this.client.rest.post(
-                `/disk/${from_divide_id}/files/to/box`,
+                `${DISK}/${from_divide_id}/files/to/box`,
                 JSON.stringify(fcaParams),
             );
         }
@@ -182,7 +184,7 @@ export class StorageElementApiService {
         };
 
         return this.client.rest.post(
-            `/storage/element/copy`,
+            `${STORAGE_ELEMENT}/copy`,
             JSON.stringify(data),
         );
     }

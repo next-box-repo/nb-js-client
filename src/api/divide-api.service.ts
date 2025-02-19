@@ -13,11 +13,14 @@ import {
     UserDivide,
 } from '../types';
 
+const DIVIDE = '/divide';
+const DIVIDE_RESTRICTIONS = `${DIVIDE}/restrictions`;
+
 export class DivideApiService {
     constructor(private client: Client) {}
 
     divideDelete(service: DivideScope, id: number): Promise<void> {
-        return this.client.rest.delete(`${service}/divide/${id}`);
+        return this.client.rest.delete(`${service}/${DIVIDE}/${id}`);
     }
 
     divideDeleteAll(
@@ -26,7 +29,7 @@ export class DivideApiService {
         access_mode: PermissionType,
         is_to_user_group: boolean,
     ): Promise<void> {
-        return this.client.rest.delete(`${service}/divide`, {
+        return this.client.rest.delete(`${service}/${DIVIDE}`, {
             ...this.makeParam(service, resource),
             is_to_user_group,
             access_mode,
@@ -57,7 +60,10 @@ export class DivideApiService {
             access_mode,
         };
 
-        return this.client.rest.post(`${service}/divide`, JSON.stringify(data));
+        return this.client.rest.post(
+            `${service}/${DIVIDE}`,
+            JSON.stringify(data),
+        );
     }
 
     divideUsers(
@@ -65,14 +71,14 @@ export class DivideApiService {
         resource: DivideResourceType,
         params: RequestUserDivideParams,
     ): Promise<DivideResponseList> {
-        return this.client.rest.get(`${service}/divide/users`, {
+        return this.client.rest.get(`${service}/${DIVIDE}/users`, {
             ...this.makeParam(service, resource),
             ...params,
         });
     }
 
     getRestriction(id: number): Promise<UnionRestriction> {
-        return this.client.rest.get(`/divide/restrictions/${id}`);
+        return this.client.rest.get(`${DIVIDE_RESTRICTIONS}/${id}`);
     }
 
     restrictionSize(
@@ -83,7 +89,7 @@ export class DivideApiService {
     }
 
     restrictions(params?: any): Promise<ResponseList<UserDivide>> {
-        return this.client.rest.get('/divide/restrictions', params);
+        return this.client.rest.get(`${DIVIDE_RESTRICTIONS}`, params);
     }
 
     restrictionsChange(
@@ -91,7 +97,7 @@ export class DivideApiService {
         data: { status: any; comment: string },
     ): Promise<ResponseList<UserDivide>> {
         return this.client.rest.put(
-            `/divide/restrictions/${token}`,
+            `${DIVIDE_RESTRICTIONS}/${token}`,
             JSON.stringify(data),
         );
     }
