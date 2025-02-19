@@ -119,10 +119,12 @@ export class Rest {
             if (this.state.authToken) {
                 for (const [id, item] of this.state.authToken.entries()) {
                     const token: AccessToken = jwtDecode(item.access_token);
+
                     const needUpdate =
                         token &&
                         token.is_remember &&
                         this.tokenUpdate.isTokenExpire(token.exp);
+
                     if (
                         needUpdate &&
                         !path.includes('/login') &&
@@ -130,8 +132,10 @@ export class Rest {
                     ) {
                         const tokens: AuthToken | null =
                             await this.tokenUpdate.refreshToken(item);
+
                         if (tokens) {
                             this.state.authToken.set(id, tokens);
+
                             config = await applyInterceptors(
                                 this.client.requestInterceptors,
                                 request,
@@ -190,16 +194,16 @@ export class Rest {
                 };
             }
 
+            const headers = new Headers();
+            xhr.getAllResponseHeaders()
+                .split('\r\n')
+                .forEach((header) => {
+                    const [key, value] = header.split(': ');
+                    if (key && value) headers.append(key, value);
+                });
+
             xhr.onload = async () => {
                 if (config?.signal && config.signal.aborted) return;
-
-                const headers = new Headers();
-                xhr.getAllResponseHeaders()
-                    .split('\r\n')
-                    .forEach((header) => {
-                        const [key, value] = header.split(': ');
-                        if (key && value) headers.append(key, value);
-                    });
 
                 let body: any;
 
@@ -223,29 +227,35 @@ export class Rest {
                     status: xhr.status,
                     statusText: xhr.statusText,
                     headers,
-                    body: body as T,
+                    url: xhr.responseURL,
                 };
+
+                if (xhr.status >= 200 && xhr.status < 300) {
+                    if (config?.observe === RequestObserve.Response) {
+                        resolve({ ...response, body: body as T });
+                    } else resolve(body as T);
+                } else {
+                    reject({
+                        ...response,
+                        error: body,
+                    });
+                }
 
                 response = await applyInterceptors(
                     this.client.responseInterceptors,
                     response,
                 );
-
-                if (xhr.status >= 200 && xhr.status < 300) {
-                    if (config?.observe === RequestObserve.Response) {
-                        resolve(response);
-                    } else resolve(body as T);
-                } else {
-                    reject({
-                        status: xhr.status,
-                        statusText: xhr.statusText,
-                        headers,
-                        error: body,
-                    });
-                }
             };
 
-            xhr.onerror = () => reject(new Error('Network error'));
+            xhr.onerror = () => {
+                reject({
+                    status: xhr.status,
+                    statusText: xhr.statusText,
+                    headers,
+                    url: xhr.responseURL,
+                    error: 'Network error',
+                });
+            };
 
             xhr.send(config?.body ?? null);
         });
