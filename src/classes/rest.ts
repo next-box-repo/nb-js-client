@@ -194,14 +194,6 @@ export class Rest {
                 };
             }
 
-            const headers = new Headers();
-            xhr.getAllResponseHeaders()
-                .split('\r\n')
-                .forEach((header) => {
-                    const [key, value] = header.split(': ');
-                    if (key && value) headers.append(key, value);
-                });
-
             xhr.onload = async () => {
                 if (config?.signal && config.signal.aborted) return;
 
@@ -222,6 +214,15 @@ export class Rest {
                             body = xhr.responseText;
                         }
                 }
+
+                const headers = new Headers();
+                xhr.getAllResponseHeaders()
+                    .split('\r\n')
+                    .forEach((header) => {
+                        const [key, value] = header.split(': ');
+
+                        if (key && value) headers.append(key, value);
+                    });
 
                 let response = {
                     status: xhr.status,
@@ -251,7 +252,6 @@ export class Rest {
                 reject({
                     status: xhr.status,
                     statusText: xhr.statusText,
-                    headers,
                     url: xhr.responseURL,
                     error: 'Network error',
                 });
