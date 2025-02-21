@@ -14,10 +14,11 @@ export class LinksApiService {
     }
 }
 
-interface CutLinkRequest {
+export interface CutLinkRequest {
     entity_id: number;
     entity_type: string;
     full_url: string;
+    reload_short_url?: boolean;
 }
 
 interface CutLinkResponse extends CutLinkRequest {
