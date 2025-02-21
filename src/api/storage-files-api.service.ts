@@ -37,9 +37,9 @@ export class StorageFilesApiService {
 
     upload(
         onProgress: OnUploadProgress,
+        divide_id = 0,
         file: File,
         path: string,
-        divide_id?: number,
     ): {
         promise: Promise<HttpEvent<ResponseItem<StorageElement>>>;
         abort: () => void;
