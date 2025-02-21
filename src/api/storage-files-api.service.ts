@@ -37,9 +37,9 @@ export class StorageFilesApiService {
 
     upload(
         onProgress: OnUploadProgress,
-        divide_id = 0,
         file: File,
         path: string,
+        divide_id?: number,
     ): {
         promise: Promise<HttpEvent<ResponseItem<StorageElement>>>;
         abort: () => void;
@@ -47,9 +47,10 @@ export class StorageFilesApiService {
         const form = new FormData();
 
         form.set('path', path);
-        form.set('file', file);
 
         if (divide_id) form.set('divide_id', divide_id.toString());
+
+        form.set('file', file);
 
         const { promise, abort } = this.client.rest.upload(
             STORAGE_FILES,
