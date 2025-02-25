@@ -32,6 +32,7 @@ export type UserLabel = Pick<
 export enum UserAuthType {
     Native = 'native',
     Ldap = 'ldap',
+    Vk = 'vk',
 }
 
 export enum UserStatus {
