@@ -80,6 +80,7 @@ export class NotificationApiService {
 export interface RequestNotificationListParams extends RequestBaseParams {
     read?: boolean;
     search?: string;
+    lang?: string;
 }
 
 export type ResponseListNotification = ResponseList<UserNotification> & {
