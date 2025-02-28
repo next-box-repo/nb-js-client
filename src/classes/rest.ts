@@ -153,7 +153,6 @@ export class Rest {
 
             const url = `${this.state.clientParams.host}${this.state.clientParams.version}${path}`;
 
-            xhr.withCredentials = false;
             xhr.open(method, url, true);
 
             if (config?.headers) {

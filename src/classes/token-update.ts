@@ -1,14 +1,14 @@
 import { AuthApiService, RequestAuthTokenParams } from '../api';
 import { getCookieValue } from '../tools';
 import { AuthToken } from '../types';
+import { BASE_URL_V1, HOST } from './rest';
 
 const MILLISECONDS_IN_SECOND = 1000;
 const TOKEN_EXPIRATION_BUFFER_MS = 3000;
 
 export class TokenUpdate {
-    private isUpdating = false;
+    isUpdating = false;
 
-    private tokenUpdatePromise: Promise<AuthToken> | null = null;
     private tokenUpdateResolve: ((token: AuthToken) => void) | null = null;
 
     constructor(private authApiService: AuthApiService) {}
@@ -22,9 +22,7 @@ export class TokenUpdate {
         return expTime <= curTime + TOKEN_EXPIRATION_BUFFER_MS;
     }
 
-    async refreshToken(
-        params: RequestAuthTokenParams,
-    ): Promise<AuthToken | null> {
+    async refreshToken(params: RequestAuthTokenParams): Promise<any> {
         const { access_token, refresh_token } = params;
 
         if (!access_token || !refresh_token) return null;
@@ -32,42 +30,82 @@ export class TokenUpdate {
 
         this.isUpdating = true;
 
-        try {
-            const response = await this.authApiService.updateToken(params);
+        return new Promise((resolve, reject) => {
+            const xhr = new XMLHttpRequest();
 
-            if (response && response.access_token && response.refresh_token) {
-                const tokens: AuthToken = {
-                    access_token: response.access_token,
-                    refresh_token: response.refresh_token,
-                };
+            const url = `${HOST}${BASE_URL_V1}/login/update`;
 
-                if (getCookieValue('access_token') === tokens.access_token) {
-                    localStorage.setItem('refresh-token', tokens.refresh_token);
+            xhr.open('POST', url, true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+
+            xhr.send(
+                JSON.stringify({
+                    access_token: access_token,
+                    refresh_token: refresh_token,
+                }),
+            );
+
+            xhr.onload = () => {
+                if (xhr.status >= 200 && xhr.status < 300) {
+                    try {
+                        const response = JSON.parse(xhr.responseText);
+                        if (
+                            response &&
+                            response.access_token &&
+                            response.refresh_token
+                        ) {
+                            const tokens: AuthToken = {
+                                access_token: response.access_token,
+                                refresh_token: response.refresh_token,
+                            };
+
+                            if (
+                                getCookieValue('access_token') ===
+                                tokens.access_token
+                            ) {
+                                localStorage.setItem(
+                                    'refresh-token',
+                                    tokens.refresh_token,
+                                );
+                            }
+
+                            if (this.tokenUpdateResolve) {
+                                this.tokenUpdateResolve(tokens);
+                                this.tokenUpdateResolve = null;
+                            }
+
+                            resolve(tokens);
+                        } else {
+                            resolve(null);
+                        }
+                    } catch (error) {
+                        reject(new Error('Failed to parse response JSON.'));
+                    }
+                } else {
+                    reject(
+                        new Error(`Request failed with status: ${xhr.status}`),
+                    );
                 }
+            };
 
-                if (this.tokenUpdateResolve) {
-                    this.tokenUpdateResolve(tokens);
-                    this.tokenUpdateResolve = null;
-                }
+            xhr.onerror = () => {
+                reject(new Error('Network error occurred'));
+            };
 
-                return tokens;
-            } else {
-                return null;
-            }
-        } catch (error) {
-            throw error;
-        } finally {
-            this.isUpdating = false;
-        }
+            xhr.onloadend = () => {
+                this.isUpdating = false;
+            };
+        });
     }
 
-    private waitForTokenUpdate(): Promise<AuthToken> {
-        if (!this.tokenUpdatePromise) {
-            this.tokenUpdatePromise = new Promise<AuthToken>((resolve) => {
-                this.tokenUpdateResolve = resolve;
-            });
-        }
-
-        return this.tokenUpdatePromise;
+    async waitForTokenUpdate(): Promise<void> {
+        return new Promise((resolve) => {
+            const interval = setInterval(() => {
+                if (!this.isUpdating) {
+                    clearInterval(interval);
+                    resolve();
+                }
+            }, 100);
+        });
     }
 }
