@@ -59,10 +59,7 @@ export class StorageElementApiService {
         return this.info({ path, divide_id: rootId, file_version_id });
     }
 
-    size(data: { paths: string[]; divide_id?: number }): Promise<number> {
-        if (!parseInt(data.divide_id?.toString() || '')) {
-            delete data.divide_id;
-        }
+    size(data: StorageItemSizeParams): Promise<number> {
 
         return this.client.rest.post(
             `${STORAGE_ELEMENT}/size`,
@@ -263,4 +260,17 @@ export type CreateStorageElementParams = Pick<
     'created_by_extension' | 'divide_id' | 'name' | 'type' | 'path'
 > & {
     is_work_dir?: boolean;
+    
 };
+
+//NOTE: is_divided и is_favorite нужно выставлять только если по всему корню размер
+export interface StorageItemSizeParams {
+    paths: StorageItemSizePathParams[];
+    is_divided?: boolean;
+    is_favorite?: boolean;
+}
+
+export interface StorageItemSizePathParams {
+    path: string;
+    divide_id?: number;
+}
