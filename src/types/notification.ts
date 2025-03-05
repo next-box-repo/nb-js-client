@@ -11,7 +11,7 @@ export interface UserNotification {
     action: NotificationAction;
 
     title: string;
-    msg: string;
+    msg: string | NotificationMessage;
 
     transition: boolean;
 
@@ -21,6 +21,11 @@ export interface UserNotification {
 
     from_user_id?: number;
     owner?: UserLabel;
+}
+
+export interface NotificationMessage {
+    en: string;
+    ru: string;
 }
 
 export enum NotificationEntityType {
