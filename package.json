@@ -1,6 +1,6 @@
 {
     "name": "nb-js-client",
-    "version": "0.0.34",
+    "version": "0.0.35",
     "main": "dist/bundle.cjs.js",
     "module": "dist/bundle.esm.js",
     "files": [
@@ -19,7 +19,7 @@
     "devDependencies": {
         "@rollup/plugin-babel": "^6.0.4",
         "@rollup/plugin-commonjs": "^28.0.1",
-        "@rollup/plugin-node-resolve": "^15.3.0",
+        "@rollup/plugin-node-resolve": "^15.3.1",
         "@rollup/plugin-terser": "^0.4.4",
         "@rollup/plugin-typescript": "^12.1.1",
         "@types/node": "^22.10.0",
@@ -31,6 +31,7 @@
         "typescript": "^5.7.2"
     },
     "dependencies": {
+        "@babel/core": "^7.26.9",
         "jwt-decode": "^4.0.0"
     }
 }
