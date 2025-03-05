@@ -21,6 +21,7 @@ export interface StorageElement {
     access_mode?: PermissionType;
     to_user_group_id?: number;
     created_by_extension?: string;
+    check_status?: StorageElementCheckStatus;
 }
 
 export enum StorageElementType {
@@ -99,6 +100,13 @@ export interface HistoryNote {
     divide_id: number | null;
     file_version_id: string;
     path: string;
+}
+
+export enum StorageElementCheckStatus {
+    CheckNull,
+    CheckInProgress,
+    CheckPositive,
+    CheckNegative,
 }
 
 export interface RequestVersionsSizeParams {
