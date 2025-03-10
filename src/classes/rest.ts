@@ -240,7 +240,7 @@ export class Rest {
                         { ...response, error: body },
                     );
 
-                    reject(response);
+                    reject(body);
                 }
 
                 response = await applyInterceptors(
