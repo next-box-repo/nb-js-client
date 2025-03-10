@@ -235,10 +235,12 @@ export class Rest {
                         resolve({ ...response, body: body as T });
                     } else resolve(body as T);
                 } else {
-                    reject({
-                        ...response,
-                        error: body,
-                    });
+                    response = await applyInterceptors(
+                        this.client.responseInterceptors,
+                        { ...response, error: body },
+                    );
+
+                    reject(response);
                 }
 
                 response = await applyInterceptors(
