@@ -6,6 +6,8 @@ import { BASE_URL_V1, HOST } from './rest';
 const MILLISECONDS_IN_SECOND = 1000;
 const TOKEN_EXPIRATION_BUFFER_MS = 3000;
 
+export const NEED_TOKEN_UPDATE_ERROR = 'update black token';
+
 export class TokenUpdate {
     isUpdating = false;
 

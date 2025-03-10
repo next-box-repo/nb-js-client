@@ -11,7 +11,7 @@ import {
 } from '../types';
 import { AccessToken } from '../types/access-token';
 import { jwtDecode } from 'jwt-decode';
-import { TokenUpdate } from './token-update';
+import { NEED_TOKEN_UPDATE_ERROR, TokenUpdate } from './token-update';
 import { applyInterceptors, makeUrlParams, normalizeHeaders } from '../tools';
 
 export const BASE_URL_V1 = '/api/v1';
@@ -235,6 +235,18 @@ export class Rest {
                         resolve({ ...response, body: body as T });
                     } else resolve(body as T);
                 } else {
+                    if (
+                        this.state.authToken &&
+                        body.code === NEED_TOKEN_UPDATE_ERROR
+                    ) {
+                        const tokens: AuthToken | null =
+                            await this.tokenUpdate.refreshToken(
+                                this.state.authToken.get(0)!,
+                            );
+
+                        if (tokens) this.state.authToken.set(0, tokens);
+                    }
+
                     response = await applyInterceptors(
                         this.client.responseInterceptors,
                         { ...response, error: body },
