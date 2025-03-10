@@ -1,4 +1,4 @@
-import { AuthApiService, RequestAuthTokenParams } from '../api';
+import { RequestAuthTokenParams } from '../api';
 import { getCookieValue } from '../tools';
 import { AuthToken } from '../types';
 import { BASE_URL_V1, HOST } from './rest';
@@ -10,8 +10,6 @@ export class TokenUpdate {
     isUpdating = false;
 
     private tokenUpdateResolve: ((token: AuthToken) => void) | null = null;
-
-    constructor(private authApiService: AuthApiService) {}
 
     isTokenExpire(timestamp: number): boolean {
         if (!timestamp) return false;
@@ -81,11 +79,7 @@ export class TokenUpdate {
                     } catch (error) {
                         reject(new Error('Failed to parse response JSON.'));
                     }
-                } else {
-                    reject(
-                        new Error(`Request failed with status: ${xhr.status}`),
-                    );
-                }
+                } else resolve(null);
             };
 
             xhr.onerror = () => {

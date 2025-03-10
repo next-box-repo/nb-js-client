@@ -57,7 +57,7 @@ export class Client {
     UserApiService = new UserApiService(this);
     VersionApiService = new VersionApiService(this);
 
-    tokenUpdate = new TokenUpdate(this.AuthApiService);
+    tokenUpdate = new TokenUpdate();
     rest = new Rest(this, this.tokenUpdate);
 
     requestInterceptors: Interceptor<RequestInit>[] = [];
