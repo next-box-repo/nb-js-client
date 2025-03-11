@@ -247,12 +247,12 @@ export class Rest {
                         if (tokens) this.state.authToken.set(0, tokens);
                     }
 
-                    response = await applyInterceptors(
+                    config = await applyInterceptors(
                         this.client.responseInterceptors,
                         { ...response, error: body },
                     );
 
-                    reject(body);
+                    reject({ ...response, error: body });
                 }
 
                 response = await applyInterceptors(
