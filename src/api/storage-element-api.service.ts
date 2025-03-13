@@ -36,8 +36,14 @@ export class StorageElementApiService {
         path: string;
         divide_id?: number;
         file_version_id?: string;
+        root?: StorageRoot;
     }): Promise<StorageElement> {
-        if (!parseInt(params.divide_id?.toString() || '')) {
+        const hasDir = params.path.split('/').length > 2;
+
+        if (
+            !parseInt(params.divide_id?.toString() || '') ||
+            (hasDir && params.root === StorageRoot.divide)
+        ) {
             delete params.divide_id;
         }
 
@@ -56,11 +62,10 @@ export class StorageElementApiService {
             return this.fcaApiService.info(rootId, path);
         }
 
-        return this.info({ path, divide_id: rootId, file_version_id });
+        return this.info({ path, divide_id: rootId, file_version_id, root });
     }
 
     size(data: StorageItemSizeParams): Promise<number> {
-
         return this.client.rest.post(
             `${STORAGE_ELEMENT}/size`,
             JSON.stringify(data),
@@ -174,11 +179,7 @@ export class StorageElementApiService {
         paths: StorageElementPaste[],
         from_sharing_password?: string,
     ): Promise<void> {
-        const data = {
-            from_sharing_token,
-            from_sharing_password,
-            paths,
-        };
+        const data = { from_sharing_token, from_sharing_password, paths };
 
         return this.client.rest.post(
             `${STORAGE_ELEMENT}/copy`,
@@ -258,10 +259,7 @@ export interface StorageElementPasteParams {
 export type CreateStorageElementParams = Pick<
     StorageElement,
     'created_by_extension' | 'divide_id' | 'name' | 'type' | 'path'
-> & {
-    is_work_dir?: boolean;
-    
-};
+> & { is_work_dir?: boolean };
 
 //NOTE: is_divided и is_favorite нужно выставлять только если по всему корню размер
 export interface StorageItemSizeParams {
