@@ -159,9 +159,13 @@ export class Rest {
                 const normalizedHeaders = normalizeHeaders(config.headers);
 
                 for (const [key, value] of Object.entries(normalizedHeaders)) {
-                    if (this.state.clientParams.host === HOST) {
-                        xhr.setRequestHeader(key, value);
-                    } else if (key.toLowerCase() !== 'content-type') {
+                    if (typeof window !== 'undefined') {
+                        if (this.state.clientParams.host === HOST) {
+                            xhr.setRequestHeader(key, value);
+                        } else if (key.toLowerCase() !== 'content-type') {
+                            xhr.setRequestHeader(key, value);
+                        }
+                    } else {
                         xhr.setRequestHeader(key, value);
                     }
                 }
@@ -289,13 +293,15 @@ export class Rest {
     }
 
     async changeHost<T>(host: string, handler: () => Promise<T>): Promise<T> {
+        const baseHost = this.state.clientParams.host;
+
         this.state.clientParams.host = host;
         this.state.requestParams.headers = {};
 
         try {
             return await handler();
         } finally {
-            this.state.clientParams.host = HOST;
+            this.state.clientParams.host = baseHost;
         }
     }
 }
