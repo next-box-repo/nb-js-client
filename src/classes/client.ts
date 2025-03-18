@@ -66,10 +66,8 @@ export class Client {
     constructor(clientParams: NbClientParams) {
         this.state = {
             clientParams: {
-                host:
-                    clientParams?.host ||
-                    `${window.location.protocol}//${window.location.host}`,
-                version: clientParams?.version || '/api/v1',
+                host: clientParams?.host,
+                version: clientParams?.version,
             },
             requestParams: {
                 path: '',
