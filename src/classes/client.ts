@@ -25,7 +25,7 @@ import {
 
 import { NbAppState, NbClientParams } from '../types/base';
 import { Interceptor } from '../types/interceptor';
-import { Rest } from './rest';
+import { BASE_URL_V1, Rest } from './rest';
 import { TokenUpdate } from './token-update';
 
 export class Client {
@@ -67,7 +67,7 @@ export class Client {
         this.state = {
             clientParams: {
                 host: clientParams?.host,
-                version: clientParams?.version,
+                version: clientParams?.version || BASE_URL_V1,
             },
             requestParams: {
                 path: '',
