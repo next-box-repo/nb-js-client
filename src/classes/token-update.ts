@@ -1,7 +1,7 @@
 import { RequestAuthTokenParams } from '../api';
 import { getCookieValue } from '../tools';
 import { AuthToken } from '../types';
-import { BASE_URL_V1, HOST } from './rest';
+import { BASE_URL_V1 } from './rest';
 
 const MILLISECONDS_IN_SECOND = 1000;
 const TOKEN_EXPIRATION_BUFFER_MS = 3000;
@@ -22,7 +22,10 @@ export class TokenUpdate {
         return expTime <= curTime + TOKEN_EXPIRATION_BUFFER_MS;
     }
 
-    async refreshToken(params: RequestAuthTokenParams): Promise<any> {
+    async refreshToken(
+        params: RequestAuthTokenParams,
+        baseHost: string,
+    ): Promise<any> {
         const { access_token, refresh_token } = params;
 
         if (!access_token || !refresh_token) return null;
@@ -33,7 +36,7 @@ export class TokenUpdate {
         return new Promise((resolve, reject) => {
             const xhr = new XMLHttpRequest();
 
-            const url = `${HOST}${BASE_URL_V1}/login/update`;
+            const url = `${baseHost}${BASE_URL_V1}/login/update`;
 
             xhr.open('POST', url, true);
             xhr.setRequestHeader('Content-Type', 'application/json');

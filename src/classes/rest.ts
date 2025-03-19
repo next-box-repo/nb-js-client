@@ -16,13 +16,14 @@ import { applyInterceptors, makeUrlParams, normalizeHeaders } from '../tools';
 
 export const BASE_URL_V1 = '/api/v1';
 export const BASE_URL_V2 = '/api/v2';
-export const HOST = `${window.location.protocol}//${window.location.host}`;
 
 export class Rest {
     constructor(
         private client: Client,
         private tokenUpdate: TokenUpdate,
     ) {}
+
+    baseHost = '';
 
     get state(): NbAppState {
         return this.client.state;
@@ -131,7 +132,10 @@ export class Rest {
                         !path.includes('/assets')
                     ) {
                         const tokens: AuthToken | null =
-                            await this.tokenUpdate.refreshToken(item);
+                            await this.tokenUpdate.refreshToken(
+                                item,
+                                this.baseHost!,
+                            );
 
                         if (tokens) {
                             this.state.authToken.set(id, tokens);
@@ -159,13 +163,9 @@ export class Rest {
                 const normalizedHeaders = normalizeHeaders(config.headers);
 
                 for (const [key, value] of Object.entries(normalizedHeaders)) {
-                    if (typeof window !== 'undefined') {
-                        if (this.state.clientParams.host === HOST) {
-                            xhr.setRequestHeader(key, value);
-                        } else if (key.toLowerCase() !== 'content-type') {
-                            xhr.setRequestHeader(key, value);
-                        }
-                    } else {
+                    if (this.state.clientParams.host === this.baseHost) {
+                        xhr.setRequestHeader(key, value);
+                    } else if (key.toLowerCase() !== 'content-type') {
                         xhr.setRequestHeader(key, value);
                     }
                 }
@@ -246,6 +246,7 @@ export class Rest {
                         const tokens: AuthToken | null =
                             await this.tokenUpdate.refreshToken(
                                 this.state.authToken.get(0)!,
+                                this.baseHost!,
                             );
 
                         if (tokens) this.state.authToken.set(0, tokens);
@@ -293,15 +294,13 @@ export class Rest {
     }
 
     async changeHost<T>(host: string, handler: () => Promise<T>): Promise<T> {
-        const baseHost = this.state.clientParams.host;
-
         this.state.clientParams.host = host;
         this.state.requestParams.headers = {};
 
         try {
             return await handler();
         } finally {
-            this.state.clientParams.host = baseHost;
+            this.state.clientParams.host = this.baseHost;
         }
     }
 }

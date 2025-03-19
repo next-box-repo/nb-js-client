@@ -79,6 +79,8 @@ export class Client {
             authToken: null,
             skipInterceptors: false,
         };
+
+        this.rest.baseHost = this.state.clientParams.host || '';
     }
 
     request = {
