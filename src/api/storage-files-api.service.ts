@@ -68,7 +68,7 @@ export class StorageFilesApiService {
     uploadNet(
         data: UploadNetRequestParams,
     ): Promise<ResponseItem<StorageElement>> {
-        return this.client.rest.post(STORAGE_FILES_NET, JSON.stringify(data));
+        return this.client.rest.post(STORAGE_FILES_NET, data);
     }
 }
 

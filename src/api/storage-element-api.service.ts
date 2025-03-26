@@ -60,11 +60,7 @@ export class StorageElementApiService {
     }
 
     size(data: StorageItemSizeParams): Promise<number> {
-
-        return this.client.rest.post(
-            `${STORAGE_ELEMENT}/size`,
-            JSON.stringify(data),
-        );
+        return this.client.rest.post(`${STORAGE_ELEMENT}/size`, data);
     }
 
     move(
@@ -83,7 +79,7 @@ export class StorageElementApiService {
         if (to === StorageRoot.fca && from === StorageRoot.fca) {
             return this.client.rest.post(
                 `${DISK}/${from_divide_id}/files/move${DISK}/${to_divide_id}`,
-                JSON.stringify(fcaParams),
+                fcaParams,
             );
         }
 
@@ -94,7 +90,7 @@ export class StorageElementApiService {
 
             return this.client.rest.put(
                 `${DISK}/${to_divide_id}/files/from/box`,
-                JSON.stringify(fcaParams),
+                fcaParams,
             );
         }
 
@@ -105,14 +101,11 @@ export class StorageElementApiService {
 
             return this.client.rest.put(
                 `${DISK}/${from_divide_id}/files/to/box`,
-                JSON.stringify(fcaParams),
+                fcaParams,
             );
         }
 
-        return this.client.rest.post(
-            STORAGE_ELEMENT_MOVE,
-            JSON.stringify(params),
-        );
+        return this.client.rest.post(STORAGE_ELEMENT_MOVE, params);
     }
 
     copy(
@@ -132,7 +125,7 @@ export class StorageElementApiService {
         if (to === StorageRoot.fca && from === StorageRoot.fca) {
             return this.client.rest.post(
                 `${DISK}/${from_divide_id}/files/copy${DISK}/${to_divide_id}`,
-                JSON.stringify(fcaParams),
+                fcaParams,
             );
         }
 
@@ -145,7 +138,7 @@ export class StorageElementApiService {
 
             return this.client.rest.post(
                 `${DISK}/${to_divide_id}/files/from/box`,
-                JSON.stringify(fcaParams),
+                fcaParams,
             );
         }
 
@@ -158,15 +151,12 @@ export class StorageElementApiService {
 
             return this.client.rest.post(
                 `${DISK}/${from_divide_id}/files/to/box`,
-                JSON.stringify(fcaParams),
+                fcaParams,
             );
         }
 
         // в моем диске и в доступных мне
-        return this.client.rest.post(
-            STORAGE_ELEMENT_COPY,
-            JSON.stringify(params),
-        );
+        return this.client.rest.post(STORAGE_ELEMENT_COPY, params);
     }
 
     pasteFromShared(
@@ -180,16 +170,13 @@ export class StorageElementApiService {
             paths,
         };
 
-        return this.client.rest.post(
-            `${STORAGE_ELEMENT}/copy`,
-            JSON.stringify(data),
-        );
+        return this.client.rest.post(`${STORAGE_ELEMENT}/copy`, data);
     }
 
     create(
         data: CreateStorageElementParams,
     ): Promise<ResponseItem<StorageElement>> {
-        return this.client.rest.post(STORAGE_ELEMENT, JSON.stringify(data));
+        return this.client.rest.post(STORAGE_ELEMENT, data);
     }
 
     delete(path: string, divide_id?: number): Promise<void> {
@@ -202,27 +189,27 @@ export class StorageElementApiService {
     favorite(path: string): Promise<void> {
         return this.client.rest.put(
             `${STORAGE_ELEMENT}?path=${encodeURIComponent(path)}`,
-            JSON.stringify({ is_favorite: true }),
+            { is_favorite: true },
         );
     }
 
     removeFavorite(path: string): Promise<void> {
         return this.client.rest.put(
             `${STORAGE_ELEMENT}?path=${encodeURIComponent(path)}`,
-            JSON.stringify({ is_favorite: false }),
+            { is_favorite: false },
         );
     }
 
     createItem(
         data: CreateStorageElementParams,
     ): Promise<ResponseItem<StorageElement>> {
-        return this.client.rest.post(STORAGE_ELEMENT, JSON.stringify(data));
+        return this.client.rest.post(STORAGE_ELEMENT, data);
     }
 
     createWorkDir(
         data: CreateStorageElementParams,
     ): Promise<ResponseItem<StorageElement>> {
-        return this.client.rest.post(STORAGE_ELEMENT, JSON.stringify(data));
+        return this.client.rest.post(STORAGE_ELEMENT, data);
     }
 
     sizeWithSection(params?: {
@@ -260,7 +247,6 @@ export type CreateStorageElementParams = Pick<
     'created_by_extension' | 'divide_id' | 'name' | 'type' | 'path'
 > & {
     is_work_dir?: boolean;
-    
 };
 
 //NOTE: is_divided и is_favorite нужно выставлять только если по всему корню размер

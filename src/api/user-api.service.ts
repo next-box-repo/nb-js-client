@@ -4,6 +4,8 @@ import {
     ResponseItem,
     ResponseList,
     User,
+    UserParams,
+    UserParamsLabel,
     UserSession,
     UserStatus,
     UserToken,
@@ -15,6 +17,7 @@ const USERS_ME = `${USERS}/me`;
 const USERS_ME_AVATARS = `${USERS_ME}/avatars`;
 const USERS_ME_SESSIONS = `${USERS_ME}/sessions`;
 const USERS_ME_TOKEN = `${USERS_ME}/tokens`;
+const USERS_ME_PARAMS = `${USERS_ME}/params`;
 const USERS_CHANGE_MY_PASSWORD = `${USERS_ME}/change-password`;
 
 export class UserApiService {
@@ -29,11 +32,11 @@ export class UserApiService {
     }
 
     create(data: CreateUserParams): Promise<ResponseItem<User>> {
-        return this.client.rest.post(USERS, JSON.stringify(data));
+        return this.client.rest.post(USERS, data);
     }
 
     update(id: number, data: CreateUserParams): Promise<ResponseItem<User>> {
-        return this.client.rest.put(USERS + `/${id}`, JSON.stringify(data));
+        return this.client.rest.put(USERS + `/${id}`, data);
     }
 
     delete(id: number, params?: { hard: boolean }): Promise<void> {
@@ -49,14 +52,14 @@ export class UserApiService {
     }
 
     updateMe(data: CreateUserParams): Promise<ResponseItem<User>> {
-        return this.client.rest.put(USERS_ME, JSON.stringify(data));
+        return this.client.rest.put(USERS_ME, data);
     }
 
     createToken(data: {
         name: string;
         expire_in: string | null;
     }): Promise<UserToken> {
-        return this.client.rest.post(USERS_ME_TOKEN, JSON.stringify(data));
+        return this.client.rest.post(USERS_ME_TOKEN, data);
     }
 
     listToken(params: RequestBaseParams): Promise<ResponseList<UserToken>> {
@@ -71,20 +74,14 @@ export class UserApiService {
         new_password: string;
         old_password: string;
     }): Promise<{ success: boolean }> {
-        return this.client.rest.put(
-            USERS_CHANGE_MY_PASSWORD,
-            JSON.stringify(data),
-        );
+        return this.client.rest.put(USERS_CHANGE_MY_PASSWORD, data);
     }
 
     changeUsersPassword(
         id: number,
         data: { new_password: string },
     ): Promise<{ success: boolean }> {
-        return this.client.rest.put(
-            `${USERS}/${id}/change-password`,
-            JSON.stringify(data),
-        );
+        return this.client.rest.put(`${USERS}/${id}/change-password`, data);
     }
 
     meUploadAvatar(
@@ -115,10 +112,19 @@ export class UserApiService {
     }
 
     setRole(id: number, role_id: number | null = null): Promise<void> {
-        return this.client.rest.put(
-            `${USERS}/${id}/roles`,
-            JSON.stringify({ role_id }),
-        );
+        return this.client.rest.put(`${USERS}/${id}/roles`, { role_id });
+    }
+
+    meParams(name: string): Promise<UserParams> {
+        return this.client.rest.get(USERS_ME_PARAMS, { name });
+    }
+
+    meSetParams(param: UserParamsLabel, value: any): Promise<UserParams> {
+        return this.client.rest.post(`${USERS_ME_PARAMS}/${param}`, value);
+    }
+
+    meListParams(): Promise<ResponseList<UserParams>> {
+        return this.client.rest.get(USERS_ME_PARAMS);
     }
 }
 

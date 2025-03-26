@@ -90,3 +90,14 @@ export interface UserRole {
     grant_access_all: boolean;
     permissions_id?: number[];
 }
+
+export interface UserParams {
+    name: UserParamsLabel;
+    value: any;
+}
+
+export enum UserParamsLabel {
+    Theme = 'theme',
+    Lang = 'lang',
+    Sort = 'sort',
+}

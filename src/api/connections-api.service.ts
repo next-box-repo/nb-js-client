@@ -26,10 +26,7 @@ export class ConnectionsApiService {
         id: number,
         data: ConnectionCreateParams,
     ): Promise<ResponseItem<Connection>> {
-        return this.client.rest.put(
-            `${CONNECTIONS}/${id}`,
-            JSON.stringify(data),
-        );
+        return this.client.rest.put(`${CONNECTIONS}/${id}`, data);
     }
 
     delete(id: number): Promise<void> {
@@ -48,10 +45,7 @@ export class ConnectionsApiService {
             [ConnectionType.S3]: '/disk/s3',
         };
 
-        return this.client.rest.post(
-            routes[data.type] || CONNECTIONS,
-            JSON.stringify(data),
-        );
+        return this.client.rest.post(routes[data.type] || CONNECTIONS, data);
     }
 
     dashboard(

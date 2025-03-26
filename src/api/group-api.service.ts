@@ -21,14 +21,14 @@ export class GroupApiService {
     }
 
     create(data: CreateUserGroupParams): Promise<ResponseItem<UserGroup>> {
-        return this.client.rest.post(GROUPS, JSON.stringify(data));
+        return this.client.rest.post(GROUPS, data);
     }
 
     update(
         id: number,
         data: CreateUserGroupParams,
     ): Promise<ResponseItem<UserGroup>> {
-        return this.client.rest.put(`${GROUPS}/${id}`, JSON.stringify(data));
+        return this.client.rest.put(`${GROUPS}/${id}`, data);
     }
 
     delete(id: number): Promise<void> {

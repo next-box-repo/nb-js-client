@@ -25,7 +25,7 @@ export class ExtensionsApiService {
     setSetting(uniqKey: string, params: SettingValue[]): Promise<void> {
         return this.client.rest.post(
             `${EXTENSIONS}/${uniqKey}/settings`,
-            JSON.stringify(params),
+            params,
         );
     }
 
@@ -51,10 +51,10 @@ export class ExtensionsApiService {
         ext_code: string,
         ext_uniq_key: string,
     ): Promise<ExtensionDefault> {
-        return this.client.rest.post(
-            EXTENSIONS_DEFAULT,
-            JSON.stringify({ ext_code, ext_uniq_key }),
-        );
+        return this.client.rest.post(EXTENSIONS_DEFAULT, {
+            ext_code,
+            ext_uniq_key,
+        });
     }
 
     checkUpdates(): Promise<void> {
@@ -62,10 +62,7 @@ export class ExtensionsApiService {
     }
 
     updateVersion(id: number, version: string): Promise<Extension> {
-        return this.client.rest.put(
-            `${EXTENSIONS}/${id}`,
-            JSON.stringify({ version }),
-        );
+        return this.client.rest.put(`${EXTENSIONS}/${id}`, { version });
     }
 
     list(
@@ -105,10 +102,10 @@ export class ExtensionsApiService {
 
     install(uniq_key: string, version: string): Promise<any> {
         return this.client.rest.changeBaseUrlVersion(BASE_URL_V2, () => {
-            return this.client.rest.post(
-                `${EXTENSIONS}/site`,
-                JSON.stringify({ uniq_key, version }),
-            );
+            return this.client.rest.post(`${EXTENSIONS}/site`, {
+                uniq_key,
+                version,
+            });
         });
     }
 }

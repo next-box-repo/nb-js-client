@@ -25,17 +25,11 @@ export class NotificationApiService {
         ids: number[],
         to_status: NotificationRowAction,
     ): Promise<void> {
-        return this.client.rest.put(
-            NOTIFICATIONS,
-            JSON.stringify({ ids, to_status }),
-        );
+        return this.client.rest.put(NOTIFICATIONS, { ids, to_status });
     }
 
     toggleAllStatus(to_status: NotificationRowAction): Promise<void> {
-        return this.client.rest.put(
-            NOTIFICATIONS_ALL,
-            JSON.stringify({ to_status }),
-        );
+        return this.client.rest.put(NOTIFICATIONS_ALL, { to_status });
     }
 
     delete(id: number[]): Promise<void> {
@@ -51,12 +45,9 @@ export class NotificationApiService {
     }
 
     setPermission(permission: boolean): Promise<void> {
-        return this.client.rest.post(
-            NOTIFICATIONS_PERMISSION,
-            JSON.stringify({
-                enabled: permission,
-            }),
-        );
+        return this.client.rest.post(NOTIFICATIONS_PERMISSION, {
+            enabled: permission,
+        });
     }
 
     getSubscription(): Promise<NotificationActionGroup> {
@@ -70,10 +61,7 @@ export class NotificationApiService {
             },
         };
 
-        return this.client.rest.post(
-            NOTIFICATIONS_SUBSCRIPTION,
-            JSON.stringify(params),
-        );
+        return this.client.rest.post(NOTIFICATIONS_SUBSCRIPTION, params);
     }
 }
 

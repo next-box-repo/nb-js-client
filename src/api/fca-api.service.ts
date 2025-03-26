@@ -31,10 +31,7 @@ export class FcaApiService {
     }
 
     create(rootID: number, data: CreateStorageElementParams): Promise<any> {
-        return this.client.rest.post(
-            `${DISK}/${rootID}/element`,
-            JSON.stringify(data),
-        );
+        return this.client.rest.post(`${DISK}/${rootID}/element`, data);
     }
 
     replace(
@@ -82,10 +79,7 @@ export class FcaApiService {
         rootID: number,
         params: UploadNetRequestParams,
     ): Promise<ResponseItem<StorageElement>> {
-        return this.client.rest.post(
-            `${DISK}/${rootID}/files/net`,
-            JSON.stringify(params),
-        );
+        return this.client.rest.post(`${DISK}/${rootID}/files/net`, params);
     }
 
     delete(rootID: number, path: string): Promise<void> {
@@ -95,6 +89,6 @@ export class FcaApiService {
     }
 
     check(data: ConnectionCreateParams): Promise<void> {
-        return this.client.rest.post(DISK_CHECK, JSON.stringify(data));
+        return this.client.rest.post(DISK_CHECK, data);
     }
 }

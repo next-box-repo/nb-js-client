@@ -14,18 +14,18 @@ export class AuthApiService {
     }
 
     login(data: RequestAuthSettingsParams): Promise<AuthToken> {
-        return this.client.rest.post(LOGIN, JSON.stringify(data));
+        return this.client.rest.post(LOGIN, data);
     }
 
     ldapLogin(data: RequestAuthSettingsParams): Promise<AuthToken> {
-        return this.client.rest.post(LOGIN_LDAP, JSON.stringify(data));
+        return this.client.rest.post(LOGIN_LDAP, data);
     }
 
     updateToken(data: RequestAuthTokenParams): Promise<AuthToken> {
         const path = data.path ? `${data.path}/${LOGIN_UPDATE}` : LOGIN_UPDATE;
         if (data.path) delete data.path;
 
-        return this.client.rest.post(path, JSON.stringify(data));
+        return this.client.rest.post(path, data);
     }
 
     logout(): Promise<void> {

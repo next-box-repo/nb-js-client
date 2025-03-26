@@ -16,16 +16,13 @@ export class StorageShareApiService {
             permissions_type,
         };
 
-        return this.client.rest.post(
-            STORAGE_ELEMENT_SHARE,
-            JSON.stringify(data),
-        );
+        return this.client.rest.post(STORAGE_ELEMENT_SHARE, data);
     }
 
     change(data: ShareModel): Promise<ShareInfo> {
         return this.client.rest.put(
             `${STORAGE_ELEMENT_SHARE}/${data.token}`,
-            JSON.stringify(data),
+            data,
         );
     }
 

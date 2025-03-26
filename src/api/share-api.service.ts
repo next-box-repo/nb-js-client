@@ -43,9 +43,6 @@ export class ShareApiService {
         token: string,
         data: { status: RestrictionStatus; comment: string },
     ): Promise<ResponseList<ShareInfo>> {
-        return this.client.rest.put(
-            `${SHARE_RESTRICTIONS}/${token}`,
-            JSON.stringify(data),
-        );
+        return this.client.rest.put(`${SHARE_RESTRICTIONS}/${token}`, data);
     }
 }

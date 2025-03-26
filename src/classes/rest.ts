@@ -12,7 +12,12 @@ import {
 import { AccessToken } from '../types/access-token';
 import { jwtDecode } from 'jwt-decode';
 import { NEED_TOKEN_UPDATE_ERROR, TokenUpdate } from './token-update';
-import { applyInterceptors, makeUrlParams, normalizeHeaders } from '../tools';
+import {
+    applyInterceptors,
+    makeUrlParams,
+    normalizeHeaders,
+    prepareRequestBody,
+} from '../tools';
 
 export const BASE_URL_V1 = '/api/v1';
 export const BASE_URL_V2 = '/api/v2';
@@ -41,19 +46,11 @@ export class Rest {
         });
     }
 
-    post(
-        path: string,
-        body?: BodyInit | null,
-        config?: RequestConfig,
-    ): Promise<any> {
+    post(path: string, body?: any, config?: RequestConfig): Promise<any> {
         return this.request(RequestMethod.POST, path, { body, ...config });
     }
 
-    put(
-        path: string,
-        body?: BodyInit | null,
-        config?: RequestConfig,
-    ): Promise<any> {
+    put(path: string, body?: any, config?: RequestConfig): Promise<any> {
         return this.request(RequestMethod.PUT, path, {
             body,
             cache: 'no-cache',
@@ -61,11 +58,7 @@ export class Rest {
         });
     }
 
-    patch(
-        path: string,
-        body?: BodyInit | null,
-        config?: RequestConfig,
-    ): Promise<any> {
+    patch(path: string, body?: any, config?: RequestConfig): Promise<any> {
         return this.request(RequestMethod.PATCH, path, { body, ...config });
     }
 
@@ -79,7 +72,7 @@ export class Rest {
 
     upload(
         path: string,
-        body?: BodyInit | null,
+        body: FormData,
         config?: RequestConfig,
     ): { promise: Promise<any>; abort: () => void } {
         const controller = new AbortController();
@@ -275,7 +268,7 @@ export class Rest {
                 });
             };
 
-            xhr.send(config?.body ?? null);
+            xhr.send(prepareRequestBody(config?.body));
         });
     }
 

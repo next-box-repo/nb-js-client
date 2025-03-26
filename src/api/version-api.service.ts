@@ -30,17 +30,11 @@ export class VersionApiService {
     }
 
     create(params: HistoryNote): Promise<ResponseItem<StorageElementVersion>> {
-        return this.client.rest.post(
-            STORAGE_ELEMENT_VERSION,
-            JSON.stringify(params),
-        );
+        return this.client.rest.post(STORAGE_ELEMENT_VERSION, params);
     }
 
     edit(params: HistoryNote): Promise<ResponseItem<StorageElementVersion>> {
-        return this.client.rest.put(
-            STORAGE_ELEMENT_VERSION,
-            JSON.stringify(params),
-        );
+        return this.client.rest.put(STORAGE_ELEMENT_VERSION, params);
     }
 
     delete(params: HistoryRequestParams): Promise<void> {
@@ -52,10 +46,7 @@ export class VersionApiService {
     }
 
     makeCurrent(params: HistoryRequestParams): Promise<void> {
-        return this.client.rest.post(
-            STORAGE_ELEMENT_VERSION_CURRENT,
-            JSON.stringify(params),
-        );
+        return this.client.rest.post(STORAGE_ELEMENT_VERSION_CURRENT, params);
     }
 }
 

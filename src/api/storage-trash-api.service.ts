@@ -24,9 +24,6 @@ export class StorageTrashApiService {
     }
 
     restore(del_groups: StorageTrashItem[]): Promise<void> {
-        return this.client.rest.patch(
-            STORAGE_TRASH_ELEMENT,
-            JSON.stringify({ del_groups }),
-        );
+        return this.client.rest.patch(STORAGE_TRASH_ELEMENT, { del_groups });
     }
 }

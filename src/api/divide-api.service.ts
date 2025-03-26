@@ -41,10 +41,7 @@ export class DivideApiService {
         id: number,
         access_mode: PermissionType,
     ): Promise<UserDivide> {
-        return this.client.rest.put(
-            `${service}/divide/${id}`,
-            JSON.stringify({ access_mode }),
-        );
+        return this.client.rest.put(`${service}/divide/${id}`, { access_mode });
     }
 
     divideCreate(
@@ -60,10 +57,7 @@ export class DivideApiService {
             access_mode,
         };
 
-        return this.client.rest.post(
-            `${service}/${DIVIDE}`,
-            JSON.stringify(data),
-        );
+        return this.client.rest.post(`${service}/${DIVIDE}`, data);
     }
 
     divideUsers(
@@ -96,10 +90,7 @@ export class DivideApiService {
         token: number,
         data: { status: any; comment: string },
     ): Promise<ResponseList<UserDivide>> {
-        return this.client.rest.put(
-            `${DIVIDE_RESTRICTIONS}/${token}`,
-            JSON.stringify(data),
-        );
+        return this.client.rest.put(`${DIVIDE_RESTRICTIONS}/${token}`, data);
     }
 
     private makeParam(

@@ -22,7 +22,7 @@ export class GatewayApiService {
     }
 
     changeSettings(data: SettingValue[]): Promise<void> {
-        return this.client.rest.post(SETTINGS, JSON.stringify(data));
+        return this.client.rest.post(SETTINGS, data);
     }
 
     queryInit(): Promise<QueryInitResponse> {

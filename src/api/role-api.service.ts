@@ -27,14 +27,14 @@ export class RoleApiService {
     }
 
     create(data: CreateUserRoleParams): Promise<ResponseItem<UserRole>> {
-        return this.client.rest.post(ROLES, JSON.stringify(data));
+        return this.client.rest.post(ROLES, data);
     }
 
     update(
         id: number,
         data: Partial<CreateUserRoleParams>,
     ): Promise<ResponseItem<UserRole>> {
-        return this.client.rest.put(`${ROLES}/${id}`, JSON.stringify(data));
+        return this.client.rest.put(`${ROLES}/${id}`, data);
     }
 
     delete(id: number): Promise<void> {
@@ -46,10 +46,7 @@ export class RoleApiService {
     }
 
     addPermission(id: number, ids: number[]): Promise<void> {
-        return this.client.rest.put(
-            `${ROLES}/${id}/permissions`,
-            JSON.stringify({ ids }),
-        );
+        return this.client.rest.put(`${ROLES}/${id}/permissions`, { ids });
     }
 
     deletePermission(id: number, ids: number[]): Promise<void> {

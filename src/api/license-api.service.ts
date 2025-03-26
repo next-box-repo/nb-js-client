@@ -13,7 +13,7 @@ export class LicenseApiService {
     }
 
     create(data: ChangeLicenseParams): Promise<License> {
-        return this.client.rest.post(LICENSE, JSON.stringify(data));
+        return this.client.rest.post(LICENSE, data);
     }
 
     check(): Promise<License> {
