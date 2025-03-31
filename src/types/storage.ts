@@ -49,7 +49,7 @@ export enum StorageRoot {
     divide = 'divide',
     share = 'share',
     favorite = 'favorite',
-    trash = 'storage-trash',
+    trash = 'trash',
 }
 
 export interface StorageRouteData {
