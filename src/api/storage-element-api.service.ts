@@ -225,6 +225,7 @@ export interface RequestStorageListParams extends RequestBaseParams {
     is_favorite?: boolean;
     is_divided?: boolean;
     divide_id?: number | null;
+    is_trash?: boolean;
     path?: string;
     min_size?: number | null;
     max_size?: number | null;
