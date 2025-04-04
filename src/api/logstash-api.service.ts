@@ -18,22 +18,6 @@ export class LogstashApiService {
     ): Promise<ResponseList<UsersLog>> {
         return this.client.rest.get(`${LOGS}/users`, params);
     }
-
-    getSystemLogs(
-        path: string,
-        start: number,
-        end: number,
-    ): Promise<HttpResponse<string>> {
-        return this.client.rest.get(
-            `${LOGS}/${path}`,
-            {},
-            {
-                observe: RequestObserve.Response,
-                responseType: ResponseType.Text,
-                headers: { Range: `bytes=${start}-${end}` },
-            },
-        );
-    }
 }
 
 export interface RequestUsersLogParams extends RequestBaseParams {
