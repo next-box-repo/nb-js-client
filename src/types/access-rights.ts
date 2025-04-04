@@ -34,7 +34,6 @@ export enum AccessRights {
 
     // Аудит
     ReadUserLogs = 'read_user_logs', // Просмотр пользовательских логов
-    ReadSystemLogs = 'read_system_logs', // Просмотр системных логов
 
     // Подключения
     ConnectionsRead = 'connections_read', // Просмотр
