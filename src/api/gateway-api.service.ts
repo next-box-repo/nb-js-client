@@ -43,10 +43,17 @@ export interface QueryInitResponse {
     cache_users: User[];
 
     lock_screen: LockScreen;
+    view_type: QueryInitViewType;
+
     restrictions?: Restriction;
 
     open_in_desktop_settings: { open_in_desktop_enabled: boolean };
 
     // нужен для devtools
     inject_scripts?: string[];
+}
+
+export enum QueryInitViewType {
+    Standard = 'Standard',
+    Simple = 'Simple',
 }
