@@ -1,5 +1,6 @@
 import { Client } from '../classes';
 import {
+    AuthToken,
     RequestBaseParams,
     ResponseItem,
     ResponseList,
@@ -19,7 +20,7 @@ const USERS_ME_SESSIONS = `${USERS_ME}/sessions`;
 const USERS_ME_TOKEN = `${USERS_ME}/tokens`;
 const USERS_ME_PARAMS = `${USERS_ME}/params`;
 const USERS_CHANGE_MY_PASSWORD = `${USERS_ME}/change-password`;
-
+const USERS_INITIAL = `${USERS}/initial`;
 export class UserApiService {
     constructor(private client: Client) {}
 
@@ -125,6 +126,10 @@ export class UserApiService {
 
     meListParams(): Promise<ResponseList<UserParams>> {
         return this.client.rest.get(USERS_ME_PARAMS);
+    }
+
+    initial(data: { login: string; password: string }): Promise<AuthToken> {
+        return this.client.rest.post(USERS_INITIAL, data);
     }
 }
 
