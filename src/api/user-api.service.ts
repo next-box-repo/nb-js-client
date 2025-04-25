@@ -24,6 +24,10 @@ const USERS_INITIAL = `${USERS}/initial`;
 export class UserApiService {
     constructor(private client: Client) {}
 
+    initial(data: { login: string; password: string }): Promise<AuthToken> {
+        return this.client.rest.post(USERS_INITIAL, data);
+    }
+
     list(params: RequestUserListParams): Promise<ResponseList<User>> {
         return this.client.rest.get(USERS, params);
     }
@@ -126,10 +130,6 @@ export class UserApiService {
 
     meListParams(): Promise<ResponseList<UserParams>> {
         return this.client.rest.get(USERS_ME_PARAMS);
-    }
-
-    initial(data: { login: string; password: string }): Promise<AuthToken> {
-        return this.client.rest.post(USERS_INITIAL, data);
     }
 }
 
