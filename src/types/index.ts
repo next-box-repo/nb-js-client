@@ -7,6 +7,7 @@ export * from './discovery';
 export * from './extension';
 export * from './divide';
 export * from './license';
+export * from './limitation';
 export * from './lock-screen';
 export * from './notification';
 export * from './permission';
