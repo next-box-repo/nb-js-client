@@ -10,6 +10,7 @@ import {
     GroupApiService,
     LicenseApiService,
     LinksApiService,
+    LimitationsApiService,
     LogstashApiService,
     NotificationApiService,
     RoleApiService,
@@ -42,6 +43,7 @@ export class Client {
     GroupApiService = new GroupApiService(this);
     LicenseApiService = new LicenseApiService(this);
     LinksApiService = new LinksApiService(this);
+    LimitationsApiService = new LimitationsApiService(this);
     LogstashApiService = new LogstashApiService(this);
     NotificationApiService = new NotificationApiService(this);
     RoleApiService = new RoleApiService(this);

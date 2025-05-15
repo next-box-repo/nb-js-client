@@ -9,6 +9,7 @@ export * from './gateway-api.service';
 export * from './group-api.service';
 export * from './license-api.service';
 export * from './links-api.service';
+export * from './limitation-api.service';
 export * from './logstash-api.service';
 export * from './notification-api.service';
 export * from './role-api.service';

@@ -95,3 +95,23 @@ interface VersionExtension {
     version: string;
     size: number;
 }
+
+
+export interface UserNamesExtension {
+    name: string;
+    create_date: string;
+}
+
+export interface NameExtensionListParams extends RequestBaseParams {
+    search?: string | null;
+}
+
+export interface ExtensionListParams extends RequestBaseParams {
+    search?: string | null;
+    uniq_key?: string[];
+    file_name_ext?: string;
+    type?: StorageElementType[];
+    ext_value?: string | null;
+    file_mode?: ExtensionFileMode[];
+    lang?: string;
+}
