@@ -3,6 +3,7 @@ import {
     Extension,
     ExtensionDefault,
     ExtensionFileMode,
+    ExtensionListParams,
     HttpEvent,
     NameExtensionListParams,
     OnUploadProgress,
@@ -132,14 +133,4 @@ export class ExtensionsApiService {
     deleteAllUserNameExts(): Promise<void> {
         return this.client.rest.delete(`${EXTENSIONS_NAME_USER}`);
     }
-}
-
-export interface ExtensionListParams extends RequestBaseParams {
-    search?: string | null;
-    uniq_key?: string[];
-    file_name_ext?: string;
-    type?: StorageElementType[];
-    ext_value?: string | null;
-    file_mode?: ExtensionFileMode[];
-    lang?: string;
 }
