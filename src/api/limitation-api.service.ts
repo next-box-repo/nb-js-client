@@ -1,6 +1,10 @@
 import { Client } from '../classes';
 import { RequestBaseParams, ResponseItem, ResponseList, User } from '../types';
-import { RequestLimitationsListParams, Limitation, CreateLimitationsParams } from '../types/limitation';
+import {
+    RequestLimitationsListParams,
+    Limitation,
+    CreateLimitationsParams,
+} from '../types/limitation';
 
 const LIMITATIONS = '/limitations';
 export class LimitationsApiService {
@@ -10,7 +14,7 @@ export class LimitationsApiService {
     ): Promise<ResponseList<Limitation>> {
         return this.client.rest.get(LIMITATIONS, params);
     }
-    listUsers(id: number): Promise<ResponseList<User>> {
+    listUsers(id: number): Promise<ResponseList<number>> {
         return this.client.rest.get(`${LIMITATIONS}/${id}/users`);
     }
     create(data: CreateLimitationsParams): Promise<ResponseItem<Limitation>> {
