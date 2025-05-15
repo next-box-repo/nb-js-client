@@ -4,16 +4,20 @@ import {
     ExtensionDefault,
     ExtensionFileMode,
     HttpEvent,
+    NameExtensionListParams,
     OnUploadProgress,
     RequestBaseParams,
     ResponseItem,
     ResponseList,
     SettingValue,
     StorageElementType,
+    UserNamesExtension,
 } from '../types';
 
 const EXTENSIONS = '/static/extensions';
 const EXTENSIONS_DEFAULT = `/extensions/defaults`;
+const EXTENSIONS_NAME_USER = `${EXTENSIONS}/names/users`;
+const EXTENSIONS_NAME_SYSTEM = `${EXTENSIONS}/names/system`;
 
 export class ExtensionsApiService {
     constructor(private client: Client) {}
@@ -107,6 +111,26 @@ export class ExtensionsApiService {
                 version,
             });
         });
+    }
+
+    getSystemNameExts(
+        params?: NameExtensionListParams,
+    ): Promise<ResponseList<string>> {
+        return this.client.rest.get(EXTENSIONS_NAME_SYSTEM, params);
+    }
+    getUserNameExts(
+        params?: NameExtensionListParams,
+    ): Promise<ResponseList<UserNamesExtension>> {
+        return this.client.rest.get(EXTENSIONS_NAME_USER, params);
+    }
+    createUserNameExt(name: string): Promise<void> {
+        return this.client.rest.post(`${EXTENSIONS_NAME_USER}`, { name });
+    }
+    deleteUserNameExt(name: string): Promise<void> {
+        return this.client.rest.delete(`${EXTENSIONS_NAME_USER}/${name}`);
+    }
+    deleteAllUserNameExts(): Promise<void> {
+        return this.client.rest.delete(`${EXTENSIONS_NAME_USER}`);
     }
 }
 
