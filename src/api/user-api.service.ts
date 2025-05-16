@@ -21,6 +21,8 @@ const USERS_ME_TOKEN = `${USERS_ME}/tokens`;
 const USERS_ME_PARAMS = `${USERS_ME}/params`;
 const USERS_CHANGE_MY_PASSWORD = `${USERS_ME}/change-password`;
 const USERS_INITIAL = `${USERS}/initial`;
+const USERS_PHONE = `${USERS}/phone`;
+const USERS_CONFIRM_PHONE = `${USERS_PHONE}/confirm`;
 
 export class UserApiService {
     constructor(private client: Client) {}
@@ -131,6 +133,14 @@ export class UserApiService {
 
     meListParams(): Promise<ResponseList<UserParams>> {
         return this.client.rest.get(USERS_ME_PARAMS);
+    }
+
+    phone(data: { phone: string }): Promise<AuthToken> {
+        return this.client.rest.post(USERS_PHONE, data);
+    }
+
+    phoneConfirm(code: number): Promise<void> {
+        return this.client.rest.post(`${USERS_CONFIRM_PHONE}/${code}`);
     }
 }
 
