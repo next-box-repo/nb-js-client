@@ -21,7 +21,7 @@ const USERS_ME_TOKEN = `${USERS_ME}/tokens`;
 const USERS_ME_PARAMS = `${USERS_ME}/params`;
 const USERS_CHANGE_MY_PASSWORD = `${USERS_ME}/change-password`;
 const USERS_INITIAL = `${USERS}/initial`;
-const USERS_PHONE = `${USERS}/phone`;
+const USERS_PHONE = `${USERS_ME}/phone`;
 const USERS_CONFIRM_PHONE = `${USERS_PHONE}/confirm`;
 
 export class UserApiService {
