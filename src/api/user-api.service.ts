@@ -135,7 +135,7 @@ export class UserApiService {
         return this.client.rest.get(USERS_ME_PARAMS);
     }
 
-    phone(data: { phone: string }): Promise<AuthToken> {
+    phone(data: { phone: string }): Promise<UserPhone> {
         return this.client.rest.post(USERS_PHONE, data);
     }
 
@@ -159,6 +159,11 @@ export interface RequestUserListParams extends RequestBaseParams {
     type?: UserType;
     exclude_type?: UserType;
     exclude_ids?: number[];
+}
+
+export interface UserPhone {
+    code_ttl: number;
+    masked_phone: string;
 }
 
 export type CreateUserParams = Pick<
