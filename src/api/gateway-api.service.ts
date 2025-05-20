@@ -11,6 +11,7 @@ import {
     User,
     UserNotification,
 } from '../types';
+import { FileLocking } from '../types/file-locking';
 
 const SETTINGS = '/settings';
 
@@ -44,6 +45,7 @@ export interface QueryInitResponse {
 
     lock_screen: LockScreen;
     view_type: QueryInitViewType;
+    file_locking: FileLocking;
 
     restrictions?: Restriction;
 

@@ -5,6 +5,7 @@ export * from './base';
 export * from './connection';
 export * from './discovery';
 export * from './extension';
+export * from './file-locking';
 export * from './divide';
 export * from './license';
 export * from './limitation';
