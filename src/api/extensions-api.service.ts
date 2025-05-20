@@ -121,7 +121,7 @@ export class ExtensionsApiService {
     }
     getUserNameExts(
         params?: NameExtensionListParams,
-    ): Promise<ResponseList<UserNamesExtension>> {
+    ): Promise<UserNamesExtension> {
         return this.client.rest.get(EXTENSIONS_NAME_USER, params);
     }
     createUserNameExt(name: string): Promise<void> {

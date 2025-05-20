@@ -13,7 +13,7 @@ export interface RequestLimitationsListParams extends RequestBaseParams {
 }
 
 export interface CreateLimitationsParams extends LimitationBody {
-    users: number[];
+    users: number[] | null;
     force: boolean;
 }
 
