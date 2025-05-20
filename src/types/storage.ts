@@ -89,6 +89,11 @@ export interface StorageElementVersion {
     is_current_version: boolean;
 }
 
+export interface StorageElementVersionLock {
+    lock_begin: string;
+    timeout: number;
+}
+
 export enum StorageElementHistoryAction {
     Create = 'create',
     Update = 'update',

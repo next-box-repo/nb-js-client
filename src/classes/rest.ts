@@ -58,8 +58,12 @@ export class Rest {
         });
     }
 
-    patch(path: string, body?: any, config?: RequestConfig): Promise<any> {
-        return this.request(RequestMethod.PATCH, path, { body, ...config });
+    patch(
+        path: string,
+        params?: Record<string, any>,
+        config?: RequestConfig,
+    ): Promise<any> {
+        return this.request(RequestMethod.PATCH, path, { params, ...config });
     }
 
     delete(
