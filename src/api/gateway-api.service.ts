@@ -49,6 +49,7 @@ export interface QueryInitResponse {
 
     open_in_desktop_settings: { open_in_desktop_enabled: boolean };
 
+    two_factor_auth_enabled: boolean;
     // нужен для devtools
     inject_scripts?: string[];
 }
