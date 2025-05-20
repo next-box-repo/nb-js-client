@@ -17,6 +17,7 @@ export interface User {
     status: UserStatus;
     type: UserType;
     role_id: number | null;
+    phone?: string;
 }
 
 export type UserLabel = Pick<

@@ -164,6 +164,7 @@ export interface RequestUserListParams extends RequestBaseParams {
 export interface UserPhone {
     code_ttl: number;
     masked_phone: string;
+    tfa_attempts: number;
 }
 
 export type CreateUserParams = Pick<
