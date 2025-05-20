@@ -38,7 +38,7 @@ export class LimitationsApiService {
         return this.client.rest.delete(`${LIMITATIONS}/${id}`);
     }
 
-    getLimitationsByUser(id: number): Promise<ResponseList<Limitation>> {
+    getLimitationsByUser(id: number): Promise<Limitation[]> {
         return this.client.rest.get(`${LIMITATION_BY_USER}/${id}`);
     }
 }
