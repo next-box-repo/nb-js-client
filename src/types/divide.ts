@@ -1,5 +1,6 @@
-import { ResponseList } from './base';
+import { RequestBaseParams, ResponseList } from './base';
 import { StorageElement, StorageElementType } from './storage';
+import { UserInfo } from './user';
 
 export enum DivideScope {
     Storage = '/storage/element',
@@ -90,4 +91,28 @@ export interface ShareModel {
     access_mode: PermissionType;
     password: string | null;
     expire_delta: number | null;
+}
+
+export interface DivideResourceParams extends RequestBaseParams {
+    path: string;
+    access_mode?: PermissionType;
+    divide_id?: number;
+    search?: string;
+}
+
+export interface ResourceAccess {
+    id: number;
+    access_mode: string;
+    comment: string;
+    create_date: string;
+    update_date: string;
+    moderator_id: number;
+    owner_id: number;
+    relative_path: string;
+    resource: string;
+    restriction_status: string;
+    to_user_group_id: number;
+    to_user_id: number;
+    type: string;
+    user_info: UserInfo;
 }

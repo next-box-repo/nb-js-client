@@ -8,12 +8,16 @@ import {
     StorageElementType,
     StorageRouteData,
     SizeBySection,
+    User,
+    DivideResourceParams,
+    ResourceAccess,
 } from '../types';
 import { StorageElement } from '../types';
 import { FcaApiService } from './fca-api.service';
 
 const STORAGE = '/storage';
 const STORAGE_ELEMENT = `${STORAGE}/element`;
+const STORAGE_DIVIDE_RESOURCE = `${STORAGE_ELEMENT}/divide/resource`;
 const STORAGE_ELEMENT_MOVE = `${STORAGE_ELEMENT}/move`;
 const STORAGE_ELEMENT_COPY = `${STORAGE_ELEMENT}/copy`;
 const STORAGE_ELEMENT_SECTION_SIZE = `${STORAGE_ELEMENT}/content_type_size`;
@@ -217,6 +221,12 @@ export class StorageElementApiService {
         with_trash: boolean;
     }): Promise<SizeBySection[] | null> {
         return this.client.rest.get(STORAGE_ELEMENT_SECTION_SIZE, params);
+    }
+
+    getDivideResource(
+        params: DivideResourceParams,
+    ): Promise<ResponseList<ResourceAccess>> {
+        return this.client.rest.get(STORAGE_DIVIDE_RESOURCE, params);
     }
 }
 
