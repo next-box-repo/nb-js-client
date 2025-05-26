@@ -5,6 +5,7 @@ const LOGIN = '/login';
 const LOGOUT = '/logout';
 const LOGIN_LDAP = `${LOGIN}/ldap`;
 const LOGIN_UPDATE = `${LOGIN}/update`;
+const LOGIN_TFA = `${LOGIN}/tfa`;
 
 export class AuthApiService {
     constructor(private client: Client) {}
@@ -19,6 +20,10 @@ export class AuthApiService {
 
     ldapLogin(data: RequestAuthSettingsParams): Promise<AuthToken> {
         return this.client.rest.post(LOGIN_LDAP, data);
+    }
+
+    loginTfa(data: RequestAuthTfaParams): Promise<AuthToken> {
+        return this.client.rest.post(LOGIN_TFA, data);
     }
 
     updateToken(data: RequestAuthTokenParams): Promise<AuthToken> {
@@ -39,7 +44,14 @@ export interface RequestAuthSettingsParams {
     is_remember: boolean;
 }
 
-export interface RequestAuthTokenParams extends AuthToken {
+export interface RequestAuthTfaParams {
+    code: number;
+    temp_token: string;
+}
+
+export interface RequestAuthTokenParams {
+    access_token: string;
+    refresh_token: string;
     with_cookie?: boolean;
     path?: string;
 }
