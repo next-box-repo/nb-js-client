@@ -58,12 +58,8 @@ export class Rest {
         });
     }
 
-    patch(
-        path: string,
-        params?: Record<string, any>,
-        config?: RequestConfig,
-    ): Promise<any> {
-        return this.request(RequestMethod.PATCH, path, { params, ...config });
+    patch(path: string, body?: any, config?: RequestConfig): Promise<any> {
+        return this.request(RequestMethod.PATCH, path, { body, ...config });
     }
 
     delete(
@@ -135,7 +131,12 @@ export class Rest {
                             );
 
                         if (tokens) {
-                            this.state.authToken.set(id, tokens);
+                            const authToken = {
+                                access_token: tokens.access_token!,
+                                refresh_token: tokens.refresh_token!,
+                            };
+
+                            this.state.authToken.set(id, authToken);
 
                             config = await applyInterceptors(
                                 this.client.requestInterceptors,
@@ -246,7 +247,14 @@ export class Rest {
                                 this.baseHost!,
                             );
 
-                        if (tokens) this.state.authToken.set(0, tokens);
+                        if (tokens) {
+                            const authToken = {
+                                access_token: tokens.access_token!,
+                                refresh_token: tokens.refresh_token!,
+                            };
+
+                            this.state.authToken.set(0, authToken);
+                        }
                     }
 
                     config = await applyInterceptors(
