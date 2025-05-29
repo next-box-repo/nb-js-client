@@ -1,5 +1,5 @@
 import { Client } from '../classes';
-import { AuthToken, AuthType } from '../types';
+import { AuthToken, AuthTokenUpdate, AuthType } from '../types';
 
 const LOGIN = '/login';
 const LOGOUT = '/logout';
@@ -26,7 +26,7 @@ export class AuthApiService {
         return this.client.rest.post(LOGIN_TFA, data);
     }
 
-    updateToken(data: RequestAuthTokenParams): Promise<AuthToken> {
+    updateToken(data: RequestAuthTokenParams): Promise<AuthTokenUpdate> {
         const path = data.path ? `${data.path}/${LOGIN_UPDATE}` : LOGIN_UPDATE;
         if (data.path) delete data.path;
 

@@ -8,6 +8,11 @@ export interface AuthToken {
     two_factor_auth_required: boolean;
 }
 
+export interface AuthTokenUpdate {
+    access_token: string;
+    refresh_token: string;
+}
+
 export interface AuthType {
     classic: boolean;
     basic: boolean;

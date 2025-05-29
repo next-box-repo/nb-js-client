@@ -8,6 +8,7 @@ import {
     RequestConfig,
     RequestObserve,
     HttpEvent,
+    AuthTokenUpdate,
 } from '../types';
 import { AccessToken } from '../types/access-token';
 import { jwtDecode } from 'jwt-decode';
@@ -124,19 +125,14 @@ export class Rest {
                         !path.includes('/login') &&
                         !path.includes('/assets')
                     ) {
-                        const tokens: AuthToken | null =
+                        const tokens: AuthTokenUpdate | null =
                             await this.tokenUpdate.refreshToken(
                                 item,
                                 this.baseHost!,
                             );
 
                         if (tokens) {
-                            const authToken = {
-                                access_token: tokens.access_token!,
-                                refresh_token: tokens.refresh_token!,
-                            };
-
-                            this.state.authToken.set(id, authToken);
+                            this.state.authToken.set(id, tokens);
 
                             config = await applyInterceptors(
                                 this.client.requestInterceptors,
@@ -241,20 +237,13 @@ export class Rest {
                         this.state.authToken &&
                         body.code === NEED_TOKEN_UPDATE_ERROR
                     ) {
-                        const tokens: AuthToken | null =
+                        const tokens: AuthTokenUpdate | null =
                             await this.tokenUpdate.refreshToken(
                                 this.state.authToken.get(0)!,
                                 this.baseHost!,
                             );
 
-                        if (tokens) {
-                            const authToken = {
-                                access_token: tokens.access_token!,
-                                refresh_token: tokens.refresh_token!,
-                            };
-
-                            this.state.authToken.set(0, authToken);
-                        }
+                        if (tokens) this.state.authToken.set(0, tokens);
                     }
 
                     config = await applyInterceptors(
