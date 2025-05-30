@@ -41,4 +41,12 @@ export class LimitationsApiService {
     getLimitationsByUser(id: number): Promise<Limitation[]> {
         return this.client.rest.get(`${LIMITATION_BY_USER}/${id}`);
     }
+
+    addUserToLimitation(limitationId: number, userId: number): Promise<void> {
+        return this.client.rest.patch(`${LIMITATIONS}/${limitationId}/user`, { id: userId })
+    }
+
+    deleteUserFromLimitation(limitationId: number, userId: number): Promise<void> {
+        return this.client.rest.delete(`${LIMITATIONS}/${limitationId}/user/${userId}`)
+    }
 }
