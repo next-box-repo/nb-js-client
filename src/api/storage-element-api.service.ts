@@ -223,7 +223,7 @@ export class StorageElementApiService {
         return this.client.rest.get(STORAGE_ELEMENT_SECTION_SIZE, params);
     }
 
-    getDivideResource(
+    getDivideResources(
         params: DivideResourceParams,
     ): Promise<ResponseList<ResourceAccess>> {
         return this.client.rest.get(STORAGE_DIVIDE_RESOURCE, params);
