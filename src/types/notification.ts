@@ -38,6 +38,8 @@ export enum NotificationAction {
     SecurityCheckNegative = 'action_security_check_negative',
     SecurityCheckPositive = 'action_security_check_positive',
 
+    CommentVersionMention = 'action_version_comment_mention',
+
     OpenSharing = 'open_sharing',
     ChangeSharing = 'change_sharing',
     CancelSharing = 'cancel_sharing',

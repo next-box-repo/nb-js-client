@@ -12,13 +12,18 @@ export interface CreateCommentParams {
     file_version_id: string;
     path: string;
 }
-export interface UpdateCommentParams extends CreateCommentParams {
+
+export interface UpdateCommentParams {
+    comment: string;
+    path: string;
+    version_comment_id: number;
+    divide_id?: number;
     is_decided?: boolean;
 }
 
 export interface DeleteCommentParams {
     path: string;
-    version_comment_id: string;
+    version_comment_id: number;
     divide_id?: number;
 }
 

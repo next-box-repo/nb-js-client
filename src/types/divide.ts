@@ -98,6 +98,7 @@ export interface DivideResourceParams extends RequestBaseParams {
     access_mode?: PermissionType;
     divide_id?: number;
     search?: string;
+    with_owner?: boolean;
 }
 
 export interface ResourceAccess {

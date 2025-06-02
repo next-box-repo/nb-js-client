@@ -24,7 +24,7 @@ export class StorageCommentApiService {
     }
 
     update(data: UpdateCommentParams): Promise<ResponseItem<Comment>> {
-        return this.client.rest.patch(`${COMMENT}`, data);
+        return this.client.rest.put(`${COMMENT}`, data);
     }
 
     delete(params: DeleteCommentParams): Promise<void> {
