@@ -8,6 +8,7 @@ import {
     RequestConfig,
     RequestObserve,
     HttpEvent,
+    AuthTokenUpdate,
 } from '../types';
 import { AccessToken } from '../types/access-token';
 import { jwtDecode } from 'jwt-decode';
@@ -58,12 +59,8 @@ export class Rest {
         });
     }
 
-    patch(
-        path: string,
-        params?: Record<string, any>,
-        config?: RequestConfig,
-    ): Promise<any> {
-        return this.request(RequestMethod.PATCH, path, { params, ...config });
+    patch(path: string, body?: any, config?: RequestConfig): Promise<any> {
+        return this.request(RequestMethod.PATCH, path, { body, ...config });
     }
 
     delete(
@@ -128,7 +125,7 @@ export class Rest {
                         !path.includes('/login') &&
                         !path.includes('/assets')
                     ) {
-                        const tokens: AuthToken | null =
+                        const tokens: AuthTokenUpdate | null =
                             await this.tokenUpdate.refreshToken(
                                 item,
                                 this.baseHost!,
@@ -240,7 +237,7 @@ export class Rest {
                         this.state.authToken &&
                         body.code === NEED_TOKEN_UPDATE_ERROR
                     ) {
-                        const tokens: AuthToken | null =
+                        const tokens: AuthTokenUpdate | null =
                             await this.tokenUpdate.refreshToken(
                                 this.state.authToken.get(0)!,
                                 this.baseHost!,

@@ -1,6 +1,6 @@
 import { RequestAuthTokenParams } from '../api';
 import { getCookieValue } from '../tools';
-import { AuthToken } from '../types';
+import { AuthTokenUpdate } from '../types';
 import { BASE_URL_V1 } from './rest';
 
 const MILLISECONDS_IN_SECOND = 1000;
@@ -11,7 +11,8 @@ export const NEED_TOKEN_UPDATE_ERROR = 'update black token';
 export class TokenUpdate {
     isUpdating = false;
 
-    private tokenUpdateResolve: ((token: AuthToken) => void) | null = null;
+    private tokenUpdateResolve: ((token: AuthTokenUpdate) => void) | null =
+        null;
 
     isTokenExpire(timestamp: number): boolean {
         if (!timestamp) return false;
@@ -57,7 +58,7 @@ export class TokenUpdate {
                             response.access_token &&
                             response.refresh_token
                         ) {
-                            const tokens: AuthToken = {
+                            const tokens: AuthTokenUpdate = {
                                 access_token: response.access_token,
                                 refresh_token: response.refresh_token,
                             };

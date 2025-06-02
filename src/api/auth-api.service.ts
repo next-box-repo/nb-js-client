@@ -1,10 +1,11 @@
 import { Client } from '../classes';
-import { AuthToken, AuthType } from '../types';
+import { AuthToken, AuthTokenUpdate, AuthType } from '../types';
 
 const LOGIN = '/login';
 const LOGOUT = '/logout';
 const LOGIN_LDAP = `${LOGIN}/ldap`;
 const LOGIN_UPDATE = `${LOGIN}/update`;
+const LOGIN_TFA = `${LOGIN}/tfa`;
 
 export class AuthApiService {
     constructor(private client: Client) {}
@@ -21,7 +22,11 @@ export class AuthApiService {
         return this.client.rest.post(LOGIN_LDAP, data);
     }
 
-    updateToken(data: RequestAuthTokenParams): Promise<AuthToken> {
+    loginTfa(data: RequestAuthTfaParams): Promise<AuthToken> {
+        return this.client.rest.post(LOGIN_TFA, data);
+    }
+
+    updateToken(data: RequestAuthTokenParams): Promise<AuthTokenUpdate> {
         const path = data.path ? `${data.path}/${LOGIN_UPDATE}` : LOGIN_UPDATE;
         if (data.path) delete data.path;
 
@@ -39,7 +44,14 @@ export interface RequestAuthSettingsParams {
     is_remember: boolean;
 }
 
-export interface RequestAuthTokenParams extends AuthToken {
+export interface RequestAuthTfaParams {
+    code: number;
+    temp_token: string;
+}
+
+export interface RequestAuthTokenParams {
+    access_token: string;
+    refresh_token: string;
     with_cookie?: boolean;
     path?: string;
 }

@@ -53,11 +53,11 @@ export class VersionApiService {
     }
 
     lock(params: VersionLockRequestParams): Promise<StorageElementVersionLock> {
-        return this.client.rest.patch(STORAGE_ELEMENT_VERSION_LOCK, params);
+        return this.client.rest.post(STORAGE_ELEMENT_VERSION_LOCK, params);
     }
 
     unlock(params: VersionLockRequestParams): Promise<void> {
-        return this.client.rest.patch(STORAGE_ELEMENT_VERSION_UNLOCK, params);
+        return this.client.rest.post(STORAGE_ELEMENT_VERSION_UNLOCK, params);
     }
 }
 
