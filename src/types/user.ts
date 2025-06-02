@@ -30,6 +30,10 @@ export type UserLabel = Pick<
     | 'avatar_path'
 >;
 
+export interface UserInfo extends UserLabel {
+    id: number;
+}
+
 export enum UserAuthType {
     Native = 'native',
     Ldap = 'ldap',
