@@ -105,4 +105,5 @@ export enum UserParamsLabel {
     Theme = 'theme',
     Lang = 'lang',
     Sort = 'sort',
+    ViewApps = 'viewApps',
 }
