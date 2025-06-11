@@ -127,7 +127,10 @@ export class UserApiService {
         return this.client.rest.get(USERS_ME_PARAMS, { name });
     }
 
-    meSetParams(param: UserParamsLabel, value: any): Promise<UserParams> {
+    meSetParams(
+        param: UserParamsLabel,
+        value: any,
+    ): Promise<{ row: UserParams }> {
         return this.client.rest.post(`${USERS_ME_PARAMS}/${param}`, value);
     }
 
