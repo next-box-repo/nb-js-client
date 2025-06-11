@@ -130,7 +130,7 @@ export class UserApiService {
     meSetParams(
         param: UserParamsLabel,
         value: any,
-    ): Promise<{ row: UserParams }> {
+    ): Promise<ResponseItem<UserParams>> {
         return this.client.rest.post(`${USERS_ME_PARAMS}/${param}`, value);
     }
 
