@@ -245,6 +245,7 @@ export interface RequestStorageListParams extends RequestBaseParams {
     from_path?: string;
     from_sharing_password?: string;
     without_content_work_dir?: boolean;
+    is_search_dir?: null | boolean;
 }
 
 export interface StorageElementPasteParams {
