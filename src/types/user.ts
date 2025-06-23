@@ -106,4 +106,5 @@ export enum UserParamsLabel {
     Lang = 'lang',
     Sort = 'sort',
     ViewApps = 'viewApps',
+    WithoutContentWorkDir = 'withoutContentWorkDir',
 }
