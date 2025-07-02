@@ -8,9 +8,13 @@ import {
 
 const LIMITATIONS = '/limitations';
 const LIMITATION_BY_USER = '/limitations/user';
+const LIMITATION_ME = '/limitations/user/me';
 
 export class LimitationsApiService {
     constructor(private client: Client) {}
+    me(): Promise<ResponseItem<Limitation>> {
+        return this.client.rest.get(`${LIMITATION_ME}`);
+    }
     list(
         params: RequestLimitationsListParams,
     ): Promise<ResponseList<Limitation>> {
