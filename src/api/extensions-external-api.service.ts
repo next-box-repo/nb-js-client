@@ -15,28 +15,28 @@ export class ExtensionsExternalApiService {
     listExtensionsSite(
         params: ExtensionExternalListParams,
     ): Promise<ResponseList<ExtensionExternalInList>> {
-        return this.client.rest.changeHost('https://next-box.ru', () => {
-            return this.client.rest.get(EXTENSIONS, params);
+        return this.client.rest.get(EXTENSIONS, params, {
+            host: 'https://next-box.ru',
         });
     }
 
     extensionDetailSite(uniqKey: string): Promise<ExtensionExternal> {
-        return this.client.rest.changeHost('https://next-box.ru', () => {
-            return this.client.rest.get(`${EXTENSIONS}/${uniqKey}`);
-        });
+        return this.client.rest.get(
+            `${EXTENSIONS}/${uniqKey}`,
+            {},
+            { host: 'https://next-box.ru' },
+        );
     }
 
     extensionMarkdown(
         uniqKey: string,
         config: { responseType: ResponseType },
     ): Promise<string> {
-        return this.client.rest.changeHost('https://next-box.ru', () => {
-            return this.client.rest.get(
-                `${EXTENSIONS}/${uniqKey}/readme`,
-                {},
-                config,
-            );
-        });
+        return this.client.rest.get(
+            `${EXTENSIONS}/${uniqKey}/readme`,
+            {},
+            { ...config, host: 'https://next-box.ru' },
+        );
     }
 }
 

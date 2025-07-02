@@ -91,27 +91,27 @@ export class ExtensionsApiService {
         form.set('file', file);
 
         const { promise, abort } = this.client.rest.upload(EXTENSIONS, form, {
+            version: BASE_URL_V2,
             onUploadProgress: (event) => {
                 onProgress(event);
             },
         });
 
         return {
-            promise: this.client.rest.changeBaseUrlVersion(
-                BASE_URL_V2,
-                () => promise,
-            ),
+            promise,
             abort,
         };
     }
 
     install(uniq_key: string, version: string): Promise<any> {
-        return this.client.rest.changeBaseUrlVersion(BASE_URL_V2, () => {
-            return this.client.rest.post(`${EXTENSIONS}/site`, {
+        return this.client.rest.post(
+            `${EXTENSIONS}/site`,
+            {
                 uniq_key,
                 version,
-            });
-        });
+            },
+            { version: BASE_URL_V2 },
+        );
     }
 
     getSystemNameExts(

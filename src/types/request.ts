@@ -33,6 +33,8 @@ export interface HttpEvent<T> {
 }
 
 export interface RequestConfig {
+    host?: string;
+    version?: string;
     params?: Record<string, string>;
     body?: any;
     cache?: RequestCache;

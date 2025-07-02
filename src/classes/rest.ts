@@ -149,7 +149,10 @@ export class Rest {
                 path += '?' + makeUrlParams(config.params);
             }
 
-            const url = `${this.state.clientParams.host}${this.state.clientParams.version}${path}`;
+            const host = config?.host ?? this.state.clientParams.host;
+            const version = config?.version ?? this.state.clientParams.version;
+
+            const url = `${host}${version}${path}`;
 
             xhr.open(method, url, true);
 
@@ -157,7 +160,7 @@ export class Rest {
                 const normalizedHeaders = normalizeHeaders(config.headers);
 
                 for (const [key, value] of Object.entries(normalizedHeaders)) {
-                    if (this.state.clientParams.host === this.baseHost) {
+                    if (host === this.baseHost) {
                         xhr.setRequestHeader(key, value);
                     } else if (key.toLowerCase() !== 'content-type') {
                         xhr.setRequestHeader(key, value);
@@ -282,30 +285,5 @@ export class Rest {
 
             xhr.send(prepareRequestBody(config?.body));
         });
-    }
-
-    async changeBaseUrlVersion<T>(
-        baseUrl: string,
-        handler: () => Promise<T>,
-    ): Promise<T> {
-        const originalBaseUrl = this.state.clientParams.version;
-        this.state.clientParams.version = baseUrl;
-
-        try {
-            return await handler();
-        } finally {
-            this.state.clientParams.version = originalBaseUrl;
-        }
-    }
-
-    async changeHost<T>(host: string, handler: () => Promise<T>): Promise<T> {
-        this.state.clientParams.host = host;
-        this.state.requestParams.headers = {};
-
-        try {
-            return await handler();
-        } finally {
-            this.state.clientParams.host = this.baseHost;
-        }
     }
 }
