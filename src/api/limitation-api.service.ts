@@ -13,7 +13,7 @@ const LIMITATION_ME = '/limitations/user/me';
 export class LimitationsApiService {
     constructor(private client: Client) {}
 
-    me(): Promise<ResponseItem<Limitation>> {
+    me(): Promise<Limitation[]> {
         return this.client.rest.get(`${LIMITATION_ME}`);
     }
 
