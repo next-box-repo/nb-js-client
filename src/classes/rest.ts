@@ -195,83 +195,72 @@ export class Rest {
             }
 
             xhr.onload = async () => {
-                try {
-                    if (config?.signal?.aborted) {
-                        reject(new Error('Request aborted'));
-                        return;
-                    }
+                if (config?.signal && config.signal.aborted) return;
 
-                    let body: any;
-                    switch (config?.responseType) {
-                        case ResponseType.Text:
+                let body: any;
+
+                switch (config?.responseType) {
+                    case ResponseType.Text:
+                        body = xhr.responseText;
+                        break;
+                    case ResponseType.Blob:
+                    case ResponseType.ArrayBuffer:
+                        body = xhr.response;
+                        break;
+                    default:
+                        try {
+                            body = JSON.parse(xhr.responseText);
+                        } catch {
                             body = xhr.responseText;
-                            break;
-                        case ResponseType.Blob:
-                        case ResponseType.ArrayBuffer:
-                            body = xhr.response;
-                            break;
-                        default:
-                            try {
-                                body = JSON.parse(xhr.responseText);
-                            } catch {
-                                body = xhr.responseText;
-                            }
-                    }
-
-                    const headers = new Headers();
-                    xhr.getAllResponseHeaders()
-                        .split('\r\n')
-                        .forEach((header) => {
-                            const [key, value] = header.split(': ');
-                            if (key && value) headers.append(key, value);
-                        });
-
-                    const response = {
-                        status: xhr.status,
-                        statusText: xhr.statusText,
-                        headers,
-                        url: xhr.responseURL,
-                    };
-
-                    if (xhr.status >= 200 && xhr.status < 300) {
-                        const result =
-                            config?.observe === RequestObserve.Response
-                                ? { ...response, body: body as T }
-                                : (body as T);
-
-                        const final = await applyInterceptors(
-                            this.client.responseInterceptors,
-                            result,
-                        );
-
-                        resolve(final);
-                    } else {
-                        if (
-                            this.state.authToken &&
-                            body?.code === NEED_TOKEN_UPDATE_ERROR
-                        ) {
-                            try {
-                                const tokens =
-                                    await this.tokenUpdate.refreshToken(
-                                        this.state.authToken.get(0)!,
-                                        this.baseHost!,
-                                    );
-                                if (tokens) this.state.authToken.set(0, tokens);
-                            } catch (error) {
-                                console.warn('Token refresh failed', error);
-                            }
                         }
-
-                        const finalError = await applyInterceptors(
-                            this.client.responseInterceptors,
-                            { ...response, error: body },
-                        );
-
-                        reject(finalError);
-                    }
-                } catch (error) {
-                    reject(error);
                 }
+
+                const headers = new Headers();
+                xhr.getAllResponseHeaders()
+                    .split('\r\n')
+                    .forEach((header) => {
+                        const [key, value] = header.split(': ');
+
+                        if (key && value) headers.append(key, value);
+                    });
+
+                let response = {
+                    status: xhr.status,
+                    statusText: xhr.statusText,
+                    headers,
+                    url: xhr.responseURL,
+                };
+
+                if (xhr.status >= 200 && xhr.status < 300) {
+                    if (config?.observe === RequestObserve.Response) {
+                        resolve({ ...response, body: body as T });
+                    } else resolve(body as T);
+                } else {
+                    if (
+                        this.state.authToken &&
+                        body.code === NEED_TOKEN_UPDATE_ERROR
+                    ) {
+                        const tokens: AuthTokenUpdate | null =
+                            await this.tokenUpdate.refreshToken(
+                                this.state.authToken.get(0)!,
+                                this.baseHost!,
+                            );
+
+                        if (tokens) this.state.authToken.set(0, tokens);
+                    }
+
+                    config = await applyInterceptors(
+                        this.client.responseInterceptors,
+                        { ...response, error: body },
+                    );
+
+                    reject({ ...response, error: body });
+                }
+
+                response = await applyInterceptors(
+                    this.client.responseInterceptors,
+                    response,
+                );
             };
 
             xhr.onerror = () => {
