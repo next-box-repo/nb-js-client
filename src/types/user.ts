@@ -5,6 +5,7 @@ export interface User {
     create_date: string;
     update_date: string;
     last_login_date: string;
+    last_update_password_date: string;
     login: string;
     password: string;
     first_name: string;
