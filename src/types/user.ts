@@ -108,4 +108,5 @@ export enum UserParamsLabel {
     Sort = 'sort',
     ViewApps = 'viewApps',
     WithoutContentWorkDir = 'withoutContentWorkDir',
+    DashboardGrid = 'dashboardGrid',
 }
