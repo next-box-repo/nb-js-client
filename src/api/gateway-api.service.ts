@@ -12,6 +12,7 @@ import {
     UserNotification,
 } from '../types';
 import { FileLocking } from '../types/file-locking';
+import { LdapStrict } from '../types/ldap-strict';
 
 const SETTINGS = '/settings';
 
@@ -52,6 +53,7 @@ export interface QueryInitResponse {
     open_in_desktop_settings: { open_in_desktop_enabled: boolean };
 
     two_factor_auth_enabled: boolean;
+    ldap_groups_roles_strict: LdapStrict;
     // нужен для devtools
     inject_scripts?: string[];
 }
