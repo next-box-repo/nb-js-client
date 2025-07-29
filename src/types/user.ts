@@ -110,3 +110,18 @@ export enum UserParamsLabel {
     WithoutContentWorkDir = 'withoutContentWorkDir',
     DashboardGrid = 'dashboardGrid',
 }
+
+export interface UserAppPasswords {
+    id: number;
+    name: string;
+    create_date: string;
+    type: UserAppType;
+}
+
+export interface UserAppPasswordInfo extends UserAppPasswords {
+    password: string;
+}
+
+export enum UserAppType {
+    Webdav = 'webdav',
+}

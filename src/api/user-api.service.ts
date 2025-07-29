@@ -5,6 +5,9 @@ import {
     ResponseItem,
     ResponseList,
     User,
+    UserAppPasswordInfo,
+    UserAppPasswords,
+    UserAppType,
     UserParams,
     UserParamsLabel,
     UserSession,
@@ -19,6 +22,7 @@ const USERS_ME_AVATARS = `${USERS_ME}/avatars`;
 const USERS_ME_SESSIONS = `${USERS_ME}/sessions`;
 const USERS_ME_TOKEN = `${USERS_ME}/tokens`;
 const USERS_ME_PARAMS = `${USERS_ME}/params`;
+const USERS_ME_APP_PASSWORDS = `${USERS_ME}/app-passwords`
 const USERS_CHANGE_MY_PASSWORD = `${USERS_ME}/change-password`;
 const USERS_INITIAL = `${USERS}/initial`;
 const USERS_PHONE = `${USERS_ME}/phone`;
@@ -144,6 +148,18 @@ export class UserApiService {
 
     phoneConfirm(code: number): Promise<void> {
         return this.client.rest.post(`${USERS_CONFIRM_PHONE}/${code}`);
+    }
+
+    appPasswordsList(params: RequestBaseParams): Promise<ResponseList<UserAppPasswords>> {
+        return this.client.rest.get(USERS_ME_APP_PASSWORDS, params);
+    }
+
+    createAppPasswords(data: {name: string, type: UserAppType}): Promise<UserAppPasswordInfo> {
+        return this.client.rest.post(USERS_ME_APP_PASSWORDS, data);
+    }
+
+    deleteAppPasswords(id: number): Promise<void> {
+        return this.client.rest.delete(`${USERS_ME_APP_PASSWORDS}/${id}`)
     }
 }
 
