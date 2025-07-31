@@ -116,7 +116,7 @@ export class StorageElementApiService {
         params: StorageElementPasteParams,
         from: StorageRoot,
         to: StorageRoot,
-    ): Promise<void> {
+    ): Promise<CopyResponse> {
         const { from_divide_id, to_divide_id } = params;
 
         let fcaParams: StorageElementPasteParams = {
@@ -261,6 +261,11 @@ export type CreateStorageElementParams = Pick<
 > & {
     is_work_dir?: boolean;
 };
+
+export interface CopyResponse {
+    not_copied?: StorageElement[];
+    rows: StorageElement[];
+}
 
 //NOTE: is_divided и is_favorite нужно выставлять только если по всему корню размер
 export interface StorageItemSizeParams {
