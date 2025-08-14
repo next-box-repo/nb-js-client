@@ -9,14 +9,13 @@ import {
 
 const SHARE = '/share';
 const SHARE_RESTRICTIONS = `${SHARE}/restrictions`;
+const SHARE_LOGIN = `${SHARE}/login`;
 
 export class ShareApiService {
     constructor(private client: Client) {}
 
-    info(path: string, share_token: string): Promise<ShareInfo> {
-        const search = new URLSearchParams({ path, share_token });
-
-        return this.client.rest.get(`${SHARE}?${search.toString()}`);
+    info(share_token: string): Promise<ShareInfo> {
+        return this.client.rest.get(`${SHARE}?share_token=${share_token}`);
     }
 
     checkPassword(password: string, share_token: string): Promise<any> {
@@ -25,10 +24,6 @@ export class ShareApiService {
         return this.client.rest.get(
             `${SHARE}/password?share_token=${share_token}&share_pass=${encodedPassword}`,
         );
-    }
-
-    checkToken(share_token: string): Promise<any> {
-        return this.client.rest.get(`${SHARE}?share_token=${share_token}`);
     }
 
     getRestriction(token: string): Promise<UnionRestriction> {
@@ -45,4 +40,13 @@ export class ShareApiService {
     ): Promise<ResponseList<ShareInfo>> {
         return this.client.rest.put(`${SHARE_RESTRICTIONS}/${token}`, data);
     }
+
+    login(data: RequestShareLoginParams): Promise<{ share_token: string }> {
+        return this.client.rest.post(`${SHARE_LOGIN}`, data);
+    }
+}
+
+export interface RequestShareLoginParams {
+    share_key: string;
+    share_password?: string;
 }
