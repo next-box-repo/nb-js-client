@@ -71,6 +71,17 @@ export class Rest {
         return this.request(RequestMethod.DELETE, path, { params, ...config });
     }
 
+    head(
+        path: string,
+        params?: Record<string, any>,
+        config?: RequestConfig,
+    ): Promise<any> {
+        return this.request(RequestMethod.HEAD, path, {
+            params,
+            ...config,
+        });
+    }
+
     upload(
         path: string,
         body: FormData,

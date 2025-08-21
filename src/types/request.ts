@@ -11,6 +11,7 @@ export enum RequestMethod {
     PUT = 'PUT',
     PATCH = 'PATCH',
     DELETE = 'DELETE',
+    HEAD = 'HEAD',
 }
 
 export enum RequestObserve {

@@ -20,3 +20,4 @@ export * from './user-log';
 export * from './setting';
 export * from './storage';
 export * from './storage-trash';
+export * from './archive'
