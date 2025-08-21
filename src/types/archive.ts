@@ -1,8 +1,10 @@
+import { NotificationAction } from "./notification";
+
 export interface ArchiveProcess<T extends ArchivePayload | ArchiveEndPayload> {
     create_date: string;
     entity_type: string;
     service_name: string;
-    action: ArchiveAction;
+    action: NotificationAction;
     title: string;
     read: boolean;
     style: string;
@@ -32,10 +34,4 @@ export interface ArchiveEndPayload {
     ref_code: string;
     zip_name: string;
     error?: string;
-}
-
-export enum ArchiveAction {
-    StatusCreateZipProcess = 'status_create_zip_process',
-    DownloadZipSuccess = 'download_zip_success',
-    DownloadZipError = 'download_zip_error',
 }
