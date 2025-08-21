@@ -44,8 +44,10 @@ export enum UserAuthType {
 export enum UserStatus {
     Registering = 'registering',
     Activated = 'activated',
-    Blocked = 'blocked',
+    BlockedByAdmin = 'blocked_by_admin',
     BlockedByLicense = 'blocked_by_license',
+    BlockedByInactive = 'blocked_by_inactive',
+    BlockedByInactiveChangePassword = 'blocked_by_inactive_change_password',
 }
 
 export enum UserType {
