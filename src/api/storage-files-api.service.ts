@@ -8,6 +8,8 @@ import {
 
 const STORAGE_FILES = '/storage/files';
 const STORAGE_FILES_NET = `${STORAGE_FILES}/net`;
+const STORAGE_FILES_ZIP = `${STORAGE_FILES}/zip`;
+const STORAGE_FILES_CODE = `${STORAGE_FILES}/code`;
 
 export class StorageFilesApiService {
     constructor(private client: Client) {}
@@ -69,6 +71,21 @@ export class StorageFilesApiService {
         data: UploadNetRequestParams,
     ): Promise<ResponseItem<StorageElement>> {
         return this.client.rest.post(STORAGE_FILES_NET, data);
+    }
+
+    createZip(params: {
+        path: string, 
+        divide_id?: number
+    }): Promise<void> {
+        return this.client.rest.post(STORAGE_FILES_ZIP, params);
+    }
+
+    cancelCreateZip(params: {process_id: string}): Promise<void> {
+        return this.client.rest.delete(STORAGE_FILES_ZIP, params);
+    }
+
+    checkZip(params: {code: string}): Promise<void> {
+        return this.client.rest.head(STORAGE_FILES_CODE, params);
     }
 }
 
