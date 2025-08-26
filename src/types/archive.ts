@@ -34,4 +34,5 @@ export interface ArchiveEndPayload {
     ref_code: string;
     zip_name: string;
     error?: string;
+    divide_id?: number;
 }
