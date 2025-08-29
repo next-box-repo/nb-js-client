@@ -1,3 +1,4 @@
+import { ArchiveEndPayload } from './archive';
 import { RequestBaseParams, ResponseList } from './base';
 import { PermissionType } from './divide';
 import { StorageElementType } from './storage';
@@ -104,7 +105,7 @@ interface NotificationActionEnabledGroup {
     enabled_mail: boolean;
 }
 
-export type NotificationPayload = PayloadFile | any;
+export type NotificationPayload = PayloadFile | ArchiveEndPayload | any;
 
 export interface PayloadFile {
     access_mode: PermissionType;
