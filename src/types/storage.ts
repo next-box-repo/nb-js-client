@@ -105,6 +105,7 @@ export interface StorageRouteData {
     access_mode?: PermissionType;
     file_version_id?: string;
     editor?: string;
+    type?: StorageElementType;
 }
 
 export interface StorageElementPaste {
