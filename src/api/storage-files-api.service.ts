@@ -77,6 +77,7 @@ export class StorageFilesApiService {
     createZip(params: {
         path: string, 
         divide_id?: number
+        time_zone?: number
     }): Promise<void> {
         return this.client.rest.post(STORAGE_FILES_ZIP, params);
     }
