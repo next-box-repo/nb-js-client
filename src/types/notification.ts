@@ -79,6 +79,9 @@ export enum NotificationAction {
     DownloadZipSuccess = 'download_zip_success',
     DownloadZipError = 'download_zip_error',
 
+    AnonymZipDirAddFileToOwner = 'anonym_zip_dir_add_file_to_owner',
+    GuestZipDirAddFileToOwner = 'guest_zip_dir_add_file_to_owner',
+
     Other = 'other',
 }
 
