@@ -77,7 +77,11 @@ export class StorageFilesApiService {
     createZip(params: {
         path: string, 
         divide_id?: number
+        time_zone?: number
     }): Promise<void> {
+        const timeZone = -new Date().getTimezoneOffset() / 60;
+        params.time_zone ??= timeZone
+        
         return this.client.rest.post(STORAGE_FILES_ZIP, params);
     }
 
