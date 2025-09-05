@@ -44,7 +44,7 @@ export class LimitationsApiService {
     ): Promise<ResponseItem<Limitation>> {
         return this.client.rest.put(`${LIMITATIONS}/${id}`, data);
     }
-    
+
     delete(id: number): Promise<void> {
         return this.client.rest.delete(`${LIMITATIONS}/${id}`);
     }
@@ -54,10 +54,17 @@ export class LimitationsApiService {
     }
 
     addUserToLimitation(limitationId: number, userId: number): Promise<void> {
-        return this.client.rest.patch(`${LIMITATIONS}/${limitationId}/user`, { id: userId })
+        return this.client.rest.patch(`${LIMITATIONS}/${limitationId}/user`, {
+            id: userId,
+        });
     }
 
-    deleteUserFromLimitation(limitationId: number, userId: number): Promise<void> {
-        return this.client.rest.delete(`${LIMITATIONS}/${limitationId}/user/${userId}`)
+    deleteUserFromLimitation(
+        limitationId: number,
+        userId: number,
+    ): Promise<void> {
+        return this.client.rest.delete(
+            `${LIMITATIONS}/${limitationId}/user/${userId}`,
+        );
     }
 }

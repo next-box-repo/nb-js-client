@@ -75,21 +75,21 @@ export class StorageFilesApiService {
     }
 
     createZip(params: {
-        path: string, 
-        divide_id?: number
-        time_zone?: number
+        path: string;
+        divide_id?: number;
+        time_zone?: number;
     }): Promise<void> {
         const timeZone = -new Date().getTimezoneOffset() / 60;
-        params.time_zone ??= timeZone
-        
+        params.time_zone ??= timeZone;
+
         return this.client.rest.post(STORAGE_FILES_ZIP, params);
     }
 
-    cancelCreateZip(params: {process_id: string}): Promise<void> {
+    cancelCreateZip(params: { process_id: string }): Promise<void> {
         return this.client.rest.delete(STORAGE_FILES_PROCESS, params);
     }
 
-    checkZip(params: {code: string}): Promise<void> {
+    checkZip(params: { code: string }): Promise<void> {
         return this.client.rest.head(STORAGE_FILES_CODE, params);
     }
 }
