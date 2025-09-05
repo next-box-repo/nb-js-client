@@ -30,6 +30,7 @@ interface LimitationBody {
 export enum LimitationType {
     BySize = 'size',
     ByExt = 'extension',
+    ByQuota = 'quota_size',
 }
 
 export enum LimitationSubType {

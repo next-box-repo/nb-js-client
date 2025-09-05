@@ -73,18 +73,15 @@ export class StorageFilesApiService {
         return this.client.rest.post(STORAGE_FILES_NET, data);
     }
 
-    createZip(params: {
-        path: string, 
-        divide_id?: number
-    }): Promise<void> {
+    createZip(params: { path: string; divide_id?: number }): Promise<void> {
         return this.client.rest.post(STORAGE_FILES_ZIP, params);
     }
 
-    cancelCreateZip(params: {process_id: string}): Promise<void> {
+    cancelCreateZip(params: { process_id: string }): Promise<void> {
         return this.client.rest.delete(STORAGE_FILES_ZIP, params);
     }
 
-    checkZip(params: {code: string}): Promise<void> {
+    checkZip(params: { code: string }): Promise<void> {
         return this.client.rest.head(STORAGE_FILES_CODE, params);
     }
 }

@@ -11,6 +11,7 @@ import {
     User,
     DivideResourceParams,
     ResourceAccess,
+    Quota,
 } from '../types';
 import { StorageElement } from '../types';
 import { FcaApiService } from './fca-api.service';
@@ -227,6 +228,10 @@ export class StorageElementApiService {
         params: DivideResourceParams,
     ): Promise<ResponseList<ResourceAccess>> {
         return this.client.rest.get(STORAGE_DIVIDE_RESOURCE, params);
+    }
+
+    getMyQoute(): Promise<Quota> {
+        return this.client.rest.get(`${STORAGE_ELEMENT}/user_size`);
     }
 }
 
