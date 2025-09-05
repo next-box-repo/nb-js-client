@@ -76,6 +76,8 @@ export enum NotificationAction {
     WaitSharingCreate = 'wait_sharing_create',
 
     StatusCreateZipProcess = 'status_create_zip_process',
+    StatusCreateZipError = 'status_create_zip_error',
+
     DownloadZipSuccess = 'download_zip_success',
     DownloadZipError = 'download_zip_error',
 
