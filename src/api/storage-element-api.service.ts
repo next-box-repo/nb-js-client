@@ -8,10 +8,10 @@ import {
     StorageElementType,
     StorageRouteData,
     SizeBySection,
-    User,
     DivideResourceParams,
     ResourceAccess,
     Quota,
+    StorageElementFileInfo,
 } from '../types';
 import { StorageElement } from '../types';
 import { FcaApiService } from './fca-api.service';
@@ -49,6 +49,16 @@ export class StorageElementApiService {
         if (!params.file_version_id) delete params.file_version_id;
 
         return this.client.rest.get(STORAGE_ELEMENT, params);
+    }
+
+    fileInfo(
+        id: string,
+        file_version_id?: string,
+    ): Promise<StorageElementFileInfo> {
+        return this.client.rest.get(
+            `${STORAGE_ELEMENT}/${id}`,
+            file_version_id ? { file_version_id } : {},
+        );
     }
 
     combineInfo({

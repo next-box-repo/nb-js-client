@@ -8,7 +8,8 @@ import {
 
 const STORAGE_FILES = '/storage/files';
 const STORAGE_FILES_NET = `${STORAGE_FILES}/net`;
-const STORAGE_FILES_ZIP = `${STORAGE_FILES}/zip`;
+const STORAGE_FILES_ZIP = `${STORAGE_FILES}/zip/download`;
+const STORAGE_FILES_PROCESS = `${STORAGE_FILES}/process`;
 const STORAGE_FILES_CODE = `${STORAGE_FILES}/code`;
 
 export class StorageFilesApiService {
@@ -73,12 +74,19 @@ export class StorageFilesApiService {
         return this.client.rest.post(STORAGE_FILES_NET, data);
     }
 
-    createZip(params: { path: string; divide_id?: number }): Promise<void> {
+    createZip(params: {
+        path: string;
+        divide_id?: number;
+        time_zone?: number;
+    }): Promise<void> {
+        const timeZone = -new Date().getTimezoneOffset() / 60;
+        params.time_zone ??= timeZone;
+
         return this.client.rest.post(STORAGE_FILES_ZIP, params);
     }
 
     cancelCreateZip(params: { process_id: string }): Promise<void> {
-        return this.client.rest.delete(STORAGE_FILES_ZIP, params);
+        return this.client.rest.delete(STORAGE_FILES_PROCESS, params);
     }
 
     checkZip(params: { code: string }): Promise<void> {

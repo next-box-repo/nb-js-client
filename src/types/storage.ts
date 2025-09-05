@@ -1,27 +1,68 @@
 import { RequestBaseParams } from './base';
-import { PermissionType } from './divide';
+import { PermissionType, RestrictionStatus } from './divide';
 import { User } from './user';
 
 export interface StorageElement {
-    name: string;
-    size: number;
-    shared: boolean;
-    full_path: string;
-    path: string;
-    type: StorageElementType;
-    file_name_ext: string;
-    content_type: StorageElementContentType;
-    update_date: string;
-    create_date: string;
-    with_preview: boolean;
-    is_favorite: boolean;
-    owner_id: number;
-    version?: StorageElementVersion;
-    divide_id?: number;
     access_mode?: PermissionType;
-    to_user_group_id?: number;
-    created_by_extension?: string;
+    available: boolean;
     check_status?: StorageElementCheckStatus;
+    content_type: StorageElementContentType;
+    create_date: string;
+    created_by_extension?: string;
+    del_group_id: number;
+    divide_id?: number;
+    file_name_ext: string;
+    full_path: string;
+
+    is_favorite: boolean;
+    last_used_extension: string;
+    name: string;
+    owner_id: number;
+    path: string;
+    shared: boolean;
+    type: StorageElementType;
+    update_date: string;
+    with_preview: boolean;
+    size: number;
+    id?: string;
+    version?: StorageElementVersion;
+    to_user_group_id?: number;
+}
+
+export type StorageDivideElement = Pick<
+    StorageElement,
+    'access_mode' | 'create_date' | 'name' | 'owner_id' | 'type' | 'update_date'
+> & {
+    comment: string;
+    id: number;
+    moderator_id: number;
+    resource: string;
+    restriction_status: RestrictionStatus;
+    to_user_group_id: number;
+    to_user_id: number;
+};
+
+export type StorageSharingElement = Pick<
+    StorageElement,
+    'access_mode' | 'create_date' | 'name' | 'update_date'
+> & {
+    comment: string;
+    expire_delta: number;
+    expire_in: string;
+    id: number;
+    element_name: string;
+    moderator_id: number;
+    restriction_status: RestrictionStatus;
+    share_sub_type: StorageElementType;
+    short_url: string;
+    token: string;
+    with_password: boolean;
+};
+
+export interface StorageElementFileInfo {
+    file_info: StorageElement | null;
+    divide_info: StorageDivideElement | null;
+    sharing_info: StorageSharingElement | null;
 }
 
 export enum StorageElementType {
@@ -63,6 +104,8 @@ export interface StorageRouteData {
     dash_back?: boolean;
     access_mode?: PermissionType;
     file_version_id?: string;
+    editor?: string;
+    type?: StorageElementType;
 }
 
 export interface StorageElementPaste {
@@ -77,16 +120,14 @@ export interface StorageElementHistory {
 }
 
 export interface StorageElementVersion {
+    create_date: string;
+    description: string;
     id: string;
+    is_current_version: boolean;
+    name: string;
     size: number;
     user_id: number;
-
-    name: string;
-    description: string;
-    create_date: string;
     update_date: string;
-
-    is_current_version: boolean;
 }
 
 export interface StorageElementVersionLock {
