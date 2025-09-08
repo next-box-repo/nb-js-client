@@ -80,7 +80,9 @@ export enum NotificationAction {
     DownloadZipError = 'download_zip_error',
 
     StatusUnzipProcess = 'status_unzip_process',
-    StatusUnzippError = 'status_unzip_error',
+    StatusUnzipSuccess = 'status_unzip_success',
+    StatusUnzipError = 'status_unzip_error',
+    StatusUnzipSuccessWithLimits = 'status_unzip_success_with_limits',
 
     Other = 'other',
 }

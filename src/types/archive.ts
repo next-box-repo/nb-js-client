@@ -36,5 +36,6 @@ export interface ArchiveEndPayload {
     zip_name: string;
     error?: string;
     divide_id?: number;
+    dst_divide_id?: number;
     zip_size?: number;
 }
