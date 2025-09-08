@@ -81,6 +81,11 @@ export enum NotificationAction {
     DownloadZipSuccess = 'download_zip_success',
     DownloadZipError = 'download_zip_error',
 
+    StatusUnzipProcess = 'status_unzip_process',
+    StatusUnzipSuccess = 'status_unzip_success',
+    StatusUnzipError = 'status_unzip_error',
+    StatusUnzipSuccessWithLimits = 'status_unzip_success_with_limits',
+    
     AnonymZipDirAddFileToOwner = 'anonym_zip_dir_add_file_to_owner',
     GuestZipDirAddFileToOwner = 'guest_zip_dir_add_file_to_owner',
 

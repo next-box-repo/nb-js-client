@@ -8,7 +8,9 @@ import {
 
 const STORAGE_FILES = '/storage/files';
 const STORAGE_FILES_NET = `${STORAGE_FILES}/net`;
-const STORAGE_FILES_ZIP = `${STORAGE_FILES}/zip/download`;
+const STORAGE_FILES_UNZIP = `${STORAGE_FILES}/unzip`;
+const STORAGE_FILES_ZIP = `${STORAGE_FILES}/zip`;
+const STORAGE_FILES_ZIP_DOWNLOAD = `${STORAGE_FILES_ZIP}/download`;
 const STORAGE_FILES_PROCESS = `${STORAGE_FILES}/process`;
 const STORAGE_FILES_CODE = `${STORAGE_FILES}/code`;
 
@@ -74,7 +76,7 @@ export class StorageFilesApiService {
         return this.client.rest.post(STORAGE_FILES_NET, data);
     }
 
-    createZip(params: {
+    createZipToDownload(params: {
         path: string;
         divide_id?: number;
         time_zone?: number;
@@ -89,6 +91,10 @@ export class StorageFilesApiService {
         return this.client.rest.delete(STORAGE_FILES_PROCESS, params);
     }
 
+    unZip(params: UnZipRequestParams): Promise<void> {
+        return this.client.rest.post(STORAGE_FILES_UNZIP, params);
+    }
+
     checkZip(params: { code: string }): Promise<void> {
         return this.client.rest.head(STORAGE_FILES_CODE, params);
     }
@@ -100,4 +106,13 @@ export interface UploadNetRequestParams {
     overwrite?: boolean;
     divide_id?: number;
     connection_divide_id?: number;
+}
+
+export interface UnZipRequestParams {
+    divide_id?: number,
+    dst_divide_id?: number,
+    dst_folder: string,
+    dst_path: string,
+    overwrite?: boolean,
+    path: string
 }

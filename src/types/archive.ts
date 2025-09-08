@@ -26,6 +26,7 @@ export interface ArchivePayload {
     progress: number;
     speed: number;
     seconds_left: number;
+    dst_path?: string;
 }
 
 export interface ArchiveEndPayload {
@@ -35,5 +36,6 @@ export interface ArchiveEndPayload {
     zip_name: string;
     error?: string;
     divide_id?: number;
+    dst_divide_id?: number;
     zip_size?: number;
 }
