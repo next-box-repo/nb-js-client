@@ -10,6 +10,7 @@ import {
     SizeBySection,
     DivideResourceParams,
     ResourceAccess,
+    Quota,
     StorageElementFileInfo,
 } from '../types';
 import { StorageElement } from '../types';
@@ -237,6 +238,10 @@ export class StorageElementApiService {
         params: DivideResourceParams,
     ): Promise<ResponseList<ResourceAccess>> {
         return this.client.rest.get(STORAGE_DIVIDE_RESOURCE, params);
+    }
+
+    getMyQuota(): Promise<Quota> {
+        return this.client.rest.get(`${STORAGE_ELEMENT}/user_size`);
     }
 }
 

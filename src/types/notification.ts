@@ -76,6 +76,8 @@ export enum NotificationAction {
     WaitSharingCreate = 'wait_sharing_create',
 
     StatusCreateZipProcess = 'status_create_zip_process',
+    StatusCreateZipError = 'status_create_zip_error',
+
     DownloadZipSuccess = 'download_zip_success',
     DownloadZipError = 'download_zip_error',
 
@@ -83,6 +85,9 @@ export enum NotificationAction {
     StatusUnzipSuccess = 'status_unzip_success',
     StatusUnzipError = 'status_unzip_error',
     StatusUnzipSuccessWithLimits = 'status_unzip_success_with_limits',
+    
+    AnonymZipDirAddFileToOwner = 'anonym_zip_dir_add_file_to_owner',
+    GuestZipDirAddFileToOwner = 'guest_zip_dir_add_file_to_owner',
 
     Other = 'other',
 }

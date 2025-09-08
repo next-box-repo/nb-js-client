@@ -177,3 +177,8 @@ export interface SizeBySection {
     count: number;
     label: string;
 }
+
+export interface Quota {
+    busy_size: number;
+    quota_size: number;
+}
