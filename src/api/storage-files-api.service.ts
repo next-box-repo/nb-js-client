@@ -84,7 +84,7 @@ export class StorageFilesApiService {
         const timeZone = -new Date().getTimezoneOffset() / 60;
         params.time_zone ??= timeZone;
 
-        return this.client.rest.post(STORAGE_FILES_ZIP, params);
+        return this.client.rest.post(STORAGE_FILES_ZIP_DOWNLOAD, params);
     }
 
     cancelCreateZip(params: { process_id: string }): Promise<void> {
