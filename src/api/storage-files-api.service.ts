@@ -87,6 +87,13 @@ export class StorageFilesApiService {
         return this.client.rest.post(STORAGE_FILES_ZIP_DOWNLOAD, params);
     }
 
+    createZip(params: CreateZipRequestParams): Promise<void> {
+        const timeZone = -new Date().getTimezoneOffset() / 60;
+        params.time_zone ??= timeZone;
+
+        return this.client.rest.post(STORAGE_FILES_ZIP, params)
+    }
+
     cancelCreateZip(params: { process_id: string }): Promise<void> {
         return this.client.rest.delete(STORAGE_FILES_PROCESS, params);
     }
@@ -115,4 +122,13 @@ export interface UnZipRequestParams {
     dst_path: string,
     overwrite?: boolean,
     path: string
+}
+
+export interface CreateZipRequestParams {
+    dst_path: string,
+    src_paths: string[],
+    dst_divide_id?: number,
+    src_divide_id?: number,
+    time_zone?: number,
+    overwrite?: boolean,
 }
