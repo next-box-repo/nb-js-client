@@ -70,9 +70,7 @@ export class ExtensionsApiService {
         return this.client.rest.put(`${EXTENSIONS}/${id}`, { version });
     }
 
-    list(
-        params?: ExtensionListParams,
-    ): Promise<ResponseList<Extension & { with_settings: boolean }>> {
+    list(params?: ExtensionListParams): Promise<ResponseList<Extension>> {
         return this.client.rest.get(EXTENSIONS, params);
     }
 
@@ -119,17 +117,21 @@ export class ExtensionsApiService {
     ): Promise<ResponseList<string>> {
         return this.client.rest.get(EXTENSIONS_NAME_SYSTEM, params);
     }
+
     getUserNameExts(
         params?: NameExtensionListParams,
     ): Promise<ResponseList<UserNamesExtension>> {
         return this.client.rest.get(EXTENSIONS_NAME_USER, params);
     }
+
     createUserNameExt(name: string): Promise<void> {
         return this.client.rest.post(`${EXTENSIONS_NAME_USER}`, { name });
     }
+
     deleteUserNameExt(name: string): Promise<void> {
         return this.client.rest.delete(`${EXTENSIONS_NAME_USER}/${name}`);
     }
+
     deleteAllUserNameExts(): Promise<void> {
         return this.client.rest.delete(`${EXTENSIONS_NAME_USER}`);
     }
