@@ -74,6 +74,11 @@ export interface ExtensionMetaPayload {
     uniq_key: string;
 }
 
+export interface ExtensionTag {
+    tag: string;
+    count: number;
+}
+
 export interface ExtensionExternalInList {
     id: number;
     create_date: string;

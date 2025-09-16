@@ -2,16 +2,14 @@ import { BASE_URL_V2, Client } from '../classes';
 import {
     Extension,
     ExtensionDefault,
-    ExtensionFileMode,
     ExtensionListParams,
+    ExtensionTag,
     HttpEvent,
     NameExtensionListParams,
     OnUploadProgress,
-    RequestBaseParams,
     ResponseItem,
     ResponseList,
     SettingValue,
-    StorageElementType,
     UserNamesExtension,
 } from '../types';
 
@@ -19,6 +17,7 @@ const EXTENSIONS = '/static/extensions';
 const EXTENSIONS_DEFAULT = `/extensions/defaults`;
 const EXTENSIONS_NAME_USER = `${EXTENSIONS}/names/users`;
 const EXTENSIONS_NAME_SYSTEM = `${EXTENSIONS}/names/system`;
+const EXTENSIONS_TAGS = `${EXTENSIONS}/tags`;
 
 export class ExtensionsApiService {
     constructor(private client: Client) {}
@@ -72,6 +71,10 @@ export class ExtensionsApiService {
 
     list(params?: ExtensionListParams): Promise<ResponseList<Extension>> {
         return this.client.rest.get(EXTENSIONS, params);
+    }
+
+    listTags(): Promise<ExtensionTag[]> {
+        return this.client.rest.get(EXTENSIONS_TAGS);
     }
 
     delete(id: number, name: string): Promise<void> {
