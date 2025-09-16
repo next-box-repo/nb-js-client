@@ -23,11 +23,18 @@ export enum ExtensionFileMode {
 
 export interface Extension {
     id: number;
+    version: string;
+    uniq_key: string;
+
+    name: Lang;
+    description: Lang;
+
     create_date: string;
     update_date: string;
 
-    with_settings?: boolean;
-    name: Lang;
+    icon: string;
+    type: ExtensionType;
+    path: string;
 
     devlocal?: boolean;
     dev_frame_params?: {
@@ -36,15 +43,8 @@ export interface Extension {
         port?: number;
     };
 
-    version: string;
     latest_repo_version?: string;
-
-    description: Lang;
-    uniq_key: string;
-
-    icon: string;
-    type: ExtensionType;
-    path: string;
+    tags?: string[];
 
     file?: {
         mode: ExtensionFileMode;
@@ -65,12 +65,18 @@ export interface Extension {
         index: string;
     };
 
+    with_settings?: boolean;
     settings?: SettingValue[];
     settings_template?: Setting[];
 }
 
 export interface ExtensionMetaPayload {
     uniq_key: string;
+}
+
+export interface ExtensionTag {
+    tag: string;
+    count: number;
 }
 
 export interface ExtensionExternalInList {
@@ -95,7 +101,6 @@ interface VersionExtension {
     version: string;
     size: number;
 }
-
 
 export interface UserNamesExtension {
     name: string;
