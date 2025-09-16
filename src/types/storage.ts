@@ -27,6 +27,12 @@ export interface StorageElement {
     id?: string;
     version?: StorageElementVersion;
     to_user_group_id?: number;
+
+    zip_entry_path?: string;
+    compressed?: number;
+    uncompressed?: number;
+    modified?: string;
+    is_dir?: boolean;
 }
 
 export type StorageDivideElement = Pick<
@@ -106,11 +112,13 @@ export interface StorageRouteData {
     file_version_id?: string;
     editor?: string;
     type?: StorageElementType;
+    zip_entry_path?: string;
 }
 
 export interface StorageElementPaste {
     from_path: string;
     to_path: string;
+    zip_entry_path?: string;
 }
 
 export interface StorageElementHistory {
