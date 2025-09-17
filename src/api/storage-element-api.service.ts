@@ -243,8 +243,8 @@ export class StorageElementApiService {
         return this.client.rest.get(STORAGE_DIVIDE_RESOURCE, params);
     }
 
-    getMyQuota(): Promise<Quota> {
-        return this.client.rest.get(`${STORAGE_ELEMENT}/user_size`);
+    getQuota(params?: { user_id: number }): Promise<Quota> {
+        return this.client.rest.get(`${STORAGE_ELEMENT}/user_size`, params);
     }
 }
 
