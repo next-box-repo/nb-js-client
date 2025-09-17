@@ -119,4 +119,5 @@ export interface ExtensionListParams extends RequestBaseParams {
     ext_value?: string | null;
     file_mode?: ExtensionFileMode[];
     lang?: string;
+    tag?: string;
 }
