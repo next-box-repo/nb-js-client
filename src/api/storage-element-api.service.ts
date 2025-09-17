@@ -41,12 +41,14 @@ export class StorageElementApiService {
         path: string;
         divide_id?: number;
         file_version_id?: string;
+        zip_entry_path?: string;
     }): Promise<StorageElement> {
         if (!parseInt(params.divide_id?.toString() || '')) {
             delete params.divide_id;
         }
 
         if (!params.file_version_id) delete params.file_version_id;
+        if (!params.zip_entry_path) delete params.zip_entry_path;
 
         return this.client.rest.get(STORAGE_ELEMENT, params);
     }
@@ -66,12 +68,13 @@ export class StorageElementApiService {
         rootId,
         path,
         file_version_id,
+        zip_entry_path,
     }: StorageRouteData): Promise<StorageElement> {
         if (root === StorageRoot.fca && rootId) {
             return this.fcaApiService.info(rootId, path);
         }
 
-        return this.info({ path, divide_id: rootId, file_version_id });
+        return this.info({ path, divide_id: rootId, file_version_id, zip_entry_path });
     }
 
     size(data: StorageItemSizeParams): Promise<number> {
@@ -240,8 +243,8 @@ export class StorageElementApiService {
         return this.client.rest.get(STORAGE_DIVIDE_RESOURCE, params);
     }
 
-    getMyQuota(): Promise<Quota> {
-        return this.client.rest.get(`${STORAGE_ELEMENT}/user_size`);
+    getQuota(params?: { user_id: number }): Promise<Quota> {
+        return this.client.rest.get(`${STORAGE_ELEMENT}/user_size`, params);
     }
 }
 
@@ -261,6 +264,7 @@ export interface RequestStorageListParams extends RequestBaseParams {
     from_sharing_password?: string;
     without_content_work_dir?: boolean;
     is_search_dir?: null | boolean;
+    zip_prefix?: string;
 }
 
 export interface StorageElementPasteParams {
