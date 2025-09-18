@@ -121,3 +121,8 @@ export interface ExtensionListParams extends RequestBaseParams {
     lang?: string;
     tag?: string;
 }
+
+export type ExtensionTagListParams = Pick<
+    ExtensionListParams,
+    'file_mode' | 'type'
+>;

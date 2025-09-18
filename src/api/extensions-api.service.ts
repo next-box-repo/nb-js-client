@@ -4,6 +4,7 @@ import {
     ExtensionDefault,
     ExtensionListParams,
     ExtensionTag,
+    ExtensionTagListParams,
     HttpEvent,
     NameExtensionListParams,
     OnUploadProgress,
@@ -73,8 +74,8 @@ export class ExtensionsApiService {
         return this.client.rest.get(EXTENSIONS, params);
     }
 
-    listTags(): Promise<ExtensionTag[]> {
-        return this.client.rest.get(EXTENSIONS_TAGS);
+    listTags(params?: ExtensionTagListParams): Promise<ExtensionTag[]> {
+        return this.client.rest.get(EXTENSIONS_TAGS, params);
     }
 
     delete(id: number, name: string): Promise<void> {

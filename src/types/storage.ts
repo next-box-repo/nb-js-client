@@ -1,6 +1,4 @@
-import { RequestBaseParams } from './base';
 import { PermissionType, RestrictionStatus } from './divide';
-import { User } from './user';
 
 export interface StorageElement {
     access_mode?: PermissionType;
@@ -75,6 +73,7 @@ export enum StorageElementType {
     Dir = 'dir',
     File = 'file',
     WorkDir = 'work_dir',
+    App = 'app',
 }
 
 export enum StorageElementContentType {
