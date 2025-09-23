@@ -112,6 +112,7 @@ export interface StorageRouteData {
     editor?: string;
     type?: StorageElementType;
     zip_entry_path?: string;
+    share_root_path?: string;
 }
 
 export interface StorageElementPaste {
