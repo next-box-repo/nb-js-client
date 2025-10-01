@@ -29,17 +29,23 @@ export class ExtensionsExternalApiService {
     }
 
     extensionMarkdown(
-        uniqKey: string,
+        params: ExtensionExternalReadmeParams,
         config: { responseType: ResponseType },
     ): Promise<string> {
         return this.client.rest.get(
-            `${EXTENSIONS}/${uniqKey}/readme`,
-            {},
+            `${EXTENSIONS}/${params.uniqKey}/readme`,
+            { lang: params.lang },
             { ...config, host: 'https://next-box.ru' },
         );
     }
 }
 
+export interface ExtensionExternalReadmeParams {
+    uniqKey: string;
+    lang: string;
+}
+
 export interface ExtensionExternalListParams extends RequestBaseParams {
+    lang: string;
     search_field?: string;
 }
