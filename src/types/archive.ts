@@ -1,4 +1,4 @@
-import { NotificationAction } from "./notification";
+import { NotificationAction } from './notification';
 
 export interface ArchiveProcess<T extends ArchivePayload | ArchiveEndPayload> {
     create_date: string;
@@ -18,7 +18,7 @@ export interface ArchiveProcess<T extends ArchivePayload | ArchiveEndPayload> {
 
 export interface ArchivePayload {
     process_id: string;
-    src_path: string;
+    src_path: string[];
     zip_name: string;
     current_file: string;
     sum_size: number;
