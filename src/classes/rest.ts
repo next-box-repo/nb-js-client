@@ -107,16 +107,20 @@ export class Rest {
             const skipInterceptors = this.state.skipInterceptors ?? false;
             this.state.skipInterceptors = false;
 
-            let requestInit = { method, ...config };
+            let requestInit: RequestInit & RequestConfig = {
+                method,
+                ...config,
+            };
             if (config?.signal) requestInit.signal = config.signal;
 
             const sendRequest = async () => {
                 // request interceptors
                 if (!skipInterceptors) {
-                    config = await applyInterceptors(
-                        this.client.requestInterceptors,
-                        requestInit,
-                    );
+                    requestInit =
+                        (await applyInterceptors(
+                            this.client.requestInterceptors,
+                            requestInit,
+                        )) ?? requestInit;
                 }
 
                 // refresh token
@@ -143,10 +147,11 @@ export class Rest {
                             if (tokens) {
                                 this.state.authToken.set(id, tokens);
 
-                                config = await applyInterceptors(
-                                    this.client.requestInterceptors,
-                                    requestInit,
-                                );
+                                requestInit =
+                                    (await applyInterceptors(
+                                        this.client.requestInterceptors,
+                                        requestInit,
+                                    )) ?? requestInit;
                             }
                         }
                     }
@@ -155,62 +160,71 @@ export class Rest {
                 const xhr = new XMLHttpRequest();
 
                 // params
-                if (config?.params && Object.keys(config.params).length) {
-                    path += '?' + makeUrlParams(config.params);
+                if (
+                    requestInit.params &&
+                    Object.keys(requestInit.params).length
+                ) {
+                    path += '?' + makeUrlParams(requestInit.params);
                 }
 
-                const host = config?.host ?? this.state.clientParams.host;
+                const host = requestInit.host ?? this.state.clientParams.host;
                 const version =
-                    config?.version ?? this.state.clientParams.version;
+                    requestInit.version ?? this.state.clientParams.version;
 
                 const url = `${host}${version}${path}`;
 
                 xhr.open(method, url, true);
 
                 // headers
-                if (config?.headers) {
-                    const normalized = normalizeHeaders(config.headers);
+                if (requestInit.headers) {
+                    const normalized = normalizeHeaders(requestInit.headers);
                     for (const [k, v] of Object.entries(normalized)) {
-                        if (host === this.baseHost) xhr.setRequestHeader(k, v);
-                        else if (k.toLowerCase() !== 'content-type')
+                        if (host === this.baseHost) {
                             xhr.setRequestHeader(k, v);
+                        } else if (k.toLowerCase() !== 'content-type') {
+                            xhr.setRequestHeader(k, v);
+                        }
                     }
                 }
 
                 // responseType
-                if (config?.responseType)
-                    xhr.responseType = config.responseType;
+                if (requestInit.responseType) {
+                    xhr.responseType = requestInit.responseType;
+                }
 
                 // abort
-                if (config?.signal) {
-                    config.signal.addEventListener('abort', () => {
+                if (requestInit.signal) {
+                    requestInit.signal.addEventListener('abort', () => {
                         xhr.abort();
-                        reject(new Error('Upload aborted'));
+                        reject(new Error('Request aborted'));
                     });
                 }
 
                 // upload progress
                 if (
                     xhr.upload &&
-                    [
-                        RequestMethod.POST,
-                        RequestMethod.PUT,
-                        RequestMethod.PATCH,
-                    ].includes(method)
+                    (method === RequestMethod.POST ||
+                        method === RequestMethod.PUT ||
+                        method === RequestMethod.PATCH)
                 ) {
                     xhr.upload.onprogress = (ev) => {
-                        if (ev.lengthComputable && config?.onUploadProgress)
-                            config.onUploadProgress(ev);
+                        if (
+                            ev.lengthComputable &&
+                            requestInit.onUploadProgress
+                        ) {
+                            requestInit.onUploadProgress(ev);
+                        }
                     };
                 }
 
                 // onload
                 xhr.onload = async () => {
-                    if (config?.signal && config.signal.aborted) return;
+                    if (requestInit.signal && requestInit.signal.aborted)
+                        return;
 
                     // body
-                    let body;
-                    switch (config?.responseType) {
+                    let body: any;
+                    switch (requestInit.responseType) {
                         case ResponseType.Text:
                             body = xhr.responseText;
                             break;
@@ -244,34 +258,34 @@ export class Rest {
 
                     // success
                     if (xhr.status >= 200 && xhr.status < 300) {
-                        // response success interceptors
                         await applyInterceptors(
                             this.client.responseInterceptors,
                             base,
                         );
 
-                        if (config?.observe === RequestObserve.Response)
-                            resolve({ ...base, body });
-                        else resolve(body);
+                        if (requestInit.observe === RequestObserve.Response) {
+                            resolve({ ...base, body } as HttpResponse<T>);
+                        } else {
+                            resolve(body as T);
+                        }
                         return;
                     }
 
                     // error
                     if (
                         this.state.authToken &&
-                        body?.code === NEED_TOKEN_UPDATE_ERROR
+                        (body as any)?.code === NEED_TOKEN_UPDATE_ERROR
                     ) {
                         const tokens = await this.tokenUpdate.refreshToken(
                             this.state.authToken.get(0)!,
-                            this.baseHost,
+                            this.baseHost!,
                         );
                         if (tokens) this.state.authToken.set(0, tokens);
                     }
 
-                    let errorPayload = { ...base, error: body };
+                    const errorPayload = { ...base, error: body };
 
-                    // response error interceptors
-                    errorPayload = await applyInterceptors(
+                    await applyInterceptors(
                         this.client.responseInterceptors,
                         errorPayload,
                     );
@@ -290,7 +304,7 @@ export class Rest {
                 };
 
                 // send
-                xhr.send(prepareRequestBody(config?.body));
+                xhr.send(prepareRequestBody(requestInit.body));
             };
 
             sendRequest().catch(reject);
