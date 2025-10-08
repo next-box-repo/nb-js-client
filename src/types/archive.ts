@@ -27,6 +27,8 @@ export interface ArchivePayload {
     speed: number;
     seconds_left: number;
     dst_path?: string;
+    divide_id?: number;
+    dst_divide_id?: number;
 }
 
 export interface ArchiveEndPayload {
