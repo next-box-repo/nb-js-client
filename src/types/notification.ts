@@ -5,20 +5,22 @@ import { StorageElementType } from './storage';
 import { UserLabel } from './user';
 
 export interface UserNotification {
+    action: NotificationAction;
+
     id: number;
     create_date: string;
     update_date: string;
+
     entity_type: NotificationEntityType;
-    action: NotificationAction;
 
     title: string;
     msg: string;
 
-    transition: boolean;
-
     read: boolean;
     style: NotificationStyle;
     payload: NotificationPayload;
+
+    service_name?: string;
 
     from_user_id?: number;
     owner?: UserLabel;
