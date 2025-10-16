@@ -90,6 +90,8 @@ export enum NotificationAction {
     AnonymZipDirAddFileToOwner = 'anonym_zip_dir_add_file_to_owner',
     GuestZipDirAddFileToOwner = 'guest_zip_dir_add_file_to_owner',
 
+    DropDocumentOnlyoffice = 'drop_document_onlyoffice',
+
     Other = 'other',
 }
 
