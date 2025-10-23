@@ -94,6 +94,10 @@ export enum NotificationAction {
 
     DropDocumentOnlyoffice = 'drop_document_onlyoffice',
 
+    CopyError = 'copy_error',
+    CopySuccess = 'copy_success',
+    StatusCopyProcess = 'status_copy_process',
+
     Other = 'other',
 }
 
