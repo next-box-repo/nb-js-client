@@ -91,10 +91,10 @@ export class StorageFilesApiService {
         const timeZone = -new Date().getTimezoneOffset() / 60;
         params.time_zone ??= timeZone;
 
-        return this.client.rest.post(STORAGE_FILES_ZIP, params)
+        return this.client.rest.post(STORAGE_FILES_ZIP, params);
     }
 
-    cancelCreateZip(params: { process_id: string }): Promise<void> {
+    cancelProcess(params: { process_id: string }): Promise<void> {
         return this.client.rest.delete(STORAGE_FILES_PROCESS, params);
     }
 
@@ -116,19 +116,19 @@ export interface UploadNetRequestParams {
 }
 
 export interface UnZipRequestParams {
-    divide_id?: number,
-    dst_divide_id?: number,
-    dst_folder: string,
-    dst_path: string,
-    overwrite?: boolean,
-    path: string
+    divide_id?: number;
+    dst_divide_id?: number;
+    dst_folder: string;
+    dst_path: string;
+    overwrite?: boolean;
+    path: string;
 }
 
 export interface CreateZipRequestParams {
-    dst_path: string,
-    src_paths: string[],
-    dst_divide_id?: number,
-    src_divide_id?: number,
-    time_zone?: number,
-    overwrite?: boolean,
+    dst_path: string;
+    src_paths: string[];
+    dst_divide_id?: number;
+    src_divide_id?: number;
+    time_zone?: number;
+    overwrite?: boolean;
 }

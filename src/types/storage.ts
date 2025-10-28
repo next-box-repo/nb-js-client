@@ -7,13 +7,13 @@ export interface StorageElement {
     content_type: StorageElementContentType;
     create_date: string;
     created_by_extension?: string;
-    del_group_id: number;
+    del_group_id?: number;
     divide_id?: number;
     file_name_ext: string;
     full_path: string;
 
     is_favorite: boolean;
-    last_used_extension: string;
+    last_used_extension?: string;
     name: string;
     owner_id: number;
     path: string;
@@ -131,8 +131,8 @@ export interface StorageElementVersion {
     create_date: string;
     description: string;
     id: string;
-    is_current_version: boolean;
-    name: string;
+    is_current_version?: boolean;
+    name: string | null;
     size: number;
     user_id: number;
     update_date: string;

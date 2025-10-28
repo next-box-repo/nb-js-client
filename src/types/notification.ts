@@ -1,5 +1,3 @@
-import { ArchiveEndPayload } from './archive';
-import { RequestBaseParams, ResponseList } from './base';
 import { PermissionType } from './divide';
 import { StorageElementType } from './storage';
 import { UserLabel } from './user';
@@ -124,7 +122,7 @@ interface NotificationActionEnabledGroup {
     enabled_mail: boolean;
 }
 
-export type NotificationPayload = PayloadFile | ArchiveEndPayload | any;
+export type NotificationPayload = PayloadFile | PayloadArchive | any;
 
 export interface PayloadFile {
     access_mode: PermissionType;
@@ -136,4 +134,15 @@ export interface PayloadFile {
     to_user_id: number;
     type: StorageElementType;
     update_date: string;
+}
+
+export interface PayloadArchive {
+    process_id: string;
+    element_path: string;
+    ref_code: string;
+    zip_name: string;
+    error?: string;
+    divide_id?: number;
+    dst_divide_id?: number;
+    zip_size?: number;
 }
