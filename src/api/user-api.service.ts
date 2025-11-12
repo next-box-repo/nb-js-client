@@ -159,6 +159,7 @@ export interface RequestUserListParams extends RequestBaseParams {
     type?: UserType;
     exclude_type?: UserType;
     exclude_ids?: number[];
+    with_used_size?: boolean;
 }
 
 export interface UserPhone {
@@ -176,4 +177,6 @@ export type CreateUserParams = Pick<
     | 'home_path'
     | 'password'
     | 'role_id'
+    | 'login'
+    | 'phone'
 >;
