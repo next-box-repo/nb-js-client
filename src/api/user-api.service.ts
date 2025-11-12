@@ -177,6 +177,4 @@ export type CreateUserParams = Pick<
     | 'home_path'
     | 'password'
     | 'role_id'
-    | 'login'
-    | 'phone'
 >;
