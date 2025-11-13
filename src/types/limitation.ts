@@ -13,7 +13,7 @@ export interface RequestLimitationsListParams extends RequestBaseParams {
 }
 
 export interface CreateLimitationsParams extends LimitationBody {
-    users: number[];
+    users: number[] | null;
     force: boolean;
 }
 
@@ -30,6 +30,7 @@ interface LimitationBody {
 export enum LimitationType {
     BySize = 'size',
     ByExt = 'extension',
+    ByQuota = 'quota_size',
 }
 
 export enum LimitationSubType {

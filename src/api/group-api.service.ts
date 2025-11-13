@@ -16,8 +16,11 @@ export class GroupApiService {
         return this.client.rest.get(GROUPS, params);
     }
 
-    listUsers(id: number): Promise<ResponseList<User>> {
-        return this.client.rest.get(`${GROUPS}/${id}/users`);
+    listUsers(
+        id: number,
+        params?: RequestBaseParams,
+    ): Promise<ResponseList<User>> {
+        return this.client.rest.get(`${GROUPS}/${id}/users`, params);
     }
 
     create(data: CreateUserGroupParams): Promise<ResponseItem<UserGroup>> {

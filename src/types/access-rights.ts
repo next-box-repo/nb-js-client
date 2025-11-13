@@ -32,6 +32,10 @@ export enum AccessRights {
     RestrictionDivideRead = 'restriction_divide_read', // Просмотр
     RestrictionDivideWrite = 'restriction_divide_write', // Управление доступами
 
+    // Ограничения на загрузку файлов
+    LimitationsRead = 'limitations_read', // Просмотр
+    LimitationsEdit = 'limitations_edit', // Редактирование
+
     // Аудит
     ReadUserLogs = 'read_user_logs', // Просмотр пользовательских логов
 

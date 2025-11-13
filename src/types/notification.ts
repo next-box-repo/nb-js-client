@@ -1,23 +1,24 @@
-import { RequestBaseParams, ResponseList } from './base';
 import { PermissionType } from './divide';
 import { StorageElementType } from './storage';
 import { UserLabel } from './user';
 
 export interface UserNotification {
+    action: NotificationAction;
+
     id: number;
     create_date: string;
     update_date: string;
+
     entity_type: NotificationEntityType;
-    action: NotificationAction;
 
     title: string;
     msg: string;
 
-    transition: boolean;
-
     read: boolean;
     style: NotificationStyle;
     payload: NotificationPayload;
+
+    service_name?: string;
 
     from_user_id?: number;
     owner?: UserLabel;
@@ -37,6 +38,8 @@ export enum NotificationEntityType {
 export enum NotificationAction {
     SecurityCheckNegative = 'action_security_check_negative',
     SecurityCheckPositive = 'action_security_check_positive',
+
+    CommentVersionMention = 'action_version_comment_mention',
 
     OpenSharing = 'open_sharing',
     ChangeSharing = 'change_sharing',
@@ -72,6 +75,27 @@ export enum NotificationAction {
     WaitSharing = 'wait_sharing',
     WaitSharingCreate = 'wait_sharing_create',
 
+    StatusCreateZipProcess = 'status_create_zip_process',
+    StatusCreateZipSuccess = 'status_create_zip_success',
+    StatusCreateZipError = 'status_create_zip_error',
+
+    DownloadZipSuccess = 'download_zip_success',
+    DownloadZipError = 'download_zip_error',
+
+    StatusUnzipProcess = 'status_unzip_process',
+    StatusUnzipSuccess = 'status_unzip_success',
+    StatusUnzipError = 'status_unzip_error',
+    StatusUnzipSuccessWithLimits = 'status_unzip_success_with_limits',
+
+    AnonymZipDirAddFileToOwner = 'anonym_zip_dir_add_file_to_owner',
+    GuestZipDirAddFileToOwner = 'guest_zip_dir_add_file_to_owner',
+
+    DropDocumentOnlyoffice = 'drop_document_onlyoffice',
+
+    CopyError = 'copy_error',
+    CopySuccess = 'copy_success',
+    StatusCopyProcess = 'status_copy_process',
+
     Other = 'other',
 }
 
@@ -98,7 +122,7 @@ interface NotificationActionEnabledGroup {
     enabled_mail: boolean;
 }
 
-export type NotificationPayload = PayloadFile | any;
+export type NotificationPayload = PayloadFile | PayloadArchive | any;
 
 export interface PayloadFile {
     access_mode: PermissionType;
@@ -110,4 +134,15 @@ export interface PayloadFile {
     to_user_id: number;
     type: StorageElementType;
     update_date: string;
+}
+
+export interface PayloadArchive {
+    process_id: string;
+    element_path: string;
+    ref_code: string;
+    zip_name: string;
+    error?: string;
+    divide_id?: number;
+    dst_divide_id?: number;
+    zip_size?: number;
 }

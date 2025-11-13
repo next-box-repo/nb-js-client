@@ -1,6 +1,5 @@
 import { Client } from './client';
 import {
-    AuthToken,
     NbAppState,
     ResponseType,
     RequestMethod,
@@ -8,6 +7,7 @@ import {
     RequestConfig,
     RequestObserve,
     HttpEvent,
+    AuthTokenUpdate,
 } from '../types';
 import { AccessToken } from '../types/access-token';
 import { jwtDecode } from 'jwt-decode';
@@ -58,12 +58,8 @@ export class Rest {
         });
     }
 
-    patch(
-        path: string,
-        params?: Record<string, any>,
-        config?: RequestConfig,
-    ): Promise<any> {
-        return this.request(RequestMethod.PATCH, path, { params, ...config });
+    patch(path: string, body?: any, config?: RequestConfig): Promise<any> {
+        return this.request(RequestMethod.PATCH, path, { body, ...config });
     }
 
     delete(
@@ -72,6 +68,17 @@ export class Rest {
         config?: RequestConfig,
     ): Promise<any> {
         return this.request(RequestMethod.DELETE, path, { params, ...config });
+    }
+
+    head(
+        path: string,
+        params?: Record<string, any>,
+        config?: RequestConfig,
+    ): Promise<any> {
+        return this.request(RequestMethod.HEAD, path, {
+            params,
+            ...config,
+        });
     }
 
     upload(
@@ -91,213 +98,216 @@ export class Rest {
         return { promise, abort: () => controller.abort() };
     }
 
-    async request<T>(
+    request<T>(
         method: RequestMethod,
         path: string,
         config?: RequestConfig,
     ): Promise<T | HttpResponse<T> | HttpEvent<T>> {
-        return new Promise(async (resolve, reject) => {
+        return new Promise((resolve, reject) => {
             const skipInterceptors = this.state.skipInterceptors ?? false;
             this.state.skipInterceptors = false;
 
-            let request: RequestInit = {
+            let requestInit: RequestInit & RequestConfig = {
                 method,
                 ...config,
             };
+            if (config?.signal) requestInit.signal = config.signal;
 
-            if (config?.signal) request.signal = config.signal;
+            const sendRequest = async () => {
+                // request interceptors
+                if (!skipInterceptors) {
+                    requestInit =
+                        (await applyInterceptors(
+                            this.client.requestInterceptors,
+                            requestInit,
+                        )) ?? requestInit;
+                }
 
-            if (!skipInterceptors) {
-                config = await applyInterceptors(
-                    this.client.requestInterceptors,
-                    request,
-                );
-            }
+                // refresh token
+                if (this.state.authToken) {
+                    for (const [id, item] of this.state.authToken.entries()) {
+                        const token: AccessToken = jwtDecode(item.access_token);
 
-            if (this.state.authToken) {
-                for (const [id, item] of this.state.authToken.entries()) {
-                    const token: AccessToken = jwtDecode(item.access_token);
+                        const needUpdate =
+                            token &&
+                            token.is_remember &&
+                            this.tokenUpdate.isTokenExpire(token.exp);
 
-                    const needUpdate =
-                        token &&
-                        token.is_remember &&
-                        this.tokenUpdate.isTokenExpire(token.exp);
+                        if (
+                            needUpdate &&
+                            !path.includes('/login') &&
+                            !path.includes('/assets')
+                        ) {
+                            const tokens: AuthTokenUpdate | null =
+                                await this.tokenUpdate.refreshToken(
+                                    item,
+                                    this.baseHost!,
+                                );
 
-                    if (
-                        needUpdate &&
-                        !path.includes('/login') &&
-                        !path.includes('/assets')
-                    ) {
-                        const tokens: AuthToken | null =
-                            await this.tokenUpdate.refreshToken(
-                                item,
-                                this.baseHost!,
-                            );
+                            if (tokens) {
+                                this.state.authToken.set(id, tokens);
 
-                        if (tokens) {
-                            this.state.authToken.set(id, tokens);
-
-                            config = await applyInterceptors(
-                                this.client.requestInterceptors,
-                                request,
-                            );
+                                requestInit =
+                                    (await applyInterceptors(
+                                        this.client.requestInterceptors,
+                                        requestInit,
+                                    )) ?? requestInit;
+                            }
                         }
                     }
                 }
-            }
 
-            const xhr = new XMLHttpRequest();
+                const xhr = new XMLHttpRequest();
 
-            if (config?.params && Object.keys(config.params).length !== 0) {
-                path += '?' + makeUrlParams(config.params);
-            }
-
-            const url = `${this.state.clientParams.host}${this.state.clientParams.version}${path}`;
-
-            xhr.open(method, url, true);
-
-            if (config?.headers) {
-                const normalizedHeaders = normalizeHeaders(config.headers);
-
-                for (const [key, value] of Object.entries(normalizedHeaders)) {
-                    if (this.state.clientParams.host === this.baseHost) {
-                        xhr.setRequestHeader(key, value);
-                    } else if (key.toLowerCase() !== 'content-type') {
-                        xhr.setRequestHeader(key, value);
-                    }
+                // params
+                if (
+                    requestInit.params &&
+                    Object.keys(requestInit.params).length
+                ) {
+                    path += '?' + makeUrlParams(requestInit.params);
                 }
-            }
 
-            if (config?.responseType) {
-                xhr.responseType = config.responseType;
-            }
+                const host = requestInit.host ?? this.state.clientParams.host;
+                const version =
+                    requestInit.version ?? this.state.clientParams.version;
 
-            if (config?.signal) {
-                config.signal.addEventListener('abort', () => {
-                    xhr.abort();
-                    reject(new Error('Upload aborted'));
-                });
-            }
+                const url = `${host}${version}${path}`;
 
-            if (
-                xhr.upload &&
-                [
-                    RequestMethod.POST,
-                    RequestMethod.PUT,
-                    RequestMethod.PATCH,
-                ].includes(method)
-            ) {
-                xhr.upload.onprogress = (event) => {
-                    if (event.lengthComputable && config?.onUploadProgress) {
-                        config.onUploadProgress(event);
-                    }
-                };
-            }
+                xhr.open(method, url, true);
 
-            xhr.onload = async () => {
-                if (config?.signal && config.signal.aborted) return;
-
-                let body: any;
-
-                switch (config?.responseType) {
-                    case ResponseType.Text:
-                        body = xhr.responseText;
-                        break;
-                    case ResponseType.Blob:
-                    case ResponseType.ArrayBuffer:
-                        body = xhr.response;
-                        break;
-                    default:
-                        try {
-                            body = JSON.parse(xhr.responseText);
-                        } catch {
-                            body = xhr.responseText;
+                // headers
+                if (requestInit.headers) {
+                    const normalized = normalizeHeaders(requestInit.headers);
+                    for (const [k, v] of Object.entries(normalized)) {
+                        if (host === this.baseHost) {
+                            xhr.setRequestHeader(k, v);
+                        } else if (k.toLowerCase() !== 'content-type') {
+                            xhr.setRequestHeader(k, v);
                         }
+                    }
                 }
 
-                const headers = new Headers();
-                xhr.getAllResponseHeaders()
-                    .split('\r\n')
-                    .forEach((header) => {
-                        const [key, value] = header.split(': ');
+                // responseType
+                if (requestInit.responseType) {
+                    xhr.responseType = requestInit.responseType;
+                }
 
-                        if (key && value) headers.append(key, value);
+                // abort
+                if (requestInit.signal) {
+                    requestInit.signal.addEventListener('abort', () => {
+                        xhr.abort();
+                        reject(new Error('Request aborted'));
                     });
+                }
 
-                let response = {
-                    status: xhr.status,
-                    statusText: xhr.statusText,
-                    headers,
-                    url: xhr.responseURL,
-                };
+                // upload progress
+                if (
+                    xhr.upload &&
+                    (method === RequestMethod.POST ||
+                        method === RequestMethod.PUT ||
+                        method === RequestMethod.PATCH)
+                ) {
+                    xhr.upload.onprogress = (ev) => {
+                        if (
+                            ev.lengthComputable &&
+                            requestInit.onUploadProgress
+                        ) {
+                            requestInit.onUploadProgress(ev);
+                        }
+                    };
+                }
 
-                if (xhr.status >= 200 && xhr.status < 300) {
-                    if (config?.observe === RequestObserve.Response) {
-                        resolve({ ...response, body: body as T });
-                    } else resolve(body as T);
-                } else {
+                // onload
+                xhr.onload = async () => {
+                    if (requestInit.signal && requestInit.signal.aborted)
+                        return;
+
+                    // body
+                    let body: any;
+                    switch (requestInit.responseType) {
+                        case ResponseType.Text:
+                            body = xhr.responseText;
+                            break;
+                        case ResponseType.Blob:
+                        case ResponseType.ArrayBuffer:
+                            body = xhr.response;
+                            break;
+                        default:
+                            try {
+                                body = JSON.parse(xhr.responseText);
+                            } catch {
+                                body = xhr.responseText;
+                            }
+                    }
+
+                    // headers
+                    const headers = new Headers();
+                    xhr.getAllResponseHeaders()
+                        .split('\r\n')
+                        .forEach((line) => {
+                            const [k, v] = line.split(': ');
+                            if (k && v) headers.append(k, v);
+                        });
+
+                    const base = {
+                        status: xhr.status,
+                        statusText: xhr.statusText,
+                        headers,
+                        url: xhr.responseURL,
+                    };
+
+                    // success
+                    if (xhr.status >= 200 && xhr.status < 300) {
+                        await applyInterceptors(
+                            this.client.responseInterceptors,
+                            base,
+                        );
+
+                        if (requestInit.observe === RequestObserve.Response) {
+                            resolve({ ...base, body } as HttpResponse<T>);
+                        } else {
+                            resolve(body as T);
+                        }
+                        return;
+                    }
+
+                    // error
                     if (
                         this.state.authToken &&
-                        body.code === NEED_TOKEN_UPDATE_ERROR
+                        (body as any)?.code === NEED_TOKEN_UPDATE_ERROR
                     ) {
-                        const tokens: AuthToken | null =
-                            await this.tokenUpdate.refreshToken(
-                                this.state.authToken.get(0)!,
-                                this.baseHost!,
-                            );
-
+                        const tokens = await this.tokenUpdate.refreshToken(
+                            this.state.authToken.get(0)!,
+                            this.baseHost!,
+                        );
                         if (tokens) this.state.authToken.set(0, tokens);
                     }
 
-                    config = await applyInterceptors(
+                    const errorPayload = { ...base, error: body };
+
+                    await applyInterceptors(
                         this.client.responseInterceptors,
-                        { ...response, error: body },
+                        errorPayload,
                     );
 
-                    reject({ ...response, error: body });
-                }
+                    reject(errorPayload);
+                };
 
-                response = await applyInterceptors(
-                    this.client.responseInterceptors,
-                    response,
-                );
+                // onerror
+                xhr.onerror = () => {
+                    reject({
+                        status: xhr.status,
+                        statusText: xhr.statusText,
+                        url: xhr.responseURL,
+                        error: 'Network error',
+                    });
+                };
+
+                // send
+                xhr.send(prepareRequestBody(requestInit.body));
             };
 
-            xhr.onerror = () => {
-                reject({
-                    status: xhr.status,
-                    statusText: xhr.statusText,
-                    url: xhr.responseURL,
-                    error: 'Network error',
-                });
-            };
-
-            xhr.send(prepareRequestBody(config?.body));
+            sendRequest().catch(reject);
         });
-    }
-
-    async changeBaseUrlVersion<T>(
-        baseUrl: string,
-        handler: () => Promise<T>,
-    ): Promise<T> {
-        const originalBaseUrl = this.state.clientParams.version;
-        this.state.clientParams.version = baseUrl;
-
-        try {
-            return await handler();
-        } finally {
-            this.state.clientParams.version = originalBaseUrl;
-        }
-    }
-
-    async changeHost<T>(host: string, handler: () => Promise<T>): Promise<T> {
-        this.state.clientParams.host = host;
-        this.state.requestParams.headers = {};
-
-        try {
-            return await handler();
-        } finally {
-            this.state.clientParams.host = this.baseHost;
-        }
     }
 }

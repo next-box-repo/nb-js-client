@@ -5,6 +5,7 @@ export interface User {
     create_date: string;
     update_date: string;
     last_login_date: string;
+    last_update_password_date: string;
     login: string;
     password: string;
     first_name: string;
@@ -31,6 +32,10 @@ export type UserLabel = Pick<
     | 'avatar_path'
 >;
 
+export interface UserInfo extends UserLabel {
+    id: number;
+}
+
 export enum UserAuthType {
     Native = 'native',
     Ldap = 'ldap',
@@ -40,8 +45,10 @@ export enum UserAuthType {
 export enum UserStatus {
     Registering = 'registering',
     Activated = 'activated',
-    Blocked = 'blocked',
+    BlockedByAdmin = 'blocked_by_admin',
     BlockedByLicense = 'blocked_by_license',
+    BlockedByInactive = 'blocked_by_inactive',
+    BlockedByInactiveChangePassword = 'blocked_by_inactive_change_password',
 }
 
 export enum UserType {
@@ -102,4 +109,22 @@ export enum UserParamsLabel {
     Theme = 'theme',
     Lang = 'lang',
     Sort = 'sort',
+    ViewApps = 'viewApps',
+    WithoutContentWorkDir = 'withoutContentWorkDir',
+    DashboardGrid = 'dashboardGrid',
+}
+
+export interface UserAppPasswords {
+    id: number;
+    name: string;
+    create_date: string;
+    type: UserAppType;
+}
+
+export interface UserAppPasswordInfo extends UserAppPasswords {
+    password: string;
+}
+
+export enum UserAppType {
+    Webdav = 'webdav',
 }

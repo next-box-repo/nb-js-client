@@ -11,6 +11,7 @@ export enum RequestMethod {
     PUT = 'PUT',
     PATCH = 'PATCH',
     DELETE = 'DELETE',
+    HEAD = 'HEAD',
 }
 
 export enum RequestObserve {
@@ -33,6 +34,8 @@ export interface HttpEvent<T> {
 }
 
 export interface RequestConfig {
+    host?: string;
+    version?: string;
     params?: Record<string, string>;
     body?: any;
     cache?: RequestCache;

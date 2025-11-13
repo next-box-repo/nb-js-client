@@ -20,7 +20,7 @@ export class DivideApiService {
     constructor(private client: Client) {}
 
     divideDelete(service: DivideScope, id: number): Promise<void> {
-        return this.client.rest.delete(`${service}/${DIVIDE}/${id}`);
+        return this.client.rest.delete(`${service}${DIVIDE}/${id}`);
     }
 
     divideDeleteAll(
@@ -29,7 +29,7 @@ export class DivideApiService {
         access_mode: PermissionType,
         is_to_user_group: boolean,
     ): Promise<void> {
-        return this.client.rest.delete(`${service}/${DIVIDE}`, {
+        return this.client.rest.delete(`${service}${DIVIDE}`, {
             ...this.makeParam(service, resource),
             is_to_user_group,
             access_mode,
@@ -41,7 +41,9 @@ export class DivideApiService {
         id: number,
         access_mode: PermissionType,
     ): Promise<UserDivide> {
-        return this.client.rest.put(`${service}/divide/${id}`, { access_mode });
+        return this.client.rest.put(`${service}${DIVIDE}/${id}`, {
+            access_mode,
+        });
     }
 
     divideCreate(
@@ -57,7 +59,7 @@ export class DivideApiService {
             access_mode,
         };
 
-        return this.client.rest.post(`${service}/${DIVIDE}`, data);
+        return this.client.rest.post(`${service}${DIVIDE}`, data);
     }
 
     divideUsers(
@@ -65,7 +67,7 @@ export class DivideApiService {
         resource: DivideResourceType,
         params: RequestUserDivideParams,
     ): Promise<DivideResponseList> {
-        return this.client.rest.get(`${service}/${DIVIDE}/users`, {
+        return this.client.rest.get(`${service}${DIVIDE}/users`, {
             ...this.makeParam(service, resource),
             ...params,
         });

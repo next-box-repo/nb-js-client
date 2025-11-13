@@ -22,6 +22,7 @@ import {
     StorageTrashApiService,
     UserApiService,
     VersionApiService,
+    StorageCommentApiService,
 } from '../api';
 
 import { NbAppState, NbClientParams } from '../types/base';
@@ -48,6 +49,7 @@ export class Client {
     NotificationApiService = new NotificationApiService(this);
     RoleApiService = new RoleApiService(this);
     ShareApiService = new ShareApiService(this);
+    StorageCommentApiService = new StorageCommentApiService(this);
     StorageElementApiService = new StorageElementApiService(
         this,
         this.FcaApiService,

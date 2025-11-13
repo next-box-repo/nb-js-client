@@ -8,12 +8,17 @@ import {
     StorageElementType,
     StorageRouteData,
     SizeBySection,
+    DivideResourceParams,
+    ResourceAccess,
+    Quota,
+    StorageElementFileInfo,
 } from '../types';
 import { StorageElement } from '../types';
 import { FcaApiService } from './fca-api.service';
 
 const STORAGE = '/storage';
 const STORAGE_ELEMENT = `${STORAGE}/element`;
+const STORAGE_DIVIDE_RESOURCE = `${STORAGE_ELEMENT}/divide/resource`;
 const STORAGE_ELEMENT_MOVE = `${STORAGE_ELEMENT}/move`;
 const STORAGE_ELEMENT_COPY = `${STORAGE_ELEMENT}/copy`;
 const STORAGE_ELEMENT_SECTION_SIZE = `${STORAGE_ELEMENT}/content_type_size`;
@@ -36,14 +41,26 @@ export class StorageElementApiService {
         path: string;
         divide_id?: number;
         file_version_id?: string;
+        zip_entry_path?: string;
     }): Promise<StorageElement> {
         if (!parseInt(params.divide_id?.toString() || '')) {
             delete params.divide_id;
         }
 
         if (!params.file_version_id) delete params.file_version_id;
+        if (!params.zip_entry_path) delete params.zip_entry_path;
 
         return this.client.rest.get(STORAGE_ELEMENT, params);
+    }
+
+    fileInfo(
+        id: string,
+        file_version_id?: string,
+    ): Promise<StorageElementFileInfo> {
+        return this.client.rest.get(
+            `${STORAGE_ELEMENT}/${id}`,
+            file_version_id ? { file_version_id } : {},
+        );
     }
 
     combineInfo({
@@ -51,12 +68,13 @@ export class StorageElementApiService {
         rootId,
         path,
         file_version_id,
+        zip_entry_path,
     }: StorageRouteData): Promise<StorageElement> {
         if (root === StorageRoot.fca && rootId) {
             return this.fcaApiService.info(rootId, path);
         }
 
-        return this.info({ path, divide_id: rootId, file_version_id });
+        return this.info({ path, divide_id: rootId, file_version_id, zip_entry_path });
     }
 
     size(data: StorageItemSizeParams): Promise<number> {
@@ -112,7 +130,7 @@ export class StorageElementApiService {
         params: StorageElementPasteParams,
         from: StorageRoot,
         to: StorageRoot,
-    ): Promise<void> {
+    ): Promise<CopyResponse> {
         const { from_divide_id, to_divide_id } = params;
 
         let fcaParams: StorageElementPasteParams = {
@@ -218,6 +236,16 @@ export class StorageElementApiService {
     }): Promise<SizeBySection[] | null> {
         return this.client.rest.get(STORAGE_ELEMENT_SECTION_SIZE, params);
     }
+
+    getDivideResources(
+        params: DivideResourceParams,
+    ): Promise<ResponseList<ResourceAccess>> {
+        return this.client.rest.get(STORAGE_DIVIDE_RESOURCE, params);
+    }
+
+    getQuota(params?: { user_id: number }): Promise<Quota> {
+        return this.client.rest.get(`${STORAGE_ELEMENT}/user_size`, params);
+    }
 }
 
 export interface RequestStorageListParams extends RequestBaseParams {
@@ -234,6 +262,9 @@ export interface RequestStorageListParams extends RequestBaseParams {
     from_sharing_token?: string;
     from_path?: string;
     from_sharing_password?: string;
+    without_content_work_dir?: boolean;
+    is_search_dir?: null | boolean;
+    zip_prefix?: string;
 }
 
 export interface StorageElementPasteParams {
@@ -249,6 +280,11 @@ export type CreateStorageElementParams = Pick<
 > & {
     is_work_dir?: boolean;
 };
+
+export interface CopyResponse {
+    not_copied?: StorageElement[];
+    rows: StorageElement[];
+}
 
 //NOTE: is_divided и is_favorite нужно выставлять только если по всему корню размер
 export interface StorageItemSizeParams {

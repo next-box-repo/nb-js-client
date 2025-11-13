@@ -14,6 +14,7 @@ export * from './logstash-api.service';
 export * from './notification-api.service';
 export * from './role-api.service';
 export * from './share-api.service';
+export * from './storage-comment-api.service';
 export * from './storage-element-api.service';
 export * from './storage-files-api.service';
 export * from './storage-instance-api.service';

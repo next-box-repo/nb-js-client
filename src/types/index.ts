@@ -2,6 +2,7 @@ export * from './access-rights';
 export * from './access-token';
 export * from './auth';
 export * from './base';
+export * from './comment';
 export * from './connection';
 export * from './discovery';
 export * from './extension';
