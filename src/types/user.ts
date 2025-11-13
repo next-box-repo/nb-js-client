@@ -19,6 +19,7 @@ export interface User {
     type: UserType;
     role_id: number | null;
     phone?: string;
+    used_size?: number;
 }
 
 export type UserLabel = Pick<
