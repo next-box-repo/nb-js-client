@@ -89,6 +89,7 @@ export interface ExtensionExternalInList {
     version: string;
     tags: string[];
     links: string[];
+    recommended: boolean;
 }
 
 export interface ExtensionExternal extends ExtensionExternalInList {
