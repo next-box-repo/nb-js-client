@@ -105,41 +105,23 @@ export class ExtensionsApiService {
         };
     }
 
-    install(extension: ExtensionExternalInList): void {
-        let abortInstall: () => void;
-
-        const promise = this.apiService.extensionsApiService.install(
-            (event) => {
-                console.log('install progress', event); // тут твой прогресс
+    install(
+        onProgress: OnUploadProgress,
+        uniq_key: string,
+        version: string,
+    ): Promise<any> {
+        return this.client.rest.post(
+            `${EXTENSIONS}/site`,
+            {
+                uniq_key,
+                version,
             },
-            extension.uniq_key,
-            extension.version,
-        );
-
-        this.install$ = from(promise).pipe(
-            switchMap(() => {
-                const isMatches = this.rows().find(
-                    (row) => row.uniq_key === extension.uniq_key,
-                );
-
-                this.pageService.toastMessage.next({
-                    severity: 'success',
-                    summary: isMatches
-                        ? translate(`system.extensions.update`)
-                        : translate(`system.extensions.installed`),
-                });
-
-                this.clear();
-
-                return this.getTagsWithList().pipe(
-                    tap(() =>
-                        this.changeExtensionsInStore(
-                            extension,
-                            ActionTypes.Install,
-                        ),
-                    ),
-                );
-            }),
+            {
+                version: BASE_URL_V2,
+                onUploadProgress: (event) => {
+                    onProgress(event);
+                },
+            },
         );
     }
 
