@@ -135,7 +135,7 @@ export class StorageElementApiService {
         params: StorageElementPasteParams,
         from: StorageRoot,
         to: StorageRoot,
-    ): Promise<void> {
+    ): Promise<void | CopyResponse> {
         const { from_divide_id, to_divide_id } = params;
 
         let fcaParams: StorageElementPasteParams = {
