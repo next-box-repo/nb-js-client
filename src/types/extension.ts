@@ -90,6 +90,8 @@ export interface ExtensionExternalInList {
     tags: string[];
     links: string[];
     downloads: number;
+    liked: false;
+    likes: number;
     recommended: boolean;
 }
 
