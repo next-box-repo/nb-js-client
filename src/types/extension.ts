@@ -89,6 +89,7 @@ export interface ExtensionExternalInList {
     version: string;
     tags: string[];
     links: string[];
+    downloads: number;
     recommended: boolean;
 }
 
