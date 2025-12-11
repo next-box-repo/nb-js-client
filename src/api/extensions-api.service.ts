@@ -105,14 +105,23 @@ export class ExtensionsApiService {
         };
     }
 
-    install(uniq_key: string, version: string): Promise<any> {
+    install(
+        onProgress: OnUploadProgress,
+        uniq_key: string,
+        version: string,
+    ): Promise<any> {
         return this.client.rest.post(
             `${EXTENSIONS}/site`,
             {
                 uniq_key,
                 version,
             },
-            { version: BASE_URL_V2 },
+            {
+                version: BASE_URL_V2,
+                onUploadProgress: (event) => {
+                    onProgress(event);
+                },
+            },
         );
     }
 

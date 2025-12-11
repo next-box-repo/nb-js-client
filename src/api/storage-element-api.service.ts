@@ -74,7 +74,12 @@ export class StorageElementApiService {
             return this.fcaApiService.info(rootId, path);
         }
 
-        return this.info({ path, divide_id: rootId, file_version_id, zip_entry_path });
+        return this.info({
+            path,
+            divide_id: rootId,
+            file_version_id,
+            zip_entry_path,
+        });
     }
 
     size(data: StorageItemSizeParams): Promise<number> {
@@ -130,7 +135,7 @@ export class StorageElementApiService {
         params: StorageElementPasteParams,
         from: StorageRoot,
         to: StorageRoot,
-    ): Promise<CopyResponse> {
+    ): Promise<void> {
         const { from_divide_id, to_divide_id } = params;
 
         let fcaParams: StorageElementPasteParams = {
