@@ -48,4 +48,5 @@ export interface ExtensionExternalReadmeParams {
 export interface ExtensionExternalListParams extends RequestBaseParams {
     lang: string;
     search_field?: string;
+    recommended?: boolean;
 }

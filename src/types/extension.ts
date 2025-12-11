@@ -89,6 +89,15 @@ export interface ExtensionExternalInList {
     version: string;
     tags: string[];
     links: string[];
+    downloads: number;
+    likes: number;
+    liked: false;
+    recommended: boolean;
+    iconTags: TagIconExtension[] | null;
+}
+export interface TagIconExtension {
+    tag: string;
+    icon: string | null;
 }
 
 export interface ExtensionExternal extends ExtensionExternalInList {
