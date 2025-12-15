@@ -277,6 +277,7 @@ export interface StorageElementPasteParams {
     overwrite: boolean;
     from_divide_id?: number | null;
     to_divide_id?: number | null;
+    resolve_conflict_duplicate?: boolean;
 }
 
 export type CreateStorageElementParams = Pick<
