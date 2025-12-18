@@ -119,6 +119,7 @@ export interface StorageElementPaste {
     from_path: string;
     to_path: string;
     zip_entry_path?: string;
+    from_file_version_id?: string;
 }
 
 export interface StorageElementHistory {
