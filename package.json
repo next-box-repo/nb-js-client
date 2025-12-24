@@ -1,6 +1,6 @@
 {
     "name": "nb-js-client",
-    "version": "1.0.24",
+    "version": "1.0.25",
     "main": "dist/bundle.cjs.js",
     "module": "dist/bundle.esm.js",
     "files": [
