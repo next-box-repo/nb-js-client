@@ -59,6 +59,9 @@ export enum AccessRights {
     // Настройки
     SettingsRead = 'settings_read', // Просмотр
     SettingsWrite = 'settings_write', // Управление
+
+    // Демо-стенд
+    DemoAdmin = 'demo_admin', // Просмотр и управление демо-стендом
 }
 
 export const CONNECTIONS_PERMISSION = [
