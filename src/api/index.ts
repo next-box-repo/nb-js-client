@@ -20,5 +20,6 @@ export * from './storage-files-api.service';
 export * from './storage-instance-api.service';
 export * from './storage-share-api.service';
 export * from './storage-trash-api.service';
+export * from './tags-api.service';
 export * from './user-api.service';
 export * from './version-api.service';

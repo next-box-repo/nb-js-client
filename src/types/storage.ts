@@ -1,4 +1,5 @@
 import { PermissionType, RestrictionStatus } from './divide';
+import { Tag } from './tags';
 
 export interface StorageElement {
     access_mode?: PermissionType;
@@ -31,6 +32,7 @@ export interface StorageElement {
     uncompressed?: number;
     modified?: string;
     is_dir?: boolean;
+    tags?: Tag[];
 }
 
 export type StorageDivideElement = Pick<
