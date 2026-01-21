@@ -45,6 +45,8 @@ export interface ShareInfo extends DivideParams {
     resource: string;
     file_info: StorageElement;
     short_url: string;
+    comment: string;
+    comment_date?: string;
 }
 
 export interface UnionRestriction extends UserDivide, ShareInfo {}
