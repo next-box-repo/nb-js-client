@@ -11,7 +11,7 @@ import {
 
 const LOGS = '/logs';
 const LOGS_USERS = `${LOGS}/users`;
-const ACTIONS = `${LOGS_USERS}/actions`;
+const LOGS_USERS_ACTIONS = `${LOGS_USERS}/actions`;
 
 export class LogstashApiService {
     constructor(private client: Client) {}
@@ -25,7 +25,7 @@ export class LogstashApiService {
     getLogsActions(
         params: RequestLogsActionsParams,
     ): Promise<ResponseList<string>> {
-        return this.client.rest.get(`${ACTIONS}`, params);
+        return this.client.rest.get(`${LOGS_USERS_ACTIONS}`, params);
     }
 }
 
