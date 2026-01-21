@@ -10,3 +10,9 @@ export interface UsersLog {
     description: string;
     ip: string;
 }
+
+export interface RequestLogsActionsParams {
+    limit?: number;
+    offset?: number;
+    search_field?: string;
+}
