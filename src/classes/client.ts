@@ -23,6 +23,7 @@ import {
     UserApiService,
     VersionApiService,
     StorageCommentApiService,
+    TagsApiService,
 } from '../api';
 
 import { NbAppState, NbClientParams } from '../types/base';
@@ -58,6 +59,7 @@ export class Client {
     StorageInstanceApiService = new StorageInstanceApiService(this);
     StorageShareApiService = new StorageShareApiService(this);
     StorageTrashApiService = new StorageTrashApiService(this);
+    TagsApiService = new TagsApiService(this);
     UserApiService = new UserApiService(this);
     VersionApiService = new VersionApiService(this);
 

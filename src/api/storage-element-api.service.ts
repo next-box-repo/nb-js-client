@@ -21,6 +21,7 @@ const STORAGE_ELEMENT = `${STORAGE}/element`;
 const STORAGE_DIVIDE_RESOURCE = `${STORAGE_ELEMENT}/divide/resource`;
 const STORAGE_ELEMENT_MOVE = `${STORAGE_ELEMENT}/move`;
 const STORAGE_ELEMENT_COPY = `${STORAGE_ELEMENT}/copy`;
+const STORAGE_ELEMENT_COPY_SYNC = `${STORAGE_ELEMENT}/copy_sync`;
 const STORAGE_ELEMENT_SECTION_SIZE = `${STORAGE_ELEMENT}/content_type_size`;
 
 const DISK = '/disk';
@@ -135,6 +136,7 @@ export class StorageElementApiService {
         params: StorageElementPasteParams,
         from: StorageRoot,
         to: StorageRoot,
+        sync = false,
     ): Promise<void> {
         const { from_divide_id, to_divide_id } = params;
 
@@ -179,7 +181,8 @@ export class StorageElementApiService {
         }
 
         // в моем диске и в доступных мне
-        return this.client.rest.post(STORAGE_ELEMENT_COPY, params);
+        const path = sync ? STORAGE_ELEMENT_COPY_SYNC : STORAGE_ELEMENT_COPY;
+        return this.client.rest.post(path, params);
     }
 
     pasteFromShared(
