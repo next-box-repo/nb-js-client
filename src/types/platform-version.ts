@@ -1,14 +1,11 @@
-export interface Versions {
-    current_version: {
-        number: string,
-        name: string,
-        date: Date,
-        url_changelog?: string
-    },
-    last_version: {
-        number: string,
-        name: string,
-        date: Date,
-        url_changelog?: string
-    }
+export interface PlatformVersions {
+    current_version: Version,
+    last_version: Version,
+}
+
+export interface Version {
+    number: string,
+    name: string,
+    date: Date,
+    url_changelog?: string
 }
