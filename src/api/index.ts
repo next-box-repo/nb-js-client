@@ -22,3 +22,4 @@ export * from './storage-share-api.service';
 export * from './storage-trash-api.service';
 export * from './user-api.service';
 export * from './version-api.service';
+export * from './platform-version-api.service'

@@ -23,6 +23,7 @@ import {
     UserApiService,
     VersionApiService,
     StorageCommentApiService,
+    PlatformVersionApiService,
 } from '../api';
 
 import { NbAppState, NbClientParams } from '../types/base';
@@ -60,6 +61,7 @@ export class Client {
     StorageTrashApiService = new StorageTrashApiService(this);
     UserApiService = new UserApiService(this);
     VersionApiService = new VersionApiService(this);
+    PlatformVersionApiService = new PlatformVersionApiService(this);
 
     tokenUpdate = new TokenUpdate();
     rest = new Rest(this, this.tokenUpdate);
