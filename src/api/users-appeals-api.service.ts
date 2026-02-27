@@ -1,5 +1,6 @@
 import { Client } from "../classes";
 import { ResponseItem, ResponseList } from "../types";
+import { Appeal, Category } from "../types/users-appeals";
 
 const APPEALS = '/users/appeals';
 const CATEGORY = `${APPEALS}/category`;
@@ -33,14 +34,4 @@ export class UsersAppealsApiService {
     }    
 }
 
-export interface Category {
-    code: string;
-    name: string;
-}
 
-export interface Appeal {
-    category_code: string;   
-    description: string;
-    id_files?: string[];
-    subcategory_code?: string;
-}
