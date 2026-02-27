@@ -33,5 +33,3 @@ export class UsersAppealsApiService {
         return this.client.rest.post(APPEALS, data);
     }    
 }
-
-
