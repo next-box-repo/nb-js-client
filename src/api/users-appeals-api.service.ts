@@ -1,5 +1,5 @@
 import { Client } from "../classes";
-import { ResponseList } from "../types";
+import { ResponseItem, ResponseList } from "../types";
 
 const APPEALS = '/users/appeals';
 const CATEGORY = `${APPEALS}/category`;
@@ -17,7 +17,7 @@ export class UsersAppealsApiService {
         return this.client.rest.get(SUBCATEGORY, {category_code});
     }
     
-    uploadFile(file: File): Promise<{ row: string }> {
+    uploadFile(file: File): Promise<ResponseItem<string>> {
         const formData = new FormData();
         formData.append('file', file);
 
