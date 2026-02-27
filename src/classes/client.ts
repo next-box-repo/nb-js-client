@@ -21,6 +21,7 @@ import {
     StorageShareApiService,
     StorageTrashApiService,
     UserApiService,
+    UsersAppealsApiService,
     VersionApiService,
     StorageCommentApiService,
     PlatformVersionApiService,
@@ -60,6 +61,7 @@ export class Client {
     StorageShareApiService = new StorageShareApiService(this);
     StorageTrashApiService = new StorageTrashApiService(this);
     UserApiService = new UserApiService(this);
+    UsersAppealsApiService = new UsersAppealsApiService(this);
     VersionApiService = new VersionApiService(this);
     PlatformVersionApiService = new PlatformVersionApiService(this);
 
