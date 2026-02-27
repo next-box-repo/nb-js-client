@@ -1,6 +1,6 @@
 import { Client } from "../classes";
-import { ResponseItem, ResponseList } from "../types";
-import { Appeal, Category } from "../types/users-appeals";
+import { Appeal, Category, ResponseItem, ResponseList } from "../types";
+
 
 const APPEALS = '/users/appeals';
 const CATEGORY = `${APPEALS}/category`;

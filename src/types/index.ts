@@ -16,6 +16,7 @@ export * from './permission';
 export * from './request';
 export * from './restriction';
 export * from './user';
+export * from './users-appeals';
 export * from './user-log';
 export * from './setting';
 export * from './storage';
