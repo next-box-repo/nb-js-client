@@ -25,6 +25,7 @@ import {
     VersionApiService,
     StorageCommentApiService,
     PlatformVersionApiService,
+    TagsApiService,
 } from '../api';
 
 import { NbAppState, NbClientParams } from '../types/base';
@@ -57,6 +58,7 @@ export class Client {
         this.FcaApiService,
     );
     StorageFilesApiService = new StorageFilesApiService(this);
+    TagsApiService = new TagsApiService(this);
     StorageInstanceApiService = new StorageInstanceApiService(this);
     StorageShareApiService = new StorageShareApiService(this);
     StorageTrashApiService = new StorageTrashApiService(this);
