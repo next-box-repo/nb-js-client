@@ -1,4 +1,5 @@
 import { PermissionType, RestrictionStatus } from './divide';
+import { Tag } from './tag';
 
 export interface StorageElement {
     access_mode?: PermissionType;
@@ -25,6 +26,7 @@ export interface StorageElement {
     id?: string;
     version?: StorageElementVersion;
     to_user_group_id?: number;
+    tags?: Tag[];
 
     zip_entry_path?: string;
     compressed?: number;

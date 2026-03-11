@@ -21,4 +21,5 @@ export * from './user-log';
 export * from './setting';
 export * from './storage';
 export * from './storage-trash';
-export * from './platform-version'
+export * from './platform-version';
+export * from './tag';
