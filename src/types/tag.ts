@@ -1,9 +1,9 @@
 export interface Tag {
-    create_date: string;
-    id: number;
+    create_date?: string;
+    id?: number;
     name: string;
     type: TagTypes;
-    update_date: string;
+    update_date?: string;
 }
 
 export interface AssignTagItemParam {
