@@ -86,6 +86,7 @@ export interface UserGroup {
     update_date: string;
     icon: string;
     icon_color: string;
+    is_default: boolean;
 }
 
 export interface UserRole {

@@ -23,6 +23,10 @@ export class GroupApiService {
         return this.client.rest.get(`${GROUPS}/${id}/users`, params);
     }
 
+    default(): Promise<ResponseItem<UserGroup>> {
+        return this.client.rest.get(`${GROUPS}/default`);
+    }
+
     create(data: CreateUserGroupParams): Promise<ResponseItem<UserGroup>> {
         return this.client.rest.post(GROUPS, data);
     }
@@ -46,6 +50,10 @@ export interface RequestUserGroupListParams extends RequestBaseParams {
     search_field?: string;
 }
 
-export type CreateUserGroupParams = Pick<UserGroup, 'name' | 'description'> & {
+export type CreateUserGroupParams = Pick<
+    UserGroup,
+    'name' | 'description' | 'icon' | 'icon_color' | 'is_default'
+> & {
     users?: number[];
+    forced_set_default_group: boolean;
 };
