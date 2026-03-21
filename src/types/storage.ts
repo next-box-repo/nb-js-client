@@ -95,6 +95,7 @@ export enum StorageRoot {
     my = 'my',
     fca = 'fca',
     divide = 'divide',
+    shared_by_me = 'shared_by_me',
     share = 'share',
     favorite = 'favorite',
     trash = 'trash',
