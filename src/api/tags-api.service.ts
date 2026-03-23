@@ -11,6 +11,10 @@ export class TagsApiService {
         return this.client.rest.get(TAG_LIST, params);
     }
 
+    get(id: number): Promise<Tag> {
+        return this.client.rest.get(`${TAG}/${id}`);
+    }
+
     assign(id: number, items: AssignTagItemParam[]): Promise<void> {
         return this.client.rest.post(`${TAG}/${id}/assign`, { items });
     }
