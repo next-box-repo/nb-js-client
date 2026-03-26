@@ -14,6 +14,8 @@ export interface StorageElement {
     full_path: string;
 
     is_favorite: boolean;
+    is_hidden: boolean;
+
     last_used_extension?: string;
     name: string;
     owner_id: number;

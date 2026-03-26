@@ -95,6 +95,14 @@ export class DivideApiService {
         return this.client.rest.put(`${DIVIDE_RESTRICTIONS}/${token}`, data);
     }
 
+    hide(data: { divide_ids: number[] }): Promise<void> {
+        return this.client.rest.post(`${DIVIDE}/hide`, data);
+    }
+
+    unhide(data: { divide_ids: number[] }): Promise<void> {
+        return this.client.rest.post(`${DIVIDE}/unhide`, data);
+    }
+
     private makeParam(
         service: DivideScope,
         resource: DivideResourceType,
