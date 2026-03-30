@@ -18,7 +18,8 @@ import { FcaApiService } from './fca-api.service';
 
 const STORAGE = '/storage';
 const STORAGE_ELEMENT = `${STORAGE}/element`;
-const STORAGE_DIVIDE_RESOURCE = `${STORAGE_ELEMENT}/divide/resource`;
+const STORAGE_DIVIDE = `${STORAGE_ELEMENT}/divide`;
+const STORAGE_DIVIDE_RESOURCE = `${STORAGE_DIVIDE}/resource`;
 const STORAGE_ELEMENT_MOVE = `${STORAGE_ELEMENT}/move`;
 const STORAGE_ELEMENT_COPY = `${STORAGE_ELEMENT}/copy`;
 const STORAGE_ELEMENT_SECTION_SIZE = `${STORAGE_ELEMENT}/content_type_size`;
@@ -250,6 +251,14 @@ export class StorageElementApiService {
 
     getQuota(params?: { user_id: number }): Promise<Quota> {
         return this.client.rest.get(`${STORAGE_ELEMENT}/user_size`, params);
+    }
+
+    hide(data: { divide_ids: number[] }): Promise<void> {
+        return this.client.rest.post(`${STORAGE_DIVIDE}/hide`, data);
+    }
+
+    unhide(data: { divide_ids: number[] }): Promise<void> {
+        return this.client.rest.post(`${STORAGE_DIVIDE}/unhide`, data);
     }
 }
 
