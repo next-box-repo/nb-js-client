@@ -22,7 +22,7 @@ const USERS_ME_AVATARS = `${USERS_ME}/avatars`;
 const USERS_ME_SESSIONS = `${USERS_ME}/sessions`;
 const USERS_ME_TOKEN = `${USERS_ME}/tokens`;
 const USERS_ME_PARAMS = `${USERS_ME}/params`;
-const USERS_ME_APP_PASSWORDS = `${USERS_ME}/app-passwords`
+const USERS_ME_APP_PASSWORDS = `${USERS_ME}/app-passwords`;
 const USERS_CHANGE_MY_PASSWORD = `${USERS_ME}/change-password`;
 const USERS_INITIAL = `${USERS}/initial`;
 const USERS_PHONE = `${USERS_ME}/phone`;
@@ -43,7 +43,11 @@ export class UserApiService {
         return this.client.rest.get(USERS + `/${id}`);
     }
 
-    create(data: CreateUserParams): Promise<ResponseItem<User>> {
+    create(
+        data: CreateUserParams & {
+            send_mail?: boolean;
+        },
+    ): Promise<ResponseItem<User>> {
         return this.client.rest.post(USERS, data);
     }
 
@@ -91,7 +95,7 @@ export class UserApiService {
 
     changeUsersPassword(
         id: number,
-        data: { new_password: string },
+        data: { new_password: string; send_mail?: boolean },
     ): Promise<{ success: boolean }> {
         return this.client.rest.put(`${USERS}/${id}/change-password`, data);
     }
@@ -150,16 +154,21 @@ export class UserApiService {
         return this.client.rest.post(`${USERS_CONFIRM_PHONE}/${code}`);
     }
 
-    appPasswordsList(params: RequestBaseParams): Promise<ResponseList<UserAppPasswords>> {
+    appPasswordsList(
+        params: RequestBaseParams,
+    ): Promise<ResponseList<UserAppPasswords>> {
         return this.client.rest.get(USERS_ME_APP_PASSWORDS, params);
     }
 
-    createAppPasswords(data: {name: string, type: UserAppType}): Promise<UserAppPasswordInfo> {
+    createAppPasswords(data: {
+        name: string;
+        type: UserAppType;
+    }): Promise<UserAppPasswordInfo> {
         return this.client.rest.post(USERS_ME_APP_PASSWORDS, data);
     }
 
     deleteAppPasswords(id: number): Promise<void> {
-        return this.client.rest.delete(`${USERS_ME_APP_PASSWORDS}/${id}`)
+        return this.client.rest.delete(`${USERS_ME_APP_PASSWORDS}/${id}`);
     }
 }
 

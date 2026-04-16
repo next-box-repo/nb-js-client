@@ -15,9 +15,11 @@ export enum DivideScope {
 export type DivideResourceType = string | number;
 
 export enum PermissionType {
-    CLOSE = '',
-    READ = 'r',
-    WRITE = 'rw',
+    Close = '',
+    Read = 'r',
+    Write = 'rw',
+    Full = 'full',
+    Admin = 'admin',
 }
 
 export enum RestrictionStatus {
