@@ -5,16 +5,19 @@ import {
     DivideResponseList,
     DivideScope,
     PermissionType,
+    RequestTagGroupsParams,
     RequestUserDivideParams,
     ResponseItem,
     ResponseList,
     RestrictionModeKey,
+    TagGroup,
     UnionRestriction,
     UserDivide,
 } from '../types';
 
 const DIVIDE = '/divide';
 const DIVIDE_RESTRICTIONS = `${DIVIDE}/restrictions`;
+const DIVIDE_TAG_GROUP = `${DIVIDE}/tag_group`;
 
 export class DivideApiService {
     constructor(private client: Client) {}
@@ -71,6 +74,15 @@ export class DivideApiService {
             ...this.makeParam(service, resource),
             ...params,
         });
+    }
+
+    divideTagGroupList(
+        params: RequestTagGroupsParams,
+    ): Promise<ResponseList<TagGroup>> {
+        return this.client.rest.get(
+            `${DivideScope.Storage}${DIVIDE_TAG_GROUP}`,
+            params,
+        );
     }
 
     getRestriction(id: number): Promise<UnionRestriction> {

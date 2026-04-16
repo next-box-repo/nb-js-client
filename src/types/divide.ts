@@ -1,5 +1,10 @@
 import { RequestBaseParams, ResponseList } from './base';
-import { StorageElement, StorageElementType } from './storage';
+import {
+    StorageElement,
+    StorageElementContentType,
+    StorageElementType,
+} from './storage';
+import { TagTypes } from './tag';
 import { UserInfo } from './user';
 
 export enum DivideScope {
@@ -120,4 +125,27 @@ export interface ResourceAccess {
     to_user_id: number;
     type: string;
     user_info: UserInfo;
+}
+
+export interface RequestTagGroupsParams extends RequestBaseParams {
+    access_mode?: PermissionType;
+    content_types?: StorageElementContentType[];
+    from_user_id?: number;
+    from_user_ids?: number[];
+    min_size?: number;
+    max_size?: number;
+    search?: string;
+    show_hidden?: boolean;
+    status?: RestrictionStatus;
+    tag_ids?: number[];
+    to_user_group_ids?: number;
+    type?: StorageElementType;
+    without_tags?: boolean;
+}
+
+export interface TagGroup {
+    count: number;
+    tag_id: number;
+    tag_name: string;
+    tag_type: TagTypes;
 }

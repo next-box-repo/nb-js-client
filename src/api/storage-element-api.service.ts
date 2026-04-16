@@ -282,6 +282,7 @@ export interface RequestStorageListParams extends RequestBaseParams {
     is_search_dir?: null | boolean;
     zip_prefix?: string;
     show_hidden?: boolean;
+    without_tags?: boolean;
 }
 
 export interface StorageElementPasteParams {
