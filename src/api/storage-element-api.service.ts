@@ -283,6 +283,7 @@ export interface RequestStorageListParams extends RequestBaseParams {
     zip_prefix?: string;
     show_hidden?: boolean;
     without_tags?: boolean;
+    tag_ids?: number[];
 }
 
 export interface StorageElementPasteParams {
