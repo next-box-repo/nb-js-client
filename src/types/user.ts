@@ -18,6 +18,7 @@ export interface User {
     status: UserStatus;
     type: UserType;
     role_id: number | null;
+    is_active: boolean;
     phone?: string;
     used_size?: number;
 }
