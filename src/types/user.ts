@@ -31,6 +31,7 @@ export type UserLabel = Pick<
     | 'middle_name'
     | 'last_name'
     | 'avatar_path'
+    | 'is_active'
 >;
 
 export interface UserInfo extends UserLabel {
