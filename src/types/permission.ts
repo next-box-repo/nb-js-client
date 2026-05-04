@@ -10,4 +10,5 @@ export interface PermissionItem {
     id: number;
     priority: number;
     title: Lang;
+    key: string;
 }
