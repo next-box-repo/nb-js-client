@@ -106,6 +106,7 @@ export interface StorageRouteData {
     path: string;
     root: StorageRoot;
     rootId: number;
+    id?: string;
     divideDir?: string;
     share_token?: string;
     share_password?: string;
