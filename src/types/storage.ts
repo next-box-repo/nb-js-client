@@ -71,6 +71,14 @@ export interface StorageElementFileInfo {
     file_info: StorageElement | null;
     divide_info: StorageDivideElement | null;
     sharing_info: StorageSharingElement | null;
+    branch_elements: StorageElementTree[];
+}
+
+export interface StorageElementTree {
+    id: string;
+    name: string;
+    path: string;
+    type: StorageElementType;
 }
 
 export enum StorageElementType {
