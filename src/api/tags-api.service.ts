@@ -1,5 +1,5 @@
 import { Client } from '../classes';
-import { AssignTagItemParam, Tag, TagTypes } from '../types';
+import { AssignTagItemParam, Tag, ColorTypes } from '../types';
 
 const TAG = '/tag';
 const TAG_LIST = `${TAG}/list`;
@@ -42,5 +42,5 @@ export interface RequestTagParams {
 
 export interface TagCreateParams {
     name: string;
-    type: TagTypes;
+    type: ColorTypes;
 }

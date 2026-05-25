@@ -23,3 +23,4 @@ export * from './storage';
 export * from './storage-trash';
 export * from './platform-version';
 export * from './tag';
+export * from './space';
