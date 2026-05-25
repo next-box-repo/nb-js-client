@@ -13,7 +13,7 @@ export interface Space {
 export enum SpacePermission {
     Read = 'r',
     Write = 'rw',
-    ReadWriteDelete = 'rwd',
+    Full = 'rwd',
     SpaceManage = 'space_manage',
 }
 
