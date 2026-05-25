@@ -79,6 +79,8 @@ export interface StorageElementTree {
     name: string;
     path: string;
     type: StorageElementType;
+    parent_id?: string;
+    file_name_ext?: string;
 }
 
 export enum StorageElementType {
