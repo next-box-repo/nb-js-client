@@ -51,3 +51,14 @@ export enum EngineType {
     PostMessage = 'postmessage',
     Empty = '',
 }
+
+export enum ColorTypes {
+    Yellow = 'yellow',
+    Success = 'success',
+    Critical = 'critical',
+    Warning = 'warning',
+    Brand = 'brand',
+    Purple = 'purple',
+    Primary = 'primary',
+    Gray = 'gray',
+}

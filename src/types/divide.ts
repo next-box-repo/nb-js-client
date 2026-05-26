@@ -1,10 +1,9 @@
-import { RequestBaseParams, ResponseList } from './base';
+import { ColorTypes, RequestBaseParams, ResponseList } from './base';
 import {
     StorageElement,
     StorageElementContentType,
     StorageElementType,
 } from './storage';
-import { TagTypes } from './tag';
 import { UserInfo } from './user';
 
 export enum DivideScope {
@@ -147,5 +146,5 @@ export interface TagGroup {
     count: number;
     tag_id: number;
     tag_name: string;
-    tag_type: TagTypes;
+    tag_type: ColorTypes;
 }
