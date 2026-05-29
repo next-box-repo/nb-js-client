@@ -17,8 +17,8 @@ export enum PermissionType {
     Close = '',
     Read = 'r',
     Write = 'rw',
-    Full = 'full',
-    Admin = 'admin',
+    Full = 'rwd',
+    SpaceManage = 'space_manage',
 }
 
 export enum RestrictionStatus {

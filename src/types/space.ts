@@ -1,3 +1,5 @@
+import { PermissionType } from './divide';
+
 export interface Space {
     can_manage?: boolean;
     create_date: string;
@@ -10,15 +12,8 @@ export interface Space {
     updated_by: number;
 }
 
-export enum SpacePermission {
-    Read = 'r',
-    Write = 'rw',
-    Full = 'rwd',
-    SpaceManage = 'space_manage',
-}
-
 export interface SpaceAccess {
-    access_mode: SpacePermission;
+    access_mode: PermissionType;
     to_user_group_id?: number;
     to_user_id?: number;
 }
@@ -30,4 +25,14 @@ export interface SpaceAdmin {
     last_name?: string;
     login?: string;
     middle_name?: string;
+}
+
+export interface SpaceAccessProvide {
+    access_mode: PermissionType;
+    create_date: string;
+    id: number;
+    space_id: number;
+    to_user_group_id?: number;
+    to_user_id?: number;
+    update_date: string;
 }
