@@ -8,7 +8,7 @@ import {
 } from '../types/space';
 
 const SPACES = '/spaces';
-const SPACES_ACCESS = '/spaces/access';
+const SPACES_ACCESS = `${SPACES}/access`;
 
 export class SpaceApiService {
     constructor(private client: Client) {}
@@ -42,7 +42,7 @@ export class SpaceApiService {
 
     accessList(
         params: RequestSpaceAccessListParams,
-    ): Promise<SpaceAcessResponseList> {
+    ): Promise<SpaceAcсessResponseList> {
         return this.client.rest.get(SPACES_ACCESS, params);
     }
 
@@ -96,11 +96,10 @@ export interface RequestSpaceAccessParams {
     is_to_user_group?: boolean;
 }
 
-export interface RequestSpaceAccessListParams
-    extends RequestSpaceAccessParams,
-        RequestSpaceAdminsListParams {}
+export type RequestSpaceAccessListParams = RequestSpaceAccessParams &
+    RequestSpaceAdminsListParams;
 
-export type SpaceAcessResponseList = ResponseList<SpaceAccessProvide> & {
+export type SpaceAcсessResponseList = ResponseList<SpaceAccessProvide> & {
     total_r: number;
     total_rw: number;
     total_rwd: number;
