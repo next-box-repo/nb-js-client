@@ -62,6 +62,9 @@ export enum AccessRights {
 
     // Демо-стенд
     DemoAdmin = 'demo_admin', // Просмотр и управление демо-стендом
+
+    // Общие пространства
+    SpaceManage = 'space_manage', // Просмотр и управление общими пространствами
 }
 
 export const CONNECTIONS_PERMISSION = [
