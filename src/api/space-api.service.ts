@@ -37,7 +37,7 @@ export class SpaceApiService {
         id: number,
         params: RequestSpaceAdminsListParams,
     ): Promise<ResponseList<SpaceAdmin>> {
-        return this.client.rest.get(`${SPACES}/${id}`, params);
+        return this.client.rest.get(`${SPACES}/${id}/admins`, params);
     }
 
     accessList(
