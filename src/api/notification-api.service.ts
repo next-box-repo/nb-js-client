@@ -72,5 +72,7 @@ export interface RequestNotificationListParams extends RequestBaseParams {
 }
 
 export type ResponseListNotification = ResponseList<UserNotification> & {
+    total_read: number;
+    total_unread: number;
     total_all: number;
 };
