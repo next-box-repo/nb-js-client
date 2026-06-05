@@ -22,6 +22,8 @@ export interface UserNotification {
 
     from_user_id?: number;
     owner?: UserLabel;
+
+    is_other_content?: boolean;
 }
 
 export enum NotificationEntityType {
@@ -97,6 +99,8 @@ export enum NotificationAction {
     StatusCopyProcess = 'status_copy_process',
 
     Other = 'other',
+
+    Application = 'application',
 }
 
 export enum NotificationRowAction {
