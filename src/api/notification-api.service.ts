@@ -3,7 +3,9 @@ import {
     NotificationActionGroup,
     NotificationRowAction,
     RequestBaseParams,
+    ResponseItem,
     ResponseList,
+    TaskNotification,
     UserNotification,
 } from '../types';
 
@@ -11,6 +13,7 @@ const NOTIFICATIONS = '/notifications';
 const NOTIFICATIONS_ALL = `${NOTIFICATIONS}/all`;
 const NOTIFICATIONS_SUBSCRIPTION = `${NOTIFICATIONS}/subscription`;
 const NOTIFICATIONS_PERMISSION = `${NOTIFICATIONS}/permission`;
+const NOTIFICATIONS_TASK = `${NOTIFICATIONS}/task`;
 
 export class NotificationApiService {
     constructor(private client: Client) {}
@@ -19,6 +22,10 @@ export class NotificationApiService {
         params?: RequestNotificationListParams,
     ): Promise<ResponseListNotification> {
         return this.client.rest.get(NOTIFICATIONS, params);
+    }
+
+    task(id: number): Promise<ResponseItem<TaskNotification>> {
+        return this.client.rest.get(`${NOTIFICATIONS_TASK}/${id}`);
     }
 
     toggleStatus(

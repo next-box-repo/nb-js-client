@@ -24,6 +24,7 @@ export interface UserNotification {
     owner?: UserLabel;
 
     is_other_content?: boolean;
+    task_notification_id?: number;
 }
 
 export enum NotificationEntityType {
@@ -149,4 +150,13 @@ export interface PayloadArchive {
     divide_id?: number;
     dst_divide_id?: number;
     zip_size?: number;
+}
+
+export interface TaskNotification {
+    create_date: string;
+    extension_uniq_key: string;
+    from_user_id: number;
+    id: number;
+    markdown_body?: string | string[] | number[];
+    media_file_id?: string;
 }
