@@ -72,11 +72,11 @@ export class StorageElementApiService {
         zip_entry_path,
     }: StorageRouteData): Promise<StorageElement> {
         if (root === StorageRoot.fca && rootId) {
-            return this.fcaApiService.info(rootId, path);
+            return this.fcaApiService.info(rootId, path!);
         }
 
         return this.info({
-            path,
+            path: path!,
             divide_id: rootId,
             file_version_id,
             zip_entry_path,

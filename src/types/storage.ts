@@ -110,13 +110,15 @@ export enum StorageRoot {
     share = 'share',
     favorite = 'favorite',
     trash = 'trash',
+    spaces = 'spaces',
 }
 
 export interface StorageRouteData {
-    path: string;
     root: StorageRoot;
     rootId: number;
     id?: string;
+    parent_id?: string;
+    path?: string;
     divideDir?: string;
     share_token?: string;
     share_password?: string;

@@ -27,17 +27,15 @@ export class StorageFilesApiService {
         params: { path: string; divide_id?: number },
         data: any,
     ): Promise<ResponseItem<StorageElement>> {
-        const search = new URLSearchParams();
-
-        Object.keys(params).forEach((key) => {
-            // @ts-ignore
-            if (params[key]) search.append(key, params[key]);
-        });
-
-        return this.client.rest.put(
-            `${STORAGE_FILES}?${search.toString()}`,
-            data,
+        const queryParams: Record<string, string> = Object.fromEntries(
+            Object.entries(params)
+                .filter(([, value]) => value !== undefined && value !== null)
+                .map(([key, value]) => [key, String(value)]),
         );
+
+        return this.client.rest.put(STORAGE_FILES, data, {
+            params: queryParams,
+        });
     }
 
     upload(

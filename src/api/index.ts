@@ -26,3 +26,4 @@ export * from './version-api.service';
 export * from './platform-version-api.service';
 export * from './tags-api.service';
 export * from './space-api.service';
+export * from './space-files-api.service';
