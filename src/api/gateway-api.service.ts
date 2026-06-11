@@ -35,6 +35,8 @@ export class GatewayApiService {
 export interface QueryInitResponse {
     license?: License;
     unread_notifications?: ResponseList<UserNotification> & {
+        total_read: number;
+        total_unread: number;
         total_all: number;
     };
 
