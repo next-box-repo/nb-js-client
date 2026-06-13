@@ -21,18 +21,18 @@ export class SpaceFilesApiService {
         id: number,
         params: RequestSpaceElementListParams,
     ): Promise<ResponseList<SpaceElement>> {
-        return this.client.rest.get(`${SPACES}/${id}/${FILES}/list`, params);
+        return this.client.rest.get(`${SPACES}/${id}${FILES}/list`, params);
     }
 
     get(id: number, params: { file_id: string }): Promise<SpaceElement> {
-        return this.client.rest.get(`${SPACES}/${id}/${FILES}`, params);
+        return this.client.rest.get(`${SPACES}/${id}${FILES}`, params);
     }
 
     create(
         id: number,
         params: RequestSpaceCreateElementParams,
     ): Promise<SpaceElement> {
-        return this.client.rest.post(`${SPACES}/${id}/${FILES}`, params);
+        return this.client.rest.post(`${SPACES}/${id}${FILES}`, params);
     }
 
     replace(
@@ -46,20 +46,20 @@ export class SpaceFilesApiService {
                 .map(([key, value]) => [key, String(value)]),
         );
 
-        return this.client.rest.put(`${SPACES}/${id}/${FILES}`, data, {
+        return this.client.rest.put(`${SPACES}/${id}${FILES}`, data, {
             params: queryParams,
         });
     }
 
     delete(id: number, params: RequestSpaceDeleteFilesParams): Promise<void> {
-        return this.client.rest.delete(`${SPACES}/${id}/${FILES}`, params);
+        return this.client.rest.delete(`${SPACES}/${id}${FILES}`, params);
     }
 
     copy(
         id: number,
         params: RequestSpaceCopyFileParams,
     ): Promise<SpaceElement> {
-        return this.client.rest.post(`${SPACES}/${id}/${FILES}/copy`, params);
+        return this.client.rest.post(`${SPACES}/${id}${FILES}/copy`, params);
     }
 
     download(
@@ -67,7 +67,7 @@ export class SpaceFilesApiService {
         params: RequestSpaceDownloadFileParams,
     ): Promise<Blob> {
         return this.client.rest.get(
-            `${SPACES}/${id}/${FILES}/download`,
+            `${SPACES}/${id}${FILES}/download`,
             params,
             {
                 responseType: ResponseType.Blob,
@@ -76,14 +76,14 @@ export class SpaceFilesApiService {
     }
 
     move(id: number, params: RequestSpaceMoveFilesParams): Promise<void> {
-        return this.client.rest.post(`${SPACES}/${id}/${FILES}/move`, params);
+        return this.client.rest.post(`${SPACES}/${id}${FILES}/move`, params);
     }
 
     rename(
         id: number,
         params: RequestSpaceRenameFileParams,
     ): Promise<SpaceElement> {
-        return this.client.rest.post(`${SPACES}/${id}/${FILES}/rename`, params);
+        return this.client.rest.post(`${SPACES}/${id}${FILES}/rename`, params);
     }
 
     upload(
@@ -103,7 +103,7 @@ export class SpaceFilesApiService {
         if (params.parent_id) form.set('parent_id', params.parent_id);
 
         const { promise, abort } = this.client.rest.upload(
-            `${SPACES}/${id}/${FILES_UPLOAD}`,
+            `${SPACES}/${id}${FILES_UPLOAD}`,
             form,
             {
                 onUploadProgress: (event) => {
@@ -120,7 +120,7 @@ export class SpaceFilesApiService {
         params: RequestSpaceUploadFromUrlParams,
     ): Promise<SpaceElement> {
         return this.client.rest.post(
-            `${SPACES}/${id}/${FILES_UPLOAD}/net`,
+            `${SPACES}/${id}${FILES_UPLOAD}/net`,
             params,
         );
     }
