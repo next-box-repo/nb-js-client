@@ -98,9 +98,9 @@ export class SpaceFilesApiService {
         const form = new FormData();
 
         form.set('overwrite', String(params.overwrite ?? false));
-        form.set('file', file);
-
         if (params.parent_id) form.set('parent_id', params.parent_id);
+
+        form.set('file', file);
 
         const { promise, abort } = this.client.rest.upload(
             `${SPACES}/${id}${FILES_UPLOAD}`,
