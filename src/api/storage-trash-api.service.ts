@@ -1,4 +1,4 @@
-import { Client } from '../classes';
+import type { Client } from '../classes/client';
 import { StorageTrashItem } from '../types';
 
 const STORAGE_TRASH = '/storage/trash';

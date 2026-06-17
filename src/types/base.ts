@@ -1,4 +1,4 @@
-import { RequestAuthTokenParams } from '../api';
+import { RequestAuthTokenParams } from './auth';
 import { PermissionType } from './divide';
 
 export interface NbClientParams {

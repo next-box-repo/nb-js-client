@@ -1,7 +1,6 @@
-import { RequestAuthTokenParams } from '../api';
 import { getCookieValue } from '../tools';
-import { AuthTokenUpdate } from '../types';
-import { BASE_URL_V1 } from './rest';
+import { AuthTokenUpdate, RequestAuthTokenParams } from '../types';
+import { BASE_URL_V1 } from './constants';
 
 const MILLISECONDS_IN_SECOND = 1000;
 const TOKEN_EXPIRATION_BUFFER_MS = 3000;

@@ -1,4 +1,4 @@
-import { Client } from '../classes';
+import type { Client } from '../classes/client';
 import {
     HttpEvent,
     OnUploadProgress,
@@ -12,7 +12,9 @@ import { RequestStorageListParams } from './storage-element-api.service';
 
 const SPACES = '/spaces';
 const FILES = '/files';
-const FILES_UPLOAD = '/files/upload';
+const FILES_UPLOAD = `${FILES}/upload`;
+const FILES_DOWNLOAD = `${FILES}/download`;
+const FILES_DOWNLOAD_ZIP = `${FILES_DOWNLOAD}/zip`;
 
 export class SpaceFilesApiService {
     constructor(private client: Client) {}
@@ -68,6 +70,19 @@ export class SpaceFilesApiService {
     ): Promise<Blob> {
         return this.client.rest.get(
             `${SPACES}/${id}${FILES}/download`,
+            params,
+            {
+                responseType: ResponseType.Blob,
+            },
+        );
+    }
+
+    createZipToDownload(
+        id: number,
+        params: RequestSpaceDownloadDirParams,
+    ): Promise<Blob> {
+        return this.client.rest.get(
+            `${SPACES}/${id}${FILES_DOWNLOAD_ZIP}`,
             params,
             {
                 responseType: ResponseType.Blob,
@@ -137,8 +152,8 @@ export type RequestSpaceElementListParams = Pick<
     | 'order_direction'
     | 'search'
     | 'type'
+    | 'content_types'
 > & {
-    content_types?: StorageElementContentType[];
     parent_id?: string;
 };
 
@@ -176,6 +191,10 @@ export interface RequestSpaceDownloadFileParams {
     download?: boolean;
     last_used_extension?: string;
     with_preview?: boolean;
+}
+
+export interface RequestSpaceDownloadDirParams {
+    file_id: string;
 }
 
 export interface RequestSpaceMoveItem {

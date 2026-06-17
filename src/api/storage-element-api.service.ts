@@ -1,4 +1,4 @@
-import { Client } from '../classes';
+import type { Client } from '../classes/client';
 import {
     ResponseItem,
     ResponseList,
@@ -12,6 +12,7 @@ import {
     ResourceAccess,
     Quota,
     StorageElementFileInfo,
+    StorageElementContentType,
 } from '../types';
 import { StorageElement } from '../types';
 import { FcaApiService } from './fca-api.service';
@@ -284,6 +285,7 @@ export interface RequestStorageListParams extends RequestBaseParams {
     show_hidden?: boolean;
     without_tags?: boolean;
     tag_ids?: number[];
+    content_types?: StorageElementContentType[];
 }
 
 export interface StorageElementPasteParams {

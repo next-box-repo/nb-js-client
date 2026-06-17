@@ -1,4 +1,4 @@
-import { Client } from './client';
+import type { Client } from './client';
 import {
     NbAppState,
     ResponseType,
@@ -18,9 +18,7 @@ import {
     normalizeHeaders,
     prepareRequestBody,
 } from '../tools';
-
-export const BASE_URL_V1 = '/api/v1';
-export const BASE_URL_V2 = '/api/v2';
+export { BASE_URL_V1, BASE_URL_V2 } from './constants';
 
 export class Rest {
     constructor(

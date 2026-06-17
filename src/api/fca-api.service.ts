@@ -1,4 +1,4 @@
-import { Client } from '../classes';
+import type { Client } from '../classes/client';
 import {
     HttpEvent,
     OnUploadProgress,

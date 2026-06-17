@@ -1,4 +1,4 @@
-import { Client } from '../classes';
+import type { Client } from '../classes/client';
 import { PermissionType, ShareInfo, ShareModel } from '../types';
 
 const STORAGE_ELEMENT_SHARE = '/storage/element/share';

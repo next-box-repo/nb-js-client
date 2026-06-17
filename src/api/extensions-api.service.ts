@@ -1,4 +1,5 @@
-import { BASE_URL_V2, Client } from '../classes';
+import type { Client } from '../classes/client';
+import { BASE_URL_V2 } from '../classes/constants';
 import {
     Extension,
     ExtensionDefault,

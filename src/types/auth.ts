@@ -18,3 +18,10 @@ export interface AuthType {
     basic: boolean;
     ldap: boolean;
 }
+
+export interface RequestAuthTokenParams {
+    access_token: string;
+    refresh_token: string;
+    with_cookie?: boolean;
+    path?: string;
+}

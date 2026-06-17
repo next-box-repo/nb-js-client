@@ -1,5 +1,6 @@
-import { Client } from '../classes';
-import { AuthToken, AuthTokenUpdate, AuthType } from '../types';
+import type { Client } from '../classes/client';
+import { AuthToken, AuthTokenUpdate, AuthType, RequestAuthTokenParams } from '../types';
+export type { RequestAuthTokenParams };
 
 const LOGIN = '/login';
 const LOGOUT = '/logout';
@@ -49,9 +50,3 @@ export interface RequestAuthTfaParams {
     temp_token: string;
 }
 
-export interface RequestAuthTokenParams {
-    access_token: string;
-    refresh_token: string;
-    with_cookie?: boolean;
-    path?: string;
-}

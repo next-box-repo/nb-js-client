@@ -1,4 +1,4 @@
-import { Client } from '../classes';
+import type { Client } from '../classes/client';
 import { ResponseItem } from '../types';
 import { PlatformVersions } from '../types/platform-version';
 

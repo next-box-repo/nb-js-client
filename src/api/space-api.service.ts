@@ -1,4 +1,4 @@
-import { Client } from '../classes';
+import type { Client } from '../classes/client';
 import { PermissionType, RequestBaseParams, ResponseList } from '../types';
 import {
     Space,
