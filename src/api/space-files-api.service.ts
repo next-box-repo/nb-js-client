@@ -16,6 +16,10 @@ const FILES_COPY = `${FILES}/copy`;
 const FILES_UPLOAD = `${FILES}/upload`;
 const FILES_DOWNLOAD = `${FILES}/download`;
 const FILES_DOWNLOAD_ZIP = `${FILES_DOWNLOAD}/zip`;
+const FILES_RECOVER = `${FILES}/recover`;
+const FILES_RECOVER_ALL = `${FILES_RECOVER}/all`;
+const FILES_TRASH = `${FILES}/trash`;
+const FILES_TRASH_ALL = `${FILES_TRASH}/all`;
 
 export class SpaceFilesApiService {
     constructor(private client: Client) {}
@@ -159,6 +163,26 @@ export class SpaceFilesApiService {
             `${SPACES}/${id}${FILES_UPLOAD}/net`,
             params,
         );
+    }
+
+    recover(id: number, del_group_ids: number[]): Promise<void> {
+        return this.client.rest.post(`${SPACES}/${id}/${FILES_RECOVER}`, {
+            del_group_ids,
+        });
+    }
+
+    recoverAll(id: number): Promise<void> {
+        return this.client.rest.post(`${SPACES}/${id}/${FILES_RECOVER_ALL}`);
+    }
+
+    trash(id: number, del_group_id: number): Promise<void> {
+        return this.client.rest.delete(`${SPACES}/${id}/${FILES_TRASH}`, {
+            del_group_id,
+        });
+    }
+
+    trashAll(id: number): Promise<void> {
+        return this.client.rest.delete(`${SPACES}/${id}/${FILES_TRASH_ALL}`);
     }
 }
 
