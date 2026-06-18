@@ -2,16 +2,17 @@ import type { Client } from '../classes/client';
 import {
     HttpEvent,
     OnUploadProgress,
+    PermissionType,
     ResponseList,
     ResponseType,
     SpaceElement,
-    StorageElementContentType,
     StorageElementType,
 } from '../types';
 import { RequestStorageListParams } from './storage-element-api.service';
 
 const SPACES = '/spaces';
 const FILES = '/files';
+const FILES_COPY = `${FILES}/copy`;
 const FILES_UPLOAD = `${FILES}/upload`;
 const FILES_DOWNLOAD = `${FILES}/download`;
 const FILES_DOWNLOAD_ZIP = `${FILES_DOWNLOAD}/zip`;
@@ -22,7 +23,7 @@ export class SpaceFilesApiService {
     list(
         id: number,
         params: RequestSpaceElementListParams,
-    ): Promise<ResponseList<SpaceElement>> {
+    ): Promise<ResponseList<SpaceElement> & { access_mode: PermissionType }> {
         return this.client.rest.get(`${SPACES}/${id}${FILES}/list`, params);
     }
 
@@ -61,7 +62,27 @@ export class SpaceFilesApiService {
         id: number,
         params: RequestSpaceCopyFileParams,
     ): Promise<SpaceElement> {
-        return this.client.rest.post(`${SPACES}/${id}${FILES}/copy`, params);
+        return this.client.rest.post(`${SPACES}/${id}${FILES_COPY}`, params);
+    }
+
+    copyFromNextbox(
+        id: number,
+        params: RequestCopyFromNextboxParams,
+    ): Promise<SpaceElement> {
+        return this.client.rest.post(
+            `${SPACES}/${id}${FILES_COPY}/from/nextbox`,
+            params,
+        );
+    }
+
+    copyToNextbox(
+        id: number,
+        params: RequestCopyToNextboxParams,
+    ): Promise<SpaceElement> {
+        return this.client.rest.post(
+            `${SPACES}/${id}${FILES_COPY}/to/nextbox`,
+            params,
+        );
     }
 
     download(
@@ -185,6 +206,23 @@ export interface RequestSpaceCopyFileParams {
     overwrite?: boolean;
     resolve_conflict_duplicate?: boolean;
 }
+
+export type RequestCopyFromNextboxParams = Pick<
+    RequestSpaceCopyFileParams,
+    'overwrite' | 'resolve_conflict_duplicate'
+> & {
+    to_parent_id?: string;
+    from_path: string;
+    from_divide_id?: number;
+};
+
+export type RequestCopyToNextboxParams = Pick<
+    RequestSpaceCopyFileParams,
+    'file_id' | 'overwrite' | 'resolve_conflict_duplicate'
+> & {
+    to_path: string;
+    to_divide_id?: number;
+};
 
 export interface RequestSpaceDownloadFileParams {
     file_id: string;
