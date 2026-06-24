@@ -12,6 +12,7 @@ import {
 const NOTIFICATIONS = '/notifications';
 const NOTIFICATIONS_ALL = `${NOTIFICATIONS}/all`;
 const NOTIFICATIONS_SUBSCRIPTION = `${NOTIFICATIONS}/subscription`;
+const NOTIFICATIONS_SUBSCRIPTION_EXTENSION = `${NOTIFICATIONS_SUBSCRIPTION}/extension`;
 const NOTIFICATIONS_PERMISSION = `${NOTIFICATIONS}/permission`;
 const NOTIFICATIONS_TASK = `${NOTIFICATIONS}/task`;
 
@@ -61,6 +62,10 @@ export class NotificationApiService {
         return this.client.rest.get(NOTIFICATIONS_SUBSCRIPTION);
     }
 
+    getSubscriptionExtension(): Promise<NotificationActionGroup> {
+        return this.client.rest.get(NOTIFICATIONS_SUBSCRIPTION_EXTENSION);
+    }
+
     setSubscription(data: NotificationActionGroup): Promise<void> {
         const params = {
             action_groups: {
@@ -69,6 +74,19 @@ export class NotificationApiService {
         };
 
         return this.client.rest.post(NOTIFICATIONS_SUBSCRIPTION, params);
+    }
+
+    setSubscriptionExtension(data: NotificationActionGroup): Promise<void> {
+        const params = {
+            action_groups: {
+                ...data,
+            },
+        };
+
+        return this.client.rest.post(
+            NOTIFICATIONS_SUBSCRIPTION_EXTENSION,
+            params,
+        );
     }
 }
 
