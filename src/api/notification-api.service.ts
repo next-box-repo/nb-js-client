@@ -78,7 +78,7 @@ export class NotificationApiService {
 
     setSubscriptionExtension(data: NotificationActionGroup): Promise<void> {
         const params = {
-            action_groups: {
+            application_groups: {
                 ...data,
             },
         };
