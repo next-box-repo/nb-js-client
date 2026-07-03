@@ -11,6 +11,7 @@ export enum SettingControlType {
     RadioList = 'radio_list',
     ConnectionChoose = 'connection_choose',
     MultiConnectionChoose = 'multi_connection_choose',
+    ActivitySwitch = 'activity_switch',
 }
 
 export interface Setting {
