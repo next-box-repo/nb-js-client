@@ -198,6 +198,7 @@ export type RequestSpaceElementListParams = Pick<
     | 'search'
     | 'type'
     | 'content_types'
+    | 'zip_prefix'
 > & {
     parent_id?: string;
 };
@@ -253,6 +254,7 @@ export interface RequestSpaceDownloadFileParams {
     download?: boolean;
     last_used_extension?: string;
     with_preview?: boolean;
+    zip_entry_path?: string;
 }
 
 export interface RequestSpaceDownloadDirParams {

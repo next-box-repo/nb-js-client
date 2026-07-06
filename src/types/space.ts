@@ -50,6 +50,7 @@ export type SpaceElement = Pick<
     | 'update_date'
     | 'with_preview'
     | 'id'
+    | 'zip_entry_path'
 > & {
     created_by: number;
     parent_id: number;
