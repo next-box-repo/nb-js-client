@@ -39,18 +39,14 @@ export class StorageElementApiService {
         return this.client.rest.get(STORAGE, params);
     }
 
-    info(params: {
-        path: string;
-        divide_id?: number;
-        file_version_id?: string;
-        zip_entry_path?: string;
-    }): Promise<StorageElement> {
-        if (!parseInt(params.divide_id?.toString() || '')) {
-            delete params.divide_id;
-        }
+    info(params: RequestStorageListItemParams): Promise<StorageElement> {
+        Object.keys(params).forEach((key) => {
+            const typedKey = key as keyof typeof params;
 
-        if (!params.file_version_id) delete params.file_version_id;
-        if (!params.zip_entry_path) delete params.zip_entry_path;
+            if (!params[typedKey]) {
+                delete params[typedKey];
+            }
+        });
 
         return this.client.rest.get(STORAGE_ELEMENT, params);
     }
@@ -271,6 +267,7 @@ export interface RequestStorageListParams extends RequestBaseParams {
     divide_id?: number | null;
     is_trash?: boolean;
     path?: string;
+    file_container_id?: string;
     min_size?: number | null;
     max_size?: number | null;
     type?: StorageElementType;
@@ -286,6 +283,14 @@ export interface RequestStorageListParams extends RequestBaseParams {
     without_tags?: boolean;
     tag_ids?: number[];
     content_types?: StorageElementContentType[];
+}
+
+export interface RequestStorageListItemParams {
+    path?: string;
+    zip_entry_path?: string;
+    file_version_id?: string;
+    file_container_id?: string;
+    divide_id?: number;
 }
 
 export interface StorageElementPasteParams {
