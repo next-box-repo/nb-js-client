@@ -64,12 +64,21 @@ export class StorageElementApiService {
     combineInfo({
         root,
         rootId,
+        id,
         path,
         file_version_id,
         zip_entry_path,
     }: StorageRouteData): Promise<StorageElement> {
         if (root === StorageRoot.fca && rootId) {
             return this.fcaApiService.info(rootId, path!);
+        }
+
+        if (id) {
+            return this.info({
+                file_container_id: id,
+                file_version_id,
+                zip_entry_path,
+            });
         }
 
         return this.info({
