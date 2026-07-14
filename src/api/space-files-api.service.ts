@@ -7,6 +7,7 @@ import {
     ResponseType,
     SpaceElement,
     StorageElementType,
+    StorageElementVersionLock,
 } from '../types';
 import { RequestStorageListParams } from './storage-element-api.service';
 
@@ -14,6 +15,8 @@ const SPACES = '/spaces';
 const FILES = '/files';
 const FILES_COPY = `${FILES}/copy`;
 const FILES_UPLOAD = `${FILES}/upload`;
+const FILES_LOCK = `${FILES}/lock`;
+const FILES_UNLOCK = `${FILES}/unlock`;
 const FILES_DOWNLOAD = `${FILES}/download`;
 const FILES_DOWNLOAD_ZIP = `${FILES_DOWNLOAD}/zip`;
 const FILES_RECOVER = `${FILES}/recover`;
@@ -183,6 +186,18 @@ export class SpaceFilesApiService {
 
     trashAll(id: number): Promise<void> {
         return this.client.rest.delete(`${SPACES}/${id}/${FILES_TRASH_ALL}`);
+    }
+
+    lock(id: number, file_id: string): Promise<StorageElementVersionLock> {
+        return this.client.rest.post(`${SPACES}/${id}/${FILES_LOCK}`, {
+            file_id,
+        });
+    }
+
+    unlock(id: number, file_id: string): Promise<void> {
+        return this.client.rest.post(`${SPACES}/${id}/${FILES_UNLOCK}`, {
+            file_id,
+        });
     }
 }
 
