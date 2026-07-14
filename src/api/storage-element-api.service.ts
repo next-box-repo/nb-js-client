@@ -76,6 +76,7 @@ export class StorageElementApiService {
         if (id) {
             return this.info({
                 file_container_id: id,
+                divide_id: rootId,
                 file_version_id,
                 zip_entry_path,
             });
