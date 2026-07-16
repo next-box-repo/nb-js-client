@@ -48,7 +48,9 @@ export interface QueryInitResponse {
 
     lock_screen: LockScreen;
     view_type: QueryInitViewType;
+
     file_locking: FileLocking;
+    spaces_file_locking: FileLocking;
 
     restrictions?: Restriction;
 
