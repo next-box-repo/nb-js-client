@@ -199,6 +199,10 @@ export class SpaceFilesApiService {
             file_id,
         });
     }
+
+    branch(id: number, file_id: string): Promise<any> {
+        return this.client.rest.get(`${SPACES}/${id}/branch`, { file_id });
+    }
 }
 
 export type RequestSpaceElementListParams = Pick<
