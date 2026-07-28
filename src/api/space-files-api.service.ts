@@ -200,7 +200,7 @@ export class SpaceFilesApiService {
         });
     }
 
-    branch(id: number, file_id: string): Promise<any> {
+    branch(id: number, file_id: string): Promise<ResponseList<SpaceElement>> {
         return this.client.rest.get(`${SPACES}/${id}/branch`, { file_id });
     }
 }
