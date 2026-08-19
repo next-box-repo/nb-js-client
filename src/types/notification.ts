@@ -25,6 +25,7 @@ export interface UserNotification {
 
     is_other_content?: boolean;
     task_notification_id?: number;
+    task_notification?: TaskNotification;
 }
 
 export enum NotificationEntityType {
@@ -159,4 +160,5 @@ export interface TaskNotification {
     id: number;
     markdown_body?: string | string[] | number[];
     media_file_id?: string;
+    payload?: Record<string, string>;
 }
