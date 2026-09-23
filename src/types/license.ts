@@ -1,8 +1,11 @@
 export interface License {
     custom_max_users_count: number | null;
-    expire_in: string;
+    expire_in?: string;
+    technical_support_expire_in?: string;
     key: string | null;
     plan: Tariff;
+    state: LicenseState;
+    mode: LicenseMode;
     error?: LicenseError | string;
 }
 
@@ -23,4 +26,14 @@ export enum LicenseError {
     Expired = 'License has been expired',
     NotValid = 'License not valid',
     NotFound = 'license file not found',
+}
+
+export enum LicenseState {
+    Purchased = 'purchased',
+    Free = 'free',
+}
+
+export enum LicenseMode {
+    Online = 'online',
+    Offline = 'offline',
 }
