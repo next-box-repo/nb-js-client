@@ -24,6 +24,7 @@ export interface SpaceAccessProvide {
     access_mode: PermissionType;
     create_date: string;
     id: number;
+    is_inherited?: false;
     space_id: number;
     to_user_group_id?: number;
     to_user_id?: number;
