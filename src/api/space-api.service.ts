@@ -1,6 +1,7 @@
 import type { Client } from '../classes/client';
 import { PermissionType, RequestBaseParams, ResponseList } from '../types';
 import {
+    ScopeDeleteSpaceAccess,
     Space,
     SpaceAccess,
     SpaceAccessProvide,
@@ -105,7 +106,7 @@ export interface RequestDeleteSpaceAccessParams {
     space_id: number;
     file_container_id?: string;
     is_to_user_group?: boolean;
-    scope?: 'object' | 'children' | 'subtree';
+    scope?: ScopeDeleteSpaceAccess;
     to_user_group_id?: number;
     to_user_id?: number;
 }
@@ -120,6 +121,9 @@ export type RequestSpaceAccessListParams = RequestSpaceAccessParams &
     RequestSpaceAdminsListParams;
 
 export type SpaceAcсessResponseList = ResponseList<SpaceAccessProvide> & {
+    has_children_access: boolean;
+    children_access_subject_ids: number[];
+    total: number;
     total_r: number;
     total_rw: number;
     total_rwd: number;

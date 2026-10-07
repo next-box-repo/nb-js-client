@@ -58,3 +58,9 @@ export type SpaceElement = Pick<
     space_id: number;
     updated_by: number;
 };
+
+export enum ScopeDeleteSpaceAccess {
+    Object = 'object',
+    Children = 'children',
+    Subtree = 'subtree',
+}
