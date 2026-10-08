@@ -24,7 +24,7 @@ export interface SpaceAccessProvide {
     access_mode: PermissionType;
     create_date: string;
     id: number;
-    is_inherited?: boolean;
+    is_inherited: boolean;
     space_id: number;
     to_user_group_id?: number;
     to_user_id?: number;
@@ -57,6 +57,7 @@ export type SpaceElement = Pick<
     parent_id: number;
     space_id: number;
     updated_by: number;
+    is_transit?: boolean;
 };
 
 export enum ScopeDeleteSpaceAccess {
