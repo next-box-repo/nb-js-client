@@ -1,6 +1,7 @@
 import type { Client } from '../classes/client';
 import { PermissionType, RequestBaseParams, ResponseList } from '../types';
 import {
+    ScopeDeleteSpaceAccess,
     Space,
     SpaceAccess,
     SpaceAccessProvide,
@@ -9,6 +10,7 @@ import {
 
 const SPACES = '/spaces';
 const SPACES_ACCESS = `${SPACES}/access`;
+const SPACES_ACCESS_CLOSE = `${SPACES_ACCESS}/close`;
 
 export class SpaceApiService {
     constructor(private client: Client) {}
@@ -52,8 +54,12 @@ export class SpaceApiService {
         return this.client.rest.post(SPACES_ACCESS, params);
     }
 
-    deleteAllAccess(params: RequestSpaceAccessParams): Promise<void> {
+    deleteAllAccess(params: RequestDeleteSpaceAccessParams): Promise<void> {
         return this.client.rest.delete(SPACES_ACCESS, params);
+    }
+
+    closeAccess(params: RequestCloseSpaceAccessParams): Promise<void> {
+        return this.client.rest.post(SPACES_ACCESS_CLOSE, params);
     }
 
     updateAccess(
@@ -96,14 +102,33 @@ export interface RequestSpaceAccessParams {
     is_to_user_group?: boolean;
 }
 
+export interface RequestDeleteSpaceAccessParams {
+    space_id: number;
+    file_container_id?: string;
+    is_to_user_group?: boolean;
+    scope?: ScopeDeleteSpaceAccess;
+    to_user_group_id?: number;
+    to_user_id?: number;
+}
+
+export interface RequestCloseSpaceAccessParams {
+    space_id: number;
+    file_container_id?: string;
+    is_to_user_group: boolean;
+}
+
 export type RequestSpaceAccessListParams = RequestSpaceAccessParams &
     RequestSpaceAdminsListParams;
 
 export type SpaceAcсessResponseList = ResponseList<SpaceAccessProvide> & {
+    has_children_access: boolean;
+    children_access_subject_ids: number[];
+    total: number;
     total_r: number;
     total_rw: number;
     total_rwd: number;
     total_admin: number;
+    total_none: number;
 };
 
 export interface RequestProvideSpaceAccessParams {
