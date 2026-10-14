@@ -45,7 +45,12 @@ export class ConnectionsApiService {
             [ConnectionType.S3]: '/disk/s3',
         };
 
-        return this.client.rest.post(routes[data.type] || CONNECTIONS, data);
+        const body =
+            data.type === ConnectionType.Mail
+                ? { ...data, disable_tls: data.disable_tls ?? false }
+                : data;
+
+        return this.client.rest.post(routes[data.type] || CONNECTIONS, body);
     }
 
     dashboard(
