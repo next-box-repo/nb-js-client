@@ -115,6 +115,7 @@ export enum UserParamsLabel {
     ViewApps = 'viewApps',
     WithoutContentWorkDir = 'withoutContentWorkDir',
     DashboardGrid = 'dashboardGrid',
+    Accent = 'accent',
 }
 
 export interface UserAppPasswords {
