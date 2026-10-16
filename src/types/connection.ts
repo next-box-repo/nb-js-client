@@ -21,6 +21,7 @@ export interface Connection {
     create_date: string;
     expire_in: string;
     to_user_group_id?: number;
+    disable_tls?: boolean; // только для ConnectionType.Mail, по умолчанию false
 }
 
 export enum ConnectionGroup {
