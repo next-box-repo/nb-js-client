@@ -58,6 +58,7 @@ export type SpaceElement = Pick<
     space_id: number;
     updated_by: number;
     is_transit?: boolean;
+    current_version_id?: string;
 };
 
 export enum ScopeDeleteSpaceAccess {

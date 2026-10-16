@@ -28,6 +28,7 @@ import {
     TagsApiService,
     SpaceApiService,
     SpaceFilesApiService,
+    SpaceFilesVersionApiService,
 } from '../api';
 
 import { NbAppState, NbClientParams } from '../types/base';
@@ -70,6 +71,7 @@ export class Client {
     PlatformVersionApiService = new PlatformVersionApiService(this);
     SpaceApiService = new SpaceApiService(this);
     SpaceFilesApiService = new SpaceFilesApiService(this);
+    SpaceFilesVersionApiService = new SpaceFilesVersionApiService(this);
 
     tokenUpdate = new TokenUpdate();
     rest = new Rest(this, this.tokenUpdate);
