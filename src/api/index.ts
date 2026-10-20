@@ -1,3 +1,4 @@
+export * from './ai-api.service';
 export * from './auth-api.service';
 export * from './connections-api.service';
 export * from './discovery-api.service';

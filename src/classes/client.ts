@@ -1,4 +1,5 @@
 import {
+    AiApiService,
     AuthApiService,
     ConnectionsApiService,
     DiscoveryApiService,
@@ -39,6 +40,7 @@ import { TokenUpdate } from './token-update';
 export class Client {
     state!: NbAppState;
 
+    AiApiService = new AiApiService(this);
     AuthApiService = new AuthApiService(this);
     ConnectionsApiService = new ConnectionsApiService(this);
     DiscoveryApiService = new DiscoveryApiService(this);
