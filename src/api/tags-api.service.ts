@@ -3,6 +3,8 @@ import { AssignTagItemParam, Tag, ColorTypes } from '../types';
 
 const TAG = '/tag';
 const TAG_LIST = `${TAG}/list`;
+const SPACES = '/spaces';
+const FILES_TAG = `/files/tag`;
 
 export class TagsApiService {
     constructor(private client: Client) {}
@@ -33,6 +35,28 @@ export class TagsApiService {
 
     delete(id: number): Promise<void> {
         return this.client.rest.delete(`${TAG}/${id}`);
+    }
+
+    assignToSpaceFile(
+        id: number,
+        tag_id: number,
+        file_container_ids: string[],
+    ): Promise<void> {
+        return this.client.rest.post(
+            `${SPACES}/${id}${FILES_TAG}/${tag_id}/assign`,
+            { file_container_ids },
+        );
+    }
+
+    unassignFromSpaceFile(
+        id: number,
+        tag_id: number,
+        file_container_ids: string[],
+    ): Promise<void> {
+        return this.client.rest.post(
+            `${SPACES}/${id}${FILES_TAG}/${tag_id}/unassign`,
+            { file_container_ids },
+        );
     }
 }
 
