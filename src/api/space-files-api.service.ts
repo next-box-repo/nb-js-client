@@ -188,15 +188,21 @@ export class SpaceFilesApiService {
         return this.client.rest.delete(`${SPACES}/${id}/${FILES_TRASH_ALL}`);
     }
 
-    lock(id: number, file_id: string): Promise<StorageElementVersionLock> {
+    lock(
+        id: number,
+        file_id: string,
+        file_version_id?: string,
+    ): Promise<StorageElementVersionLock> {
         return this.client.rest.post(`${SPACES}/${id}/${FILES_LOCK}`, {
             file_id,
+            ...(file_version_id ? { file_version_id } : {}),
         });
     }
 
-    unlock(id: number, file_id: string): Promise<void> {
+    unlock(id: number, file_id: string, file_version_id?: string): Promise<void> {
         return this.client.rest.post(`${SPACES}/${id}/${FILES_UNLOCK}`, {
             file_id,
+            ...(file_version_id ? { file_version_id } : {}),
         });
     }
 
@@ -270,6 +276,7 @@ export type RequestCopyToNextboxParams = Pick<
 
 export interface RequestSpaceDownloadFileParams {
     file_id: string;
+    file_version_id?: string;
     download?: boolean;
     last_used_extension?: string;
     with_preview?: boolean;
