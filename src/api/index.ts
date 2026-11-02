@@ -29,3 +29,4 @@ export * from './tags-api.service';
 export * from './space-api.service';
 export * from './space-files-api.service';
 export * from './space-files-version-api.service';
+export * from './space-files-version-comment-api.service';
