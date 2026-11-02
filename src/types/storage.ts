@@ -146,6 +146,7 @@ export interface StorageElementHistory {
 }
 
 export interface StorageElementVersion {
+    author_service?: string;
     create_date: string;
     description: string;
     id: string;

@@ -36,9 +36,40 @@ export interface DeleteAllCommentParams {
 export interface Comment {
     id: number;
     author_id: number;
+    author_service?: string;
     comment: string;
     file_version_id: string;
     is_decided: boolean;
     create_date: string;
     update_date: string;
+}
+
+export interface SpaceCommentParams extends RequestBaseParams {
+    file_id: string;
+    file_version_id: string;
+}
+
+export interface CreateSpaceCommentParams {
+    comment: string;
+    file_id: string;
+    file_version_id: string;
+}
+
+export interface UpdateSpaceCommentParams {
+    comment?: string;
+    file_id: string;
+    file_version_id: string;
+    version_comment_id: number;
+    is_decided?: boolean;
+}
+
+export interface DeleteSpaceCommentParams {
+    file_id: string;
+    file_version_id: string;
+    version_comment_id: number;
+}
+
+export interface DeleteAllSpaceCommentParams {
+    file_id: string;
+    file_version_id: string;
 }
