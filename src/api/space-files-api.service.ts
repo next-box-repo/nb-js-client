@@ -6,6 +6,7 @@ import {
     ResponseList,
     ResponseType,
     SpaceElement,
+    SpaceSearchElement,
     StorageElementType,
     StorageElementVersionLock,
 } from '../types';
@@ -32,6 +33,12 @@ export class SpaceFilesApiService {
         params: RequestSpaceElementListParams,
     ): Promise<ResponseList<SpaceElement> & { access_mode: PermissionType }> {
         return this.client.rest.get(`${SPACES}/${id}${FILES}/list`, params);
+    }
+
+    search(
+        params?: RequestSpaceSearchParams,
+    ): Promise<ResponseList<SpaceSearchElement>> {
+        return this.client.rest.get(`${SPACES}${FILES}/search`, params);
     }
 
     get(id: number, params: { file_id: string }): Promise<SpaceElement> {
@@ -312,3 +319,17 @@ export interface RequestSpaceUploadFromUrlParams {
     parent_id?: string;
     overwrite?: boolean;
 }
+
+export type RequestSpaceSearchParams = Pick<
+    RequestStorageListParams,
+    | 'search'
+    | 'content_types'
+    | 'min_size'
+    | 'max_size'
+    | 'offset'
+    | 'order_by'
+    | 'order_direction'
+    | 'tag_ids'
+> & {
+    limit?: number;
+};
