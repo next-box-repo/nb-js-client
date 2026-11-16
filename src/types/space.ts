@@ -61,8 +61,8 @@ export type SpaceElement = Pick<
     is_transit?: boolean;
     current_version_id?: string;
     space_name?: string;
-    created_by_service?: string;
-    updated_by_service?: string;
+    created_by_service: string;
+    updated_by_service: string;
     meta?: Record<string, unknown>;
 };
 
