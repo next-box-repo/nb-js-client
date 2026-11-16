@@ -61,10 +61,9 @@ export type SpaceElement = Pick<
     current_version_id?: string;
 };
 
-export type SpaceSearchElement = Omit<SpaceElement, 'id' | 'parent_id'> &
+export type SpaceSearchElement = SpaceElement &
     Pick<StorageElement, 'tags'> & {
         id: string;
-        parent_id?: string;
         space_name: string;
         created_by_service?: string;
         updated_by_service?: string;

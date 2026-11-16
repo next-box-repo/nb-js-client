@@ -326,10 +326,9 @@ export type RequestSpaceSearchParams = Pick<
     | 'content_types'
     | 'min_size'
     | 'max_size'
+    | 'limit'
     | 'offset'
     | 'order_by'
     | 'order_direction'
     | 'tag_ids'
-> & {
-    limit?: number;
-};
+>;
