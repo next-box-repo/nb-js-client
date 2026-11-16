@@ -6,7 +6,6 @@ import {
     ResponseList,
     ResponseType,
     SpaceElement,
-    SpaceSearchElement,
     StorageElementType,
     StorageElementVersionLock,
 } from '../types';
@@ -37,7 +36,7 @@ export class SpaceFilesApiService {
 
     search(
         params?: RequestSpaceSearchParams,
-    ): Promise<ResponseList<SpaceSearchElement>> {
+    ): Promise<ResponseList<SpaceElement>> {
         return this.client.rest.get(`${SPACES}${FILES}/search`, params);
     }
 
