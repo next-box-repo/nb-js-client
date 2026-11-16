@@ -52,13 +52,18 @@ export type SpaceElement = Pick<
     | 'with_preview'
     | 'id'
     | 'zip_entry_path'
+    | 'tags'
 > & {
     created_by: number;
-    parent_id: number;
+    parent_id?: string;
     space_id: number;
     updated_by: number;
     is_transit?: boolean;
     current_version_id?: string;
+    space_name?: string;
+    created_by_service: string;
+    updated_by_service: string;
+    meta?: Record<string, unknown>;
 };
 
 export enum ScopeDeleteSpaceAccess {

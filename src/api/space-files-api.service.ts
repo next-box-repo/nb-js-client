@@ -34,6 +34,12 @@ export class SpaceFilesApiService {
         return this.client.rest.get(`${SPACES}/${id}${FILES}/list`, params);
     }
 
+    search(
+        params?: RequestSpaceSearchParams,
+    ): Promise<ResponseList<SpaceElement>> {
+        return this.client.rest.get(`${SPACES}${FILES}/search`, params);
+    }
+
     get(id: number, params: { file_id: string }): Promise<SpaceElement> {
         return this.client.rest.get(`${SPACES}/${id}${FILES}`, params);
     }
@@ -312,3 +318,16 @@ export interface RequestSpaceUploadFromUrlParams {
     parent_id?: string;
     overwrite?: boolean;
 }
+
+export type RequestSpaceSearchParams = Pick<
+    RequestStorageListParams,
+    | 'search'
+    | 'content_types'
+    | 'min_size'
+    | 'max_size'
+    | 'limit'
+    | 'offset'
+    | 'order_by'
+    | 'order_direction'
+    | 'tag_ids'
+>;
