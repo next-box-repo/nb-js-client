@@ -35,7 +35,7 @@ export class StorageElementApiService {
 
     list(
         params?: RequestStorageListParams,
-    ): Promise<ResponseList<StorageElement>> {
+    ): Promise<StorageListResponse<StorageElement>> {
         return this.client.rest.get(STORAGE, params);
     }
 
@@ -333,4 +333,9 @@ export interface StorageItemSizeParams {
 export interface StorageItemSizePathParams {
     path: string;
     divide_id?: number;
+}
+
+export interface StorageListResponse<T> extends ResponseList<T> {
+    files_count: number;
+    folders_count: number;
 }

@@ -35,6 +35,8 @@ export interface StorageElement {
     uncompressed?: number;
     modified?: string;
     is_dir?: boolean;
+
+    has_multiple_versions?: boolean;
 }
 
 export type StorageDivideElement = Pick<
