@@ -30,7 +30,7 @@ export class SpaceFilesApiService {
     list(
         id: number,
         params: RequestSpaceElementListParams,
-    ): Promise<ResponseList<SpaceElement> & { access_mode: PermissionType }> {
+    ): Promise<SpaceListResponse<SpaceElement>> {
         return this.client.rest.get(`${SPACES}/${id}${FILES}/list`, params);
     }
 
@@ -205,7 +205,11 @@ export class SpaceFilesApiService {
         });
     }
 
-    unlock(id: number, file_id: string, file_version_id?: string): Promise<void> {
+    unlock(
+        id: number,
+        file_id: string,
+        file_version_id?: string,
+    ): Promise<void> {
         return this.client.rest.post(`${SPACES}/${id}/${FILES_UNLOCK}`, {
             file_id,
             ...(file_version_id ? { file_version_id } : {}),
@@ -331,3 +335,9 @@ export type RequestSpaceSearchParams = Pick<
     | 'order_direction'
     | 'tag_ids'
 >;
+
+export interface SpaceListResponse<T> extends ResponseList<T> {
+    files_count: number;
+    folders_count: number;
+    access_mode: PermissionType;
+}

@@ -339,3 +339,9 @@ export interface StorageListResponse<T> extends ResponseList<T> {
     files_count: number;
     folders_count: number;
 }
+
+export interface StorageListTrashResponse<T> extends StorageListResponse<T> {
+    quota?: number;
+    ttl_days?: number;
+    used?: number;
+}
